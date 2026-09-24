@@ -4,12 +4,12 @@ namespace Movement
 {
     public class Physics
     {
-        const float GRAVITY = 0.0f;
-        const float FRICTION = 0.0f;
+        const float GRAVITY = -100.0f;
+        const float FRICTION = 1.0f;
 
-        public void applyGravity()
+        public float applyGravity(float yVel, float deltaTime)
         {
-            
+            return yVel + GRAVITY * deltaTime;
         }
     }
 }

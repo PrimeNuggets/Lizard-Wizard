@@ -13,4 +13,11 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   health:
+    max: 10
+  water:
     max: 0
+  speed:
+    max: 10
+  jumpHeight:
+    max: 1.5
+  feetOffset: 0.25
