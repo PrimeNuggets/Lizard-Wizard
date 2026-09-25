@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         //===========================================================
-            //Turning
+            //Cursor Locking
         //===========================================================
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
@@ -61,17 +61,21 @@ public class Player : MonoBehaviour
             {
                 SetCursorLocked(true);
             }
-        } else {
-            Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
-            transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
         }
     }
 
-    void FixedUpdate()
+    void FixedUpdate() //Using this saves a lot of fps
     {
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.WasPressedThisFrame();
+        //===========================================================
+            //Turning
+        //===========================================================
+        if (Cursor.lockState == CursorLockMode.Locked) {
+            Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
+            transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
+        }
         //===========================================================
             //Movement
         //===========================================================

@@ -17,7 +17,7 @@ MonoBehaviour:
   water:
     max: 0
   speed:
-    max: 10
+    max: 5
   jumpHeight:
-    max: 1.5
+    max: 5
   feetOffset: 0.25
