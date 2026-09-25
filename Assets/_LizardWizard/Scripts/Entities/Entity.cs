@@ -64,23 +64,30 @@ public class Entity : ScriptableObject
     public Vector3 ApplyMove(Vector2 move, bool jumped)
     {
         float dt = Time.deltaTime;
-        move = Vector2.ClampMagnitude(move, 1f); //Processes WASD
         if (!ctrl)
         {
             move = Vector2.zero;
-            jumped = false;
         }
+        move = Vector2.ClampMagnitude(move, 1f); //Processes WASD
 
-        Vector3 direction = entObj.transform.right * move.x + entObj.transform.forward * move.y;
+        if (grounded && ctrl) {
+            Vector3 direction = entObj.transform.right * move.x + entObj.transform.forward * move.y;
 
+            velocity.x = direction.x * speed.GetCurrent();
+            velocity.z = direction.z * speed.GetCurrent();
+            if (jumped)
+            {
+                float gravity = physics.applyGravity(0f, 1f);
 
-        if (grounded && jumped)
-        {
-            velocity.y = jumpHeight.GetCurrent();
-            grounded = false;
-            ctrl = false;
+                velocity.y = Mathf.Sqrt(
+                    2f *
+                    Mathf.Abs(gravity) *
+                    Mathf.Max(0f, jumpHeight.GetCurrent())
+                );
+                grounded = false;
+                ctrl = false;
+            }
         }
-        velocity = direction * speed.GetCurrent();
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
 
         Vector3 nextPos = entObj.transform.position;
@@ -93,7 +100,13 @@ public class Entity : ScriptableObject
             velocity.y = 0f;
             grounded = true;
             ctrl = true;
+        } else
+        {
+            grounded = false;
         }
+        Debug.Log("Velocity: " + velocity);
+        Debug.Log("Grounded: " + grounded);
+        Debug.Log("Ctrl: " + ctrl);
         return nextPos;
     }
 }
