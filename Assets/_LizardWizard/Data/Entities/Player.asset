@@ -20,4 +20,4 @@ MonoBehaviour:
     max: 5
   jumpHeight:
     max: 5
-  feetOffset: 0.25
+  feetOffset: 0.125
