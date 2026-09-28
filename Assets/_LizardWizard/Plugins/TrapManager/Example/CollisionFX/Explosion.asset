@@ -9,15 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf4bbdf2bb5a964bb6411f16e02f319, type: 3}
-  m_Name: Player
-  m_EditorClassIdentifier: Assembly-CSharp::Entity
-  health:
-    max: 10
-  water:
-    max: 0
-  speed:
-    max: 5
-  jumpHeight:
-    max: 5
-  feetOffset: 0.125
+  m_Script: {fileID: 11500000, guid: dbf410c9307479646818a82c92b81993, type: 3}
+  m_Name: Explosion
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionEffects
+  effectType: 2
+  damage: 20
+  damageType: 1
+  dotInterval: 1
+  collisionLife: 1.5

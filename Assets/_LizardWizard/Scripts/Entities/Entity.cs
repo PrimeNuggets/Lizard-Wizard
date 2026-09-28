@@ -46,6 +46,15 @@ public class Entity : ScriptableObject
     [NonSerialized] public Vector3 velocity;
     [NonSerialized] public Terrain terrain;
     [NonSerialized] public GameObject entObj;
+    //===================================================
+        //TrapManager Plugin - Xavier
+    //===================================================
+    public class StatusEffects
+    {
+        public bool onFire;
+        public bool onPoison;
+    }
+    [NonSerialized] public StatusEffects status;
     
     public void Initialize(GameObject obj, Terrain ter)
     {

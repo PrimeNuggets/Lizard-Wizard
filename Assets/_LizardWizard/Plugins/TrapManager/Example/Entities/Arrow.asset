@@ -9,15 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abf4bbdf2bb5a964bb6411f16e02f319, type: 3}
-  m_Name: Player
+  m_Script: {fileID: 11500000, guid: daf21f26c3b11344f908a4230860971d, type: 3}
+  m_Name: Arrow
   m_EditorClassIdentifier: Assembly-CSharp::Entity
-  health:
-    max: 10
-  water:
-    max: 0
-  speed:
-    max: 5
-  jumpHeight:
-    max: 5
-  feetOffset: 0.125
+  stats:
+    health:
+      baseValue: 20
+    speed:
+      baseValue: 5
+    jumpMod: 0
+    evasion: 0

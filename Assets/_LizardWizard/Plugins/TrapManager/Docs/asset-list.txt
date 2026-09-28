@@ -1,0 +1,60 @@
+Everything in this kit is my own code and artwork. Please credit me if used outside of the course GAME415 Spring 2026.
+
+File List:
+
+[Actual Kit]
+    - Docs/
+        - asset-list.txt
+        - readme.txt
+    - Scripts/
+        - Functionality/
+            - CollisionFX.cs
+            - Entity.cs
+            - Hazard.cs
+        - InScene/
+            - HazardManager.cs
+            - InteractionCollision.cs
+            - InterationManager.cs
+            - Projectile.cs
+
+[Demo]
+    - Example/
+        - Animations/
+            - Player.controller
+            - PlayerIdle.anim
+            - PlayerPitfallEnter.anim
+            - PlayerPitfallExit.anim
+        - CollisionFX/
+            - Explosion.asset
+        - Entities/
+            - Arrow.asset
+            - Player.asset
+        - HealSpots/
+            - HealSpot.asset
+        - Prefabs/
+            - Arrow.prefab
+            - ArrowTrap.prefab
+            - Explosion.prefab
+            - Fire.prefab
+            - FireSpawner.prefab
+            - GasTrap.prefab
+            - Hazard Bulk.prefab
+            - HealSpot.prefab
+            - Pitfall.prefab
+            - Spikes.prefab
+            - TrapTemplate.prefab
+        - Scenes/
+            - Example.unity
+        - Scripts/
+            - PlayerExample.cs
+            - HazardSpawner.cs
+        - Sprites/
+            - UI-EmptyBar.png
+            - UI-StaminaBar.png
+        - Traps/
+            - Arrow.asset
+            - Fire.asset
+            - FireSpawner.asset
+            - Gas.asset
+            - Pitfall.asset
+            - Spikes.asset
