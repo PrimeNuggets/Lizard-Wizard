@@ -4,16 +4,21 @@ public class SpiderVision : MonoBehaviour
 {
     public Transform player;
     public SpiderAI spiderAI;
+    public Transform visionOrigin;
 
     public float viewDistance = 10f;
     public float viewAngle = 90f;
+    public float visionYawOffset = 0f;
     public float detectionRate = 0.2f;
 
     private float timer;
 
+    private Vector3 VisionForward =>
+        Quaternion.AngleAxis(visionYawOffset, Vector3.up) * transform.forward;
+
     void Update()
     {
-        // -- Check vision every 0.2 seconds
+        // -- Check vision at the set rate
         timer += Time.deltaTime;
 
         if (timer >= detectionRate)
@@ -25,34 +30,76 @@ public class SpiderVision : MonoBehaviour
 
     void CheckVision()
     {
-        Vector3 direction = player.position - transform.position;
+        if (player == null || spiderAI == null || visionOrigin == null)
+            return;
+
+        Vector3 direction = player.position - visionOrigin.position;
 
         // -- Check distance
         if (direction.magnitude > viewDistance)
             return;
 
-        // -- Check view angle
-        float angle = Vector3.Angle(transform.forward, direction);
+        // -- Check angle
+        float angle = Vector3.Angle(VisionForward, direction);
 
         if (angle > viewAngle / 2f)
             return;
 
-        // -- Check line of sight
+        // -- Check if anything blocks the player
         RaycastHit hit;
 
         if (Physics.Raycast(
-            transform.position,
+            visionOrigin.position,
             direction.normalized,
             out hit,
             viewDistance))
         {
             Aspect aspect = hit.collider.GetComponent<Aspect>();
 
-            // -- Send detection to SpiderAI
+            // -- Tell SpiderAI when the player is seen
             if (aspect != null)
             {
                 spiderAI.PlayerDetected(aspect, "Vision");
             }
         }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        // -- Draw the vision range in red
+        if (visionOrigin == null || viewDistance <= 0f)
+            return;
+
+        Gizmos.color = Color.red;
+        Vector3 origin = visionOrigin.position;
+        Vector3 forward = VisionForward;
+        float halfAngle = Mathf.Clamp(viewAngle, 0f, 360f) * 0.5f;
+
+        // -- Draw a sphere if the angle is 360
+        if (halfAngle >= 180f)
+        {
+            Gizmos.DrawWireSphere(origin, viewDistance);
+            return;
+        }
+
+        const int segments = 32;
+        Vector3 edge = Quaternion.AngleAxis(halfAngle, Vector3.up) * forward;
+        Vector3 previous = origin + edge * viewDistance;
+
+        for (int i = 1; i <= segments; i++)
+        {
+            Vector3 direction =
+                Quaternion.AngleAxis(i * 360f / segments, forward) * edge;
+            Vector3 point = origin + direction * viewDistance;
+
+            Gizmos.DrawLine(previous, point);
+
+            if (i % 4 == 0)
+                Gizmos.DrawLine(origin, point);
+
+            previous = point;
+        }
+
+        Gizmos.DrawLine(origin, origin + forward * viewDistance);
     }
 }

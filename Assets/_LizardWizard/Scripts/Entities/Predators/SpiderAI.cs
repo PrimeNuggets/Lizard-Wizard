@@ -10,7 +10,6 @@ public class SpiderAI : MonoBehaviour
     }
 
     public State currentState = State.Idle;
-
     public float actionTime = 2f;
 
     private float timer;
@@ -48,7 +47,6 @@ public class SpiderAI : MonoBehaviour
         if (aspect != null && aspect.aspectName == Aspect.aspect.Player)
         {
             Debug.Log("Player detected by " + sense);
-
             ChooseReaction();
         }
     }
@@ -64,15 +62,12 @@ public class SpiderAI : MonoBehaviour
         if (roll < 0.75f)
         {
             currentState = State.Pounce;
-
             Debug.Log("Pounce");
         }
-
         // -- 25% Retreat
         else
         {
             currentState = State.Retreat;
-
             Debug.Log("Retreat");
         }
 
