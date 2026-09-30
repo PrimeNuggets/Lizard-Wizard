@@ -169,3 +169,7 @@ Packages/packages-lock.json linguist-generated
 
 # Exceptions for .asset files such as lightning pre-baking
 LightingData.asset     binary
+
+# TerrainData assets are binary; preserve their bytes instead of normalizing text.
+"Assets/New Terrain.asset" binary
+"Assets/New Terrain 1.asset" binary
