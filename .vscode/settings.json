@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Lizard Wizard.slnx"
+    "dotnet.defaultSolution": "Lizard-Wizard.slnx"
 }
