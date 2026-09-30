@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
         //===========================================================
             //Movement
         //===========================================================
-        transform.position = entityData.ApplyMove(move, jumpPressed);
+        entityData.ApplyMove(move, jumpPressed);
     }
 
     private void SetCursorLocked(bool locked)

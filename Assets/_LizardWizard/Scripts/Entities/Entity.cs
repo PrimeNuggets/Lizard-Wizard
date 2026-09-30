@@ -35,7 +35,6 @@ public class Entity : ScriptableObject
     [Tooltip("Effectively Mana")] public Stat water;
     public Stat speed;
     public Stat jumpHeight;
-    [SerializeField, Tooltip("Distance from the player's pivot to their feet")] private float feetOffset = 0.25f;
 
     //===================================================
         //Non-Serializable Variables
@@ -46,6 +45,7 @@ public class Entity : ScriptableObject
     [NonSerialized] public Vector3 velocity;
     [NonSerialized] public Terrain terrain;
     [NonSerialized] public GameObject entObj;
+    [NonSerialized] public CharacterController entChar;
     //===================================================
         //TrapManager Plugin - Xavier
     //===================================================
@@ -62,6 +62,7 @@ public class Entity : ScriptableObject
         ctrl = true;
         entObj = obj;
         terrain = ter;
+        entChar = entObj.GetComponent<CharacterController>();
     }
     public void InitializeStats()
     {
@@ -70,14 +71,20 @@ public class Entity : ScriptableObject
         speed.Set(speed.GetMax());
         jumpHeight.Set(jumpHeight.GetMax());
     }
-    public Vector3 ApplyMove(Vector2 move, bool jumped)
+    public void ApplyMove(Vector2 move, bool jumped)
     {
         float dt = Time.deltaTime;
+        grounded = entChar.isGrounded;
+        if (grounded && velocity.y < 0f)
+        {
+            velocity.y = -2f;
+        }
+        
+        move = Vector2.ClampMagnitude(move, 1f); //Processes WASD
         if (!ctrl)
         {
             move = Vector2.zero;
         }
-        move = Vector2.ClampMagnitude(move, 1f); //Processes WASD
 
         if (grounded && ctrl) {
             Vector3 direction = entObj.transform.right * move.x + entObj.transform.forward * move.y;
@@ -99,10 +106,24 @@ public class Entity : ScriptableObject
         }
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
 
-        Vector3 nextPos = entObj.transform.position;
-        nextPos += velocity * dt;
+        //Vector3 nextPos = entObj.transform.position;
+        //nextPos += velocity * dt;
 
-        float groundY = terrain.SampleHeight(nextPos) + terrain.transform.position.y + feetOffset;
+        CollisionFlags collisions = entChar.Move(velocity * dt);
+
+        grounded = entChar.isGrounded;
+        if (grounded && velocity.y < 0f)
+        {
+            velocity.y = -2f;
+            ctrl = true;
+        }
+
+        if ((collisions & CollisionFlags.Above) != 0 && velocity.y > 0f)
+        {
+            velocity.y = 0f;
+        }
+
+        /*float groundY = terrain.SampleHeight(nextPos) + terrain.transform.position.y + feetOffset;
         if (nextPos.y <= groundY && velocity.y <= 0f)
         {
             nextPos.y = groundY;
@@ -112,10 +133,10 @@ public class Entity : ScriptableObject
         } else
         {
             grounded = false;
-        }
+        }*/
         Debug.Log("Velocity: " + velocity);
         Debug.Log("Grounded: " + grounded);
         Debug.Log("Ctrl: " + ctrl);
-        return nextPos;
+        //return nextPos;
     }
 }
