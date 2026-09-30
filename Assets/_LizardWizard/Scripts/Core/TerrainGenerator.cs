@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public int width = 256;
-    public int height = 256;
-    public int depth = 20;
-    public float scale = 20f;
-    public float multscale;
+    public int width = 1024;
+    public int height = 1024;
+    public int depth = 25;
+    public float scale = 80f;
+    public float multscale = 10f;
     public float seedX = 0f;
     public float seedY = 0f;
     public float propseedX = 0f;
