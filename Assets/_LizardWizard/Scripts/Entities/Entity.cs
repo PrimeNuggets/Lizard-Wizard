@@ -22,14 +22,15 @@ public class Entity : ScriptableObject
             if (!max)
             {
                 current = value;
-            } else
+            }
+            else
             {
                 this.max = value;
             }
         }
     }
     //===================================================
-        //Serializable Variables
+    //Serializable Variables
     //===================================================
     public Stat health;
     [Tooltip("Effectively Mana")] public Stat water;
@@ -37,17 +38,17 @@ public class Entity : ScriptableObject
     public Stat jumpHeight;
 
     //===================================================
-        //Non-Serializable Variables
+    //Non-Serializable Variables
     //===================================================
     [NonSerialized] public bool grounded = false;
-    [NonSerialized] public bool ctrl = false; //Whether the entity is in control of their own actions
+    [NonSerialized] public bool ctrl = true; //Whether the entity is in control of their own actions
     private readonly Movement.Physics physics = new Movement.Physics();
     [NonSerialized] public Vector3 velocity;
     [NonSerialized] public Terrain terrain;
     [NonSerialized] public GameObject entObj;
     [NonSerialized] public CharacterController entChar;
     //===================================================
-        //TrapManager Plugin - Xavier
+    //TrapManager Plugin - Xavier
     //===================================================
     public class StatusEffects
     {
@@ -55,7 +56,7 @@ public class Entity : ScriptableObject
         public bool onPoison;
     }
     [NonSerialized] public StatusEffects status;
-    
+
     public void Initialize(GameObject obj, Terrain ter)
     {
         InitializeStats();
@@ -79,14 +80,15 @@ public class Entity : ScriptableObject
         {
             velocity.y = -2f;
         }
-        
+
         move = Vector2.ClampMagnitude(move, 1f); //Processes WASD
         if (!ctrl)
         {
             move = Vector2.zero;
         }
 
-        if (grounded && ctrl) {
+        if (grounded && ctrl)
+        {
             Vector3 direction = entObj.transform.right * move.x + entObj.transform.forward * move.y;
 
             velocity.x = direction.x * speed.GetCurrent();
