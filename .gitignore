@@ -105,6 +105,4 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
-Assets/New Terrain.asset
-Assets/New Terrain.asset
-Assets/New Terrain.asset.meta
+/[Aa]ssets/New Terrain.asset*
