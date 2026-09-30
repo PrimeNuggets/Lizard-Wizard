@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
     {
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
-        bool jumpPressed = jumpAction.WasPressedThisFrame();
+        bool jumpPressed = jumpAction.IsPressed();
         //===========================================================
             //Turning
         //===========================================================
