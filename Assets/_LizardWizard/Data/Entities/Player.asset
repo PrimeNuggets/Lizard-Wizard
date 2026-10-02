@@ -20,4 +20,4 @@ MonoBehaviour:
     max: 5
   jumpHeight:
     max: 5
-  feetOffset: 0.125
+  noiseChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}

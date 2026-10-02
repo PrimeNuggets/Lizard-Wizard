@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "Entity", menuName = "Scriptable Objects/Entity")]
 public class Entity : ScriptableObject
@@ -28,6 +29,23 @@ public class Entity : ScriptableObject
             }
         }
     }
+    public enum StateTypes // Sets what physics should be used based on the lizard's current animation. Will also help with future additions like stealth.
+    {
+        Unchanged,
+        Standing,
+        Crouching,
+        Air,
+        LyingDown,
+        Diving,
+    }
+    public enum MoveTypes // UNUSED: Defines the action that the player is taking
+    {
+        Unchanged,
+        Idling, 
+        Attacking,
+        Guarding,
+        Hurt,
+    }
     //===================================================
         //Serializable Variables
     //===================================================
@@ -35,6 +53,7 @@ public class Entity : ScriptableObject
     [Tooltip("Effectively Mana")] public Stat water;
     public Stat speed;
     public Stat jumpHeight;
+    public NoiseChannel noiseChannel;
 
     //===================================================
         //Non-Serializable Variables
@@ -46,6 +65,9 @@ public class Entity : ScriptableObject
     [NonSerialized] public Terrain terrain;
     [NonSerialized] public GameObject entObj;
     [NonSerialized] public CharacterController entChar;
+    [NonSerialized] public StateTypes stateType = StateTypes.Standing;
+    [NonSerialized] public StateTypes prevStateType = StateTypes.Standing;
+    private Aspect aspect;
     //===================================================
         //TrapManager Plugin - Xavier
     //===================================================
@@ -63,6 +85,7 @@ public class Entity : ScriptableObject
         entObj = obj;
         terrain = ter;
         entChar = entObj.GetComponent<CharacterController>();
+        aspect = entObj.GetComponent<Aspect>();
     }
     public void InitializeStats()
     {
@@ -75,6 +98,7 @@ public class Entity : ScriptableObject
     {
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
+        prevStateType = stateType;
         if (grounded && velocity.y < 0f)
         {
             velocity.y = -2f;
@@ -100,14 +124,10 @@ public class Entity : ScriptableObject
                     Mathf.Abs(gravity) *
                     Mathf.Max(0f, jumpHeight.GetCurrent())
                 );
-                grounded = false;
-                ctrl = false;
+                SetStateType('A', false);
             }
         }
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
-
-        //Vector3 nextPos = entObj.transform.position;
-        //nextPos += velocity * dt;
 
         CollisionFlags collisions = entChar.Move(velocity * dt);
 
@@ -115,28 +135,58 @@ public class Entity : ScriptableObject
         if (grounded && velocity.y < 0f)
         {
             velocity.y = -2f;
-            ctrl = true;
+            SetStateType('S', true);
+            if (prevStateType == StateTypes.Air)
+            {
+                noiseChannel.Raise(entObj.transform.position, aspect);
+            }
+        } else if (!grounded)
+        {
+            SetStateType('A', ctrl);
         }
 
         if ((collisions & CollisionFlags.Above) != 0 && velocity.y > 0f)
         {
             velocity.y = 0f;
         }
-
-        /*float groundY = terrain.SampleHeight(nextPos) + terrain.transform.position.y + feetOffset;
-        if (nextPos.y <= groundY && velocity.y <= 0f)
+    }
+    public void SetStateType(char state, bool ctrl)
+    {
+        switch (state)
         {
-            nextPos.y = groundY;
-            velocity.y = 0f;
-            grounded = true;
-            ctrl = true;
-        } else
+            case 'A':
+                stateType = StateTypes.Air;
+                grounded = false;
+                break;
+            case 'C':
+                stateType = StateTypes.Crouching;
+                grounded = true;
+                break;
+            case 'D':
+                stateType = StateTypes.Diving;
+                grounded = false;
+                ctrl = true; //Unlike Air, Diving specifically sets control to true to allow for state cancels. Transitions to LyingDown (L) when colliding with the ground
+                break;
+            case 'S':
+                stateType = StateTypes.Standing;
+                grounded = true;
+                break;
+            case 'L':
+                stateType = StateTypes.LyingDown;
+                grounded = true;
+                break;
+            default:
+                stateType = StateTypes.Unchanged;
+                if (state != 'U')
+                {
+                    Debug.LogWarning("StateType \"" + state + "\" doesn't exist.\nKeeping the previous state to prevent errors.");
+                }
+                break;
+        }
+        if (stateType == StateTypes.Unchanged)
         {
-            grounded = false;
-        }*/
-        Debug.Log("Velocity: " + velocity);
-        Debug.Log("Grounded: " + grounded);
-        Debug.Log("Ctrl: " + ctrl);
-        //return nextPos;
+            stateType = prevStateType;
+        }
+        this.ctrl = ctrl;
     }
 }
