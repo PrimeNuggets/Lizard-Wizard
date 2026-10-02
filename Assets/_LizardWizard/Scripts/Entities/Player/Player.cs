@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Aspect))]
 public class Player : MonoBehaviour
 {
     //=========================================
@@ -96,4 +97,5 @@ public class Player : MonoBehaviour
     {
         Destroy(entityData);
     }
+
 }
