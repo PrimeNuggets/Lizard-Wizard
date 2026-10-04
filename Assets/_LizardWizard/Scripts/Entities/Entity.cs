@@ -67,6 +67,10 @@ public class Entity : ScriptableObject
     [NonSerialized] public CharacterController entChar;
     [NonSerialized] public StateTypes stateType = StateTypes.Standing;
     [NonSerialized] public StateTypes prevStateType = StateTypes.Standing;
+    bool stateTypeChanged = false;
+    [NonSerialized] public MoveTypes moveType = MoveTypes.Idling;
+    [NonSerialized] public MoveTypes prevMoveType = MoveTypes.Idling;
+    bool moveTypeChanged = false;
     private Aspect aspect;
     //===================================================
         //TrapManager Plugin - Xavier
@@ -94,11 +98,18 @@ public class Entity : ScriptableObject
         speed.Set(speed.GetMax());
         jumpHeight.Set(jumpHeight.GetMax());
     }
-    public void ApplyMove(Vector2 move, bool jumped)
+    public void BeginTick() //reference in every entity's fixed update method
+    {
+        stateTypeChanged = false;
+        moveTypeChanged = false;
+
+        prevStateType = stateType;
+        prevMoveType = moveType;
+    }
+    public void ApplyMove(Vector2 move, bool jumped, Transform moveRef = null)
     {
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
-        prevStateType = stateType;
         if (grounded && velocity.y < 0f)
         {
             velocity.y = -2f;
@@ -110,8 +121,11 @@ public class Entity : ScriptableObject
             move = Vector2.zero;
         }
 
+        Transform reference = moveRef == null ? entObj.transform : moveRef;
+        Vector3 fwd = Vector3.ProjectOnPlane(reference.forward, Vector3.up).normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, fwd);
         if (grounded && ctrl) {
-            Vector3 direction = entObj.transform.right * move.x + entObj.transform.forward * move.y;
+            Vector3 direction = right * move.x + fwd * move.y;
 
             velocity.x = direction.x * speed.GetCurrent();
             velocity.z = direction.z * speed.GetCurrent();
@@ -136,7 +150,7 @@ public class Entity : ScriptableObject
         {
             velocity.y = -2f;
             SetStateType('S', true);
-            if (prevStateType == StateTypes.Air)
+            if (prevStateType == StateTypes.Air && noiseChannel != null)
             {
                 noiseChannel.Raise(entObj.transform.position, aspect);
             }
@@ -150,30 +164,81 @@ public class Entity : ScriptableObject
             velocity.y = 0f;
         }
     }
+    public char GetStateType()
+    {
+        char ret = 'U';
+        switch (stateType)
+        {
+            case StateTypes.Standing:
+                ret = 'S';
+                break;
+            case StateTypes.Air:
+                ret = 'A';
+                break;
+            case StateTypes.Crouching:
+                ret = 'C';
+                break;
+            case StateTypes.LyingDown:
+                ret = 'L';
+                break;
+            case StateTypes.Diving:
+                ret = 'D';
+                break;
+        }
+        return ret;
+    }
+    public char GetMoveType()
+    {
+        char ret = 'U';
+        switch (moveType)
+        {
+            case MoveTypes.Idling:
+                ret = 'I';
+                break;
+            case MoveTypes.Attacking:
+                ret = 'A';
+                break;
+            case MoveTypes.Guarding:
+                ret = 'G';
+                break;
+            case MoveTypes.Hurt:
+                ret = 'H';
+                break;
+        }
+        return ret;
+    }
     public void SetStateType(char state, bool ctrl)
     {
+        if (!stateTypeChanged) {
+            prevStateType = stateType;
+        }
         switch (state)
         {
             case 'A':
                 stateType = StateTypes.Air;
                 grounded = false;
+                stateTypeChanged = true;
                 break;
             case 'C':
                 stateType = StateTypes.Crouching;
                 grounded = true;
+                stateTypeChanged = true;
                 break;
             case 'D':
                 stateType = StateTypes.Diving;
                 grounded = false;
                 ctrl = true; //Unlike Air, Diving specifically sets control to true to allow for state cancels. Transitions to LyingDown (L) when colliding with the ground
+                stateTypeChanged = true;
                 break;
             case 'S':
                 stateType = StateTypes.Standing;
                 grounded = true;
+                stateTypeChanged = true;
                 break;
             case 'L':
                 stateType = StateTypes.LyingDown;
                 grounded = true;
+                stateTypeChanged = true;
                 break;
             default:
                 stateType = StateTypes.Unchanged;
@@ -188,5 +253,41 @@ public class Entity : ScriptableObject
             stateType = prevStateType;
         }
         this.ctrl = ctrl;
+    }
+    public void SetMoveType(char move)
+    {
+        if (!moveTypeChanged) {
+            prevMoveType = moveType;
+        }
+        switch (move)
+        {
+            case 'I':
+                moveType = MoveTypes.Idling;
+                moveTypeChanged = true;
+                break;
+            case 'H':
+                moveType = MoveTypes.Hurt;
+                moveTypeChanged = true;
+                break;
+            case 'A':
+                moveType = MoveTypes.Attacking;
+                moveTypeChanged = true;
+                break;
+            case 'G':
+                moveType = MoveTypes.Guarding;
+                moveTypeChanged = true;
+                break;
+            default:
+                moveType = MoveTypes.Unchanged;
+                if (move != 'U')
+                {
+                    Debug.LogWarning("MoveType \"" + move + "\" doesn't exist.\nKeeping the previous type to prevent errors.");
+                }
+                break;
+        }
+        if (moveType == MoveTypes.Unchanged)
+        {
+            moveType = prevMoveType;
+        }
     }
 }
