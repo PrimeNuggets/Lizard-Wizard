@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Aspect))]
+[RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
     //=========================================
@@ -68,6 +69,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate() //Using this saves a lot of fps
     {
+        entityData.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.IsPressed();

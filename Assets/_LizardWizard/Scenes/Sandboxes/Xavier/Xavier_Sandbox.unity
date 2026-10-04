@@ -150,6 +150,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 317449139}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &168310115 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+  m_PrefabInstance: {fileID: 2694692293406466300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &224475879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,11 +1123,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1122189211 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 863690504387952358, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-  m_PrefabInstance: {fileID: 2694692293406466300}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1132592519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,80 +1785,13 @@ GameObject:
   - component: {fileID: 1545893354}
   - component: {fileID: 1545893353}
   - component: {fileID: 1545893352}
-  - component: {fileID: 1545893351}
-  - component: {fileID: 1545893350}
-  - component: {fileID: 1545893349}
   m_Layer: 0
-  m_Name: Spider
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1545893349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545893348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a73c6c86e97be04b8c46823d497ad1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiderHearing
-  hearingRange: 8
-  spiderAI: {fileID: 1545893351}
-  playerChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}
---- !u!114 &1545893350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545893348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b900fa5bdc192479232bb887a1ca7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiderVision
-  player: {fileID: 1122189211}
-  spiderAI: {fileID: 1545893351}
-  visionOrigin: {fileID: 43689716}
-  viewDistance: 30
-  viewAngle: 90
-  visionYawOffset: 90
-  detectionRate: 0.2
---- !u!114 &1545893351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545893348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af3395f4b51063643ae1991a2a17a266, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpiderAI
-  entityTemplate: {fileID: 11400000, guid: 2bc4dca9b382c2149a96c650d6179c12, type: 2}
-  actionCooldowns:
-  - key: 0
-    value:
-      actionTime: 0
-  - key: 3
-    value:
-      actionTime: 2
-  - key: 2
-    value:
-      actionTime: 0
-  - key: 1
-    value:
-      actionTime: 3
-  - key: 4
-    value:
-      actionTime: 0
-  terrain: {fileID: 925611747}
 --- !u!136 &1545893352
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1947,14 +1880,179 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1545893348}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.24728788, y: 0.31617922, z: -0.72145224, w: 0.56425714}
-  m_LocalPosition: {x: 138.39105, y: 2.384639, z: 90.79475}
-  m_LocalScale: {x: 0.69594, y: 0.69594, z: 0.69594}
+  m_LocalRotation: {x: 0.5177846, y: -0.43794933, z: -0.5611178, w: 0.4746012}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.6959401, y: 0.69593996, z: 0.69594}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 317449139}
+  m_Father: {fileID: 1714446098}
+  m_LocalEulerAnglesHint: {x: 0, y: -85.4, z: -99.55}
+--- !u!1 &1714446092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1714446098}
+  - component: {fileID: 1714446097}
+  - component: {fileID: 1714446096}
+  - component: {fileID: 1714446095}
+  - component: {fileID: 1714446094}
+  - component: {fileID: 1714446093}
+  m_Layer: 0
+  m_Name: Spider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1714446093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714446092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af3395f4b51063643ae1991a2a17a266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiderAI
+  entityTemplate: {fileID: 11400000, guid: 2bc4dca9b382c2149a96c650d6179c12, type: 2}
+  actionCooldowns:
+  - key: 0
+    value:
+      maxTime: 0
+  - key: 3
+    value:
+      maxTime: 10
+  - key: 2
+    value:
+      maxTime: 4
+  - key: 1
+    value:
+      maxTime: 12
+  - key: 4
+    value:
+      maxTime: 0
+  - key: 5
+    value:
+      maxTime: 4
+  actionStateTimes:
+  - key: 0
+    value:
+      maxTime: 5
+  - key: 1
+    value:
+      maxTime: 5
+  - key: 2
+    value:
+      maxTime: 20
+  - key: 3
+    value:
+      maxTime: 40
+  - key: 4
+    value:
+      maxTime: 20
+  - key: 5
+    value:
+      maxTime: 15
+  - key: 6
+    value:
+      maxTime: 15
+  turnThreshold: 3
+  terrain: {fileID: 925611747}
+--- !u!143 &1714446094
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714446092}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 0.5
+  m_Radius: 0.53
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.06, z: 0.35}
+--- !u!114 &1714446095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714446092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332e85c87fd56a044b507284d014477e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Aspect
+  aspectName: 1
+--- !u!114 &1714446096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714446092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b900fa5bdc192479232bb887a1ca7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiderVision
+  player: {fileID: 168310115}
+  spiderAI: {fileID: 1714446093}
+  visionOrigin: {fileID: 43689716}
+  viewDistance: 10
+  viewAngle: 90
+  visionYawOffset: 0
+  detectionRate: 0.2
+--- !u!114 &1714446097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714446092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a73c6c86e97be04b8c46823d497ad1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiderHearing
+  hearingRange: 8
+  spiderAI: {fileID: 1714446093}
+  playerChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}
+--- !u!4 &1714446098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714446092}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 138.39105, y: 2.384639, z: 90.79475}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1545893355}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 10.204, y: 46.477, z: -99.55}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2694692293406466300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2027,5 +2125,5 @@ SceneRoots:
   - {fileID: 1217585352}
   - {fileID: 2694692293406466300}
   - {fileID: 925611749}
-  - {fileID: 1545893355}
+  - {fileID: 1714446098}
   - {fileID: 1132592520}
