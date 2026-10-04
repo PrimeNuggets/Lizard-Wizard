@@ -6,6 +6,10 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     //=========================================
+    [Header("Entity Data")]
+    [LabelOverride("Data")] public Entity entityTemplate;
+    [NonSerialized] public Entity entityData;
+    //=========================================
     [Header("Turning")]
     [SerializeField, LabelOverride("Mouse Sensitivity")] float sensitivity;
     //=========================================
@@ -15,11 +19,8 @@ public class Player : MonoBehaviour
     private InputAction lookAction;
     private InputAction jumpAction;
     //=========================================
-    [Header("Entity Data")]
-    [LabelOverride("Data")] public Entity entityTemplate;
-    [NonSerialized] public Entity entityData;
-    //=========================================
     [Header("Misc Data")]
+    [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
     [SerializeField] private Terrain terrain;
     //=========================================
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -75,12 +76,12 @@ public class Player : MonoBehaviour
         //===========================================================
         if (Cursor.lockState == CursorLockMode.Locked) {
             Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
-            transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
+            cameraRef.transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
         }
         //===========================================================
             //Movement
         //===========================================================
-        entityData.ApplyMove(move, jumpPressed);
+        entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
     }
 
     private void SetCursorLocked(bool locked)

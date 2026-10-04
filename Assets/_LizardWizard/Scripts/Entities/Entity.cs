@@ -67,6 +67,8 @@ public class Entity : ScriptableObject
     [NonSerialized] public CharacterController entChar;
     [NonSerialized] public StateTypes stateType = StateTypes.Standing;
     [NonSerialized] public StateTypes prevStateType = StateTypes.Standing;
+    [NonSerialized] public MoveTypes moveType = MoveTypes.Idling;
+    [NonSerialized] public MoveTypes prevMoveType = MoveTypes.Idling;
     private Aspect aspect;
     //===================================================
         //TrapManager Plugin - Xavier
@@ -94,7 +96,7 @@ public class Entity : ScriptableObject
         speed.Set(speed.GetMax());
         jumpHeight.Set(jumpHeight.GetMax());
     }
-    public void ApplyMove(Vector2 move, bool jumped)
+    public void ApplyMove(Vector2 move, bool jumped, Transform moveRef = null)
     {
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
@@ -110,8 +112,11 @@ public class Entity : ScriptableObject
             move = Vector2.zero;
         }
 
+        Transform reference = moveRef == null ? entObj.transform : moveRef;
+        Vector3 fwd = Vector3.ProjectOnPlane(reference.forward, Vector3.up).normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, fwd);
         if (grounded && ctrl) {
-            Vector3 direction = entObj.transform.right * move.x + entObj.transform.forward * move.y;
+            Vector3 direction = right * move.x + fwd * move.y;
 
             velocity.x = direction.x * speed.GetCurrent();
             velocity.z = direction.z * speed.GetCurrent();
