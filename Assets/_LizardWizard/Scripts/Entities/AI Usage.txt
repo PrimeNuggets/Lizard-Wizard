@@ -1,0 +1,29 @@
+-------------------------------------------------
+    Overview
+-------------------------------------------------
+The AI class is meant to be used as a super class that generates basic functionality all of our enemies should use. Enums for the different states are located at the top of the file for editing convenience.
+-------------------------------------------------
+    State Processing
+-------------------------------------------------
+- Individual states have all of their actions defined in {state_name}Actions() besides Wander and Chase since movement is hardcoded into the ProcessState() method.
+
+- The action methods can be overriden to add or remove actions as necessary
+
+- While ProcessState() can also be overriden, it's not recommended as it may break the entity's physics if done incorrectly.
+-------------------------------------------------
+    State Changing
+-------------------------------------------------
+- States can easily be changed with ChangeState({state}). The input must be grabbed from the enum mentioned above.
+
+- If forcing a state change is not desired, the method CanChangeState({char movetype}, {bool grounded}) can be checked before executing. This method checks if the entity's movetype is the same as the input, whether the entity is grounded, and whether the AI is in control of their actions. Valid movetype inputs:
+    - 'I': Idle
+    - 'A': Attacking
+    - 'G': Guarding
+    - 'H': Hurt
+    - 'U': Unchanged/Any
+-------------------------------------------------
+    Scoring
+-------------------------------------------------
+- Scores are currently calculated in the CalculateScores() method. This method can be overriden to account for situations specific to the current entity.
+
+- The AI weighs their decisions based on these scores rather than random decisions. While there is a degree of randomness, random decisions are generally bad because they can ignore the current situation and add unnecessary unpredictability. It's fine if the AI is designed to be bad, but against 

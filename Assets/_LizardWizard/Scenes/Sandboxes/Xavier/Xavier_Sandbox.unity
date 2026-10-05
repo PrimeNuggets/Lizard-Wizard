@@ -1964,6 +1964,7 @@ MonoBehaviour:
     value:
       maxTime: 15
   turnThreshold: 3
+  wanderSpeedMult: 0.5
   terrain: {fileID: 925611747}
 --- !u!143 &1714446094
 CharacterController:
