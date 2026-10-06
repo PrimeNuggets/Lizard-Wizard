@@ -1,46 +1,24 @@
+using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class SpiderAI : MonoBehaviour
+[RequireComponent(typeof(SpiderHearing))]
+[RequireComponent(typeof(SpiderVision))]
+public class SpiderAI : AI
 {
-    public enum State
+    public enum Attacks
     {
-        Idle,
         Pounce,
-        Retreat
+        WebTrap
     }
-
-    public State currentState = State.Idle;
-    public float actionTime = 2f;
-
-    private float timer;
-
-    void Start()
-    {
-        // -- Start in Idle
-        Debug.Log("Spider is Idle");
-    }
-
-    void Update()
-    {
-        // -- Return to Idle after an action
-        if (currentState != State.Idle)
-        {
-            timer += Time.deltaTime;
-
-            if (timer >= actionTime)
-            {
-                currentState = State.Idle;
-                timer = 0f;
-
-                Debug.Log("Spider returned to Idle");
-            }
-        }
-    }
-
+    //=========================================================
+        //General Methods
+    //=========================================================
     public void PlayerDetected(Aspect aspect, string sense)
     {
-        // -- Only react while Idle
-        if (currentState != State.Idle)
+        // -- Only react while state change is possible
+        if (!CanChangeState())
             return;
 
         // -- Check for Player aspect
@@ -50,27 +28,31 @@ public class SpiderAI : MonoBehaviour
             ChooseReaction();
         }
     }
-
+    //---------------------------------------------------------
     void ChooseReaction()
     {
         // -- Random roll from 0 to 1
-        float roll = Random.Range(0f, 1f);
+        float roll = UnityEngine.Random.Range(0f, 1f);
 
         Debug.Log("Random Roll: " + roll);
 
         // -- 75% Pounce
         if (roll < 0.75f)
         {
-            currentState = State.Pounce;
-            Debug.Log("Pounce");
+            ChangeState(AIStates.Chase);
         }
         // -- 25% Retreat
         else
         {
-            currentState = State.Retreat;
-            Debug.Log("Retreat");
+            ChangeState(AIStates.Retreat);
         }
 
-        timer = 0f;
+        //timer = 0f;
+    }
+    //---------------------------------------------------------
+    protected override void AttackActions()
+    {
+        base.AttackActions();
+        //Pounce()
     }
 }

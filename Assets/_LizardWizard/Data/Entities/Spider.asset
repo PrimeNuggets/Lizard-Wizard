@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abf4bbdf2bb5a964bb6411f16e02f319, type: 3}
-  m_Name: Player
+  m_Name: Spider
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   health:
     max: 10
   water:
-    max: 0
+    max: 50
   speed:
-    max: 5
+    max: 7
   jumpHeight:
-    max: 5
-  noiseChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}
+    max: 10
+  noiseChannel: {fileID: 0}

@@ -21,24 +21,18 @@ public class LabelOverride : PropertyAttribute
         {
             try
             {
-                var propertyAttribute = this.attribute as LabelOverride;
-                if( IsArray(property) == false )
-                {
-                    label.text = propertyAttribute.label;
-                    
-                } else
-                {
-                    Debug.LogWarningFormat(
-                        "{0}(\"{1}\") doesn't support arrays ",
-                        typeof(LabelOverride).Name ,
-                        propertyAttribute.label
-                    );
-                }
-                EditorGUI.PropertyField( position , property , label );
+                var labelOverride = (LabelOverride)attribute;
+                var customLabel = new GUIContent(label);
+                customLabel.text = labelOverride.label;
+                EditorGUI.PropertyField( position , property , customLabel, includeChildren: true );
             } catch ( System.Exception ex ) { Debug.LogException( ex ); }
         }
-        
-        bool IsArray (SerializedProperty property)
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUI.GetPropertyHeight(property, label, includeChildren: true);
+        }
+        /*bool IsArray(SerializedProperty property)
         {
             string path =  property.propertyPath;
             int idot = path.IndexOf('.');
@@ -47,7 +41,7 @@ public class LabelOverride : PropertyAttribute
             SerializedProperty p = property.serializedObject.FindProperty( propName );
             return p.isArray;
             //CREDITS: https://answers.unity.com/questions/603882/serializedproperty-isnt-being-detected-as-an-array.html
-        }
+        }*/
     }
     #endif
 }
