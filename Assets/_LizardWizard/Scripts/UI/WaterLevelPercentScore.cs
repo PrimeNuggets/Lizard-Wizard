@@ -9,7 +9,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     private int waterAmount;
     public TextMeshProUGUI waterLevelPercentText;
     //private PlayerInput playerInput;
-    private CharacterController playerController;
+    public CharacterController playerController;
     public Image WaterMeter;
     public float WaterLevel, MaxWaterLevel;
     public float WaterMovementMinDrainAmount;
@@ -43,7 +43,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             //if player is moving at a slow enough pace
             WaterLevel -= WaterMovementMinDrainAmount * Time.deltaTime;
             if (WaterLevel < 0) WaterLevel = 0;
-            waterLevelPercentText.text = "H20: " + WaterLevel + "%";
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             WaterMeter.fillAmount = WaterLevel / MaxWaterLevel;
         }
         else if (playerVelocity.magnitude > WaterMovementMaxSpeed) 
@@ -51,13 +51,13 @@ public class WaterLevelPercentScore : MonoBehaviour
             //if the player is moving fast via a sprint or momentum
             WaterLevel -= WaterMovementMaxDrainAmount * Time.deltaTime;
             if (WaterLevel < 0) WaterLevel = 0;
-            waterLevelPercentText.text = "H20: " + WaterLevel + "%";
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             WaterMeter.fillAmount = WaterLevel / MaxWaterLevel;
         }
         else
         {
             //update just to be sure everything is working
-            waterLevelPercentText.text = "H20: " + WaterLevel + "%";
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
         }
 
 

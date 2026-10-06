@@ -1731,6 +1731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
   waterLevelPercentText: {fileID: 1253387658}
+  playerController: {fileID: 0}
   WaterMeter: {fileID: 0}
   WaterLevel: 0
   MaxWaterLevel: 0
@@ -2505,6 +2506,7 @@ MonoBehaviour:
     value:
       maxTime: 15
   turnThreshold: 3
+  wanderSpeedMult: 0.25
   terrain: {fileID: 925611747}
 --- !u!143 &1714446094
 CharacterController:
@@ -2639,13 +2641,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803979018}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a07fb2758753984dbbcc2535af9a82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
   waterLevelPercentText: {fileID: 1803979021}
-  WaterMeter: {fileID: 0}
+  playerController: {fileID: 1903370473}
+  WaterMeter: {fileID: 1954642150}
   WaterLevel: 0
   MaxWaterLevel: 0
   WaterMovementMinDrainAmount: 0
@@ -2909,6 +2912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
   waterLevelPercentText: {fileID: 1803979021}
+  playerController: {fileID: 0}
   WaterMeter: {fileID: 1954642150}
   WaterLevel: 100
   MaxWaterLevel: 100
@@ -2918,6 +2922,11 @@ MonoBehaviour:
   WaterMovementMaxSpeed: 10
   WaterMagicDrainAmount: 0
   WaterTakeDamageDrainAmount: 0
+--- !u!143 &1903370473 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 94468549096083774, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+  m_PrefabInstance: {fileID: 2694692293406466300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1954642148
 GameObject:
   m_ObjectHideFlags: 0
