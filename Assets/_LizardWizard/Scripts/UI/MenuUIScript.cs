@@ -7,6 +7,13 @@ public class MenuUIScript : MonoBehaviour
     public GameObject PauseMenu;
     private bool gameIsPaused;
 
+    void Start()
+    {
+        //=========================================================
+            //Cursor Locking
+        //=========================================================
+        SetCursorLocked(false); //Start unlocked so that it's easier to test in the editor
+    }
     void Update()
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -20,6 +27,16 @@ public class MenuUIScript : MonoBehaviour
                 PauseGame();
             }
         }
+        if (!gameIsPaused)
+        {
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                if (Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    SetCursorLocked(true);
+                }
+            }
+        }
     }
 
     public void PauseGame()
@@ -27,6 +44,13 @@ public class MenuUIScript : MonoBehaviour
         gameIsPaused = true;
         PauseMenu.SetActive(true);
         Time.timeScale = 0f;
+        //===========================================================
+            //Cursor Locking
+        //===========================================================
+        if (Cursor.lockState != CursorLockMode.None)
+        {
+            SetCursorLocked(false);
+        }
     }
     
     public void ResumeGameplay()
@@ -34,6 +58,13 @@ public class MenuUIScript : MonoBehaviour
         gameIsPaused = false;
         PauseMenu.SetActive(false);
         Time.timeScale = 1.0f;
+        //===========================================================
+            //Cursor Locking
+        //===========================================================
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            SetCursorLocked(true);
+        }
     }
 
     public void lizardFunny()
@@ -53,5 +84,11 @@ public class MenuUIScript : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
+    }
+
+    public static void SetCursorLocked(bool locked)
+    {
+        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !locked;
     }
 }
