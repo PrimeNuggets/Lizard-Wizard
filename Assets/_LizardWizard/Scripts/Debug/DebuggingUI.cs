@@ -25,7 +25,7 @@ public class DebuggingUI : MonoBehaviour
         fps.text = fpsObj.GetComponent<TMP_Text>();
         //Override outside of the editor
         #if !UNITY_EDITOR
-            devMode = false
+            devMode = false;
         #endif
     }
 
