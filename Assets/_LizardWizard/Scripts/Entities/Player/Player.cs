@@ -28,11 +28,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         //=========================================================
-            //Cursor Locking
-        //=========================================================
-        SetCursorLocked(false); //Start unlocked so that it's easier to test in the editor
-
-        //=========================================================
             //Controls
         //=========================================================
         var input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
@@ -51,20 +46,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //===========================================================
-            //Cursor Locking
-        //===========================================================
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            SetCursorLocked(false);
-        }
-        if (Cursor.lockState != CursorLockMode.Locked)
-        {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                SetCursorLocked(true);
-            }
-        }
+        
     }
 
     void FixedUpdate() //Using this saves a lot of fps
@@ -86,15 +68,9 @@ public class Player : MonoBehaviour
         entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
     }
 
-    private void SetCursorLocked(bool locked)
-    {
-        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !locked;
-    }
-
     void OnDisable()
     {
-        SetCursorLocked(false);
+        MenuUIScript.SetCursorLocked(false);
     }
     void OnDestroy()
     {
