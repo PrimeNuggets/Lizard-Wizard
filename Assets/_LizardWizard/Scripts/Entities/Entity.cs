@@ -148,11 +148,14 @@ public class Entity : ScriptableObject
         grounded = entChar.isGrounded;
         if (grounded && velocity.y < 0f)
         {
+            float landingSpeed = Mathf.Abs(velocity.y);
             velocity.y = -2f;
             SetStateType('S', true);
             if (prevStateType == StateTypes.Air && noiseChannel != null)
             {
-                noiseChannel.Raise(entObj.transform.position, aspect);
+                //-- Harder landings make more noise
+                float strength = Mathf.Clamp(landingSpeed / 15f, 0.5f, 2f);
+                noiseChannel.Raise(entObj.transform.position, aspect, strength);
             }
         } else if (!grounded)
         {
