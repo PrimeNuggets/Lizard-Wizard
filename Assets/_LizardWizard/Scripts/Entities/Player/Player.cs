@@ -13,12 +13,15 @@ public class Player : MonoBehaviour
     //=========================================
     [Header("Turning")]
     [SerializeField, LabelOverride("Mouse Sensitivity")] float sensitivity;
+    [SerializeField] private Transform cameraPitch;
+    [SerializeField] private float maxLookAngle = 75f;
     //=========================================
         // Movement
     //=========================================
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction jumpAction;
+    private float pitch;
     //=========================================
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
@@ -36,6 +39,10 @@ public class Player : MonoBehaviour
         lookAction = input.actions.FindAction("Player/Look", true);
         jumpAction = input.actions.FindAction("Player/Jump", true);
 
+        pitch = cameraPitch.localEulerAngles.x;
+        if (pitch > 180f)
+            pitch -= 360f;
+
         //=========================================================
             //Entity Instantiation
         //=========================================================
@@ -46,7 +53,21 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Cursor.lockState != CursorLockMode.Locked)
+            return;
+
+        Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
+
+        cameraRef.transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
+
+        //-- Keep the camera from turning too far up or down
+        pitch = Mathf.Clamp(
+            pitch - mouseDelta.y * sensitivity,
+            -maxLookAngle,
+            maxLookAngle
+        );
+
+        cameraPitch.localRotation = Quaternion.Euler(pitch, 0f, 0f);
     }
 
     void FixedUpdate() //Using this saves a lot of fps
@@ -55,13 +76,6 @@ public class Player : MonoBehaviour
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.IsPressed();
-        //===========================================================
-            //Turning
-        //===========================================================
-        if (Cursor.lockState == CursorLockMode.Locked) {
-            Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
-            cameraRef.transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
-        }
         //===========================================================
             //Movement
         //===========================================================
@@ -72,9 +86,9 @@ public class Player : MonoBehaviour
     {
         MenuUIScript.SetCursorLocked(false);
     }
+
     void OnDestroy()
     {
         Destroy(entityData);
     }
-
 }

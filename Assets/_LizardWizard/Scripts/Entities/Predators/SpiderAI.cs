@@ -1,54 +1,55 @@
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(SpiderHearing))]
-[RequireComponent(typeof(SpiderVision))]
-public class SpiderAI : AI
+[RequireComponent(typeof(HearingSensor))]
+[RequireComponent(typeof(VisionSensor))]
+public class SpiderAI : EnemyAI
 {
     public enum Attacks
     {
         Pounce,
         WebTrap
     }
+
     //=========================================================
         //General Methods
     //=========================================================
-    public void PlayerDetected(Aspect aspect, string sense)
+    protected override void OnPlayerDetected()
     {
-        // -- Only react while state change is possible
-        if (!CanChangeState())
+        if (entityData == null ||
+            !entityData.grounded ||
+            !entityData.ctrl ||
+            entityData.GetMoveType() != 'I')
             return;
 
-        // -- Check for Player aspect
-        if (aspect != null && aspect.aspectName == Aspect.aspect.Player)
+        Debug.Log("Player detected by " + LastSense);
+
+        if (LastSense == "Hearing")
         {
-            Debug.Log("Player detected by " + sense);
-            ChooseReaction();
+            //-- Search where the sound came from
+            SearchAt(LastKnownPosition);
+            return;
         }
+
+        ChooseReaction();
     }
+
     //---------------------------------------------------------
     void ChooseReaction()
     {
-        // -- Random roll from 0 to 1
         float roll = UnityEngine.Random.Range(0f, 1f);
-
         Debug.Log("Random Roll: " + roll);
 
-        // -- 75% Pounce
+        //-- Most detections lead to Chase
         if (roll < 0.75f)
         {
             ChangeState(AIStates.Chase);
         }
-        // -- 25% Retreat
         else
         {
             ChangeState(AIStates.Retreat);
         }
-
-        //timer = 0f;
     }
+
     //---------------------------------------------------------
     protected override void AttackActions()
     {
