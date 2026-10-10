@@ -874,16 +874,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c7e26008497564b8ef8914e5530b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainGenerator
-  width: 1024
-  height: 1024
-  depth: 25
-  scale: 80
-  multscale: 10
-  seedX: 0
-  seedY: 0
-  propseedX: 0
-  propseedY: 0
-  prop1: {fileID: 0}
+  propscale: 100
+  propchancelowering: 0.25
+  prop1: {fileID: 8372568761179522024, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
 --- !u!4 &1535336942
 Transform:
   m_ObjectHideFlags: 0
@@ -899,23 +892,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1555054172 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8372568761179522024, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
-  m_PrefabInstance: {fileID: 6925290960391791368}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1555054177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1555054172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1ab37bbae6f02b42b3b9f3114e923ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PropManager
 --- !u!1 &1609670787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,10 +1024,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8372568761179522024, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1555054177}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

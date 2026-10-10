@@ -2,19 +2,34 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public int width = 1024;
-    public int height = 1024;
-    public int depth = 25;
-    public float scale = 80f;
-    public float multscale = 10f;
-    public float seedX = 0f;
-    public float seedY = 0f;
-    public float propseedX = 0f;
-    public float propseedY = 0f;
+    private int width = 1024;
+    private int height = 1024;
+    //width and height of the terrain. Must be equal! 
+    // it scales the dunes with it- increasing it will NOT make more dunes it will make BIGGER dunes
+    private int depth = 25;
+    //depth is how high the hills go.
+    private float scale = 80f;
+    //scale of the perlin noise map. higher = more dunes across the map.
+    private float multscale = 10f;
+    public float propscale = 10f;
+    //scale of the perlin noise multiplier map. lower means larger areas of flat and hilly terrain
+
+    //Seeds. They each have an X and Y of where in the perlin noise map they are. 
+    // Could squash some of them together for simplification and easier map seed gen but idk for now
+    private float seedX = 0f;
+    private float seedY = 0f;
+    private float multseedX = 0f;
+    private float multseedY = 0f;
+    private float propseedX = 0f;
+    private float propseedY = 0f;
+    public float propchancelowering; //0 = 50%, 0.5 = 0% chance of prop
     public GameObject prop1;
+    private Vector3[] ImportantPropPlaces;
+    private Vector3 centerOfMap;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+       centerOfMap = new Vector3(width/2f, depth/2f, height/2f);
         //uncomment this for randomization
         //seedX = Random.Range(0f,100000f);
         //seedY = Random.Range(0f,100000f);
@@ -22,11 +37,11 @@ public class TerrainGenerator : MonoBehaviour
         //propseedY = Random.Range(0f,100000f);
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        // PlaceProps(prop1);
+        PlaceProps(prop1, propchancelowering);
 
     }
     /* DO NOT UNCOMMENT 
-    this is for live update terrain. any large size (>500x500) will start slowing computers.
+    this is for terrain that updates live. any large size (>500x500) will start slowing computers. for small testing only.
     void Update()
     {
         Terrain terrain = GetComponent<Terrain>();
@@ -55,27 +70,44 @@ public class TerrainGenerator : MonoBehaviour
     }
     float CalculateHeight(int x, int y)
     {
+        //Okay so this is for the terrain height multiplier
         float ScalexCoord = (float)x / width * multscale;
         float ScaleyCoord = (float)y / height * multscale;
+        //to make 'areas' the multscale should be a lot less than scale
+
         float xCoord = (float)x / width * scale;
         float yCoord = (float)y / height * scale;
-        return Mathf.PerlinNoise(xCoord + seedX, yCoord + seedY) * Mathf.PerlinNoise(ScalexCoord, ScaleyCoord);
+        //terrain noise * larger mult noise*
+        return Mathf.PerlinNoise(xCoord + seedX, yCoord + seedY) * Mathf.PerlinNoise(ScalexCoord + multseedX, ScaleyCoord + multseedY);
     }
 
-    void PlaceProps(GameObject prop)
+    void PlaceProps(GameObject prop, float propchancebelowfifty)
     {
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                float xCoord = (float)x / width * scale;
-                float yCoord = (float)y / height * scale;
+                float xCoord = (float)x / width * propscale;
+                float yCoord = (float)y / height * propscale;
                 if (Random.value < Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY))
                 {
-                    Instantiate(prop, new Vector3(x + Random.value, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + Random.value), Quaternion.identity);
+                    float xRand = Random.value;
+                    float yRand = Random.value;
+                    //
+                    var colliders = Physics.OverlapSphere(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 0.0f);
+                    if (colliders.Length > 0) {
+                    Debug.Log("overlap detected - "+colliders[0].name);
+                    }else{
+                    //spawn prop
+                    Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
+                }
                 }
             }
         }
 
+    }
+    //doing a test of a different prop placement system. Preferable for objectives and PoIs
+    void PlaceProps2(GameObject prop, float radius){
+        
     }
 }
