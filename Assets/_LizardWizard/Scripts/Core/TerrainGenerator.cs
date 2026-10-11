@@ -11,7 +11,7 @@ public class TerrainGenerator : MonoBehaviour
     private float scale = 80f;
     //scale of the perlin noise map. higher = more dunes across the map.
     private float multscale = 10f;
-    public float propscale = 10f;
+    public float propscale = 100f;
     //scale of the perlin noise multiplier map. lower means larger areas of flat and hilly terrain
 
     //Seeds. They each have an X and Y of where in the perlin noise map they are. 
@@ -22,9 +22,10 @@ public class TerrainGenerator : MonoBehaviour
     private float multseedY = 0f;
     private float propseedX = 0f;
     private float propseedY = 0f;
-    public float propchancelowering; //0 = 50%, 0.5 = 0% chance of prop
+    public float propRollLowerBound;
+    public float propRollUpperBound;
     public GameObject prop1;
-    private Vector3[] ImportantPropPlaces;
+    private Collider[] propcheckbuffer;
     private Vector3 centerOfMap;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -37,7 +38,7 @@ public class TerrainGenerator : MonoBehaviour
         //propseedY = Random.Range(0f,100000f);
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        PlaceProps(prop1, propchancelowering);
+        PlaceProps(prop1);
 
     }
     /* DO NOT UNCOMMENT 
@@ -81,7 +82,7 @@ public class TerrainGenerator : MonoBehaviour
         return Mathf.PerlinNoise(xCoord + seedX, yCoord + seedY) * Mathf.PerlinNoise(ScalexCoord + multseedX, ScaleyCoord + multseedY);
     }
 
-    void PlaceProps(GameObject prop, float propchancebelowfifty)
+    void PlaceProps(GameObject prop)
     {
         for (int x = 0; x < width; x++)
         {
@@ -89,18 +90,21 @@ public class TerrainGenerator : MonoBehaviour
             {
                 float xCoord = (float)x / width * propscale;
                 float yCoord = (float)y / height * propscale;
-                if (Random.value < Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY))
+                if (Random.Range(0f, 100f)*Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY)>propRollUpperBound)
                 {
                     float xRand = Random.value;
                     float yRand = Random.value;
                     //
-                    var colliders = Physics.OverlapSphere(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 0.0f);
-                    if (colliders.Length > 0) {
-                    Debug.Log("overlap detected - "+colliders[0].name);
+                    var colliders = Physics.OverlapSphereNonAlloc(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 0.0f,propcheckbuffer);
+                    if (colliders > 0) {
+                    //Debug.Log("overlap detected - "+colliders[0].name);
                     }else{
                     //spawn prop
                     Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
+
                 }
+                }else{
+                     //Debug.Log("spawn aborted - highroll >" + Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY));
                 }
             }
         }
