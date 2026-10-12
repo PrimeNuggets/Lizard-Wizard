@@ -18,7 +18,8 @@ public class SpiderAI : EnemyAI
         if (entityData == null ||
             !entityData.grounded ||
             !entityData.ctrl ||
-            entityData.GetMoveType() != 'I')
+            entityData.GetMoveType() != 'I' ||
+            state == AIStates.Retreat)
             return;
 
         Debug.Log("Player detected by " + LastSense);
