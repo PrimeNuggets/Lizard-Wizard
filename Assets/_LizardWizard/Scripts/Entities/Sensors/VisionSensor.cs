@@ -14,6 +14,7 @@ public class VisionSensor : MonoBehaviour
     public float viewAngle = 90f;
     public float visionYawOffset = 0f;
     public float detectionRate = 0.2f;
+    public bool debugVision;
 
     private float timer;
 
@@ -35,36 +36,77 @@ public class VisionSensor : MonoBehaviour
     void CheckVision()
     {
         if (player == null || enemyAI == null || visionOrigin == null)
+        {
+            if (debugVision)
+                Debug.Log("Vision: missing player, enemy AI, or vision origin");
             return;
+        }
 
-        Vector3 direction = player.position - visionOrigin.position;
+        Collider playerCollider = player.GetComponent<Collider>();
+        Vector3 targetPosition = playerCollider != null
+            ? playerCollider.bounds.center
+            : player.position;
+
+        Vector3 direction = targetPosition - visionOrigin.position;
+        float distance = direction.magnitude;
+
+        if (distance <= 0f)
+            return;
 
         // -- Check distance
-        if (direction.magnitude > viewDistance)
+        if (distance > viewDistance)
+        {
+            if (debugVision)
+                Debug.Log("Vision: outside range, distance " + distance);
             return;
+        }
 
         // -- Check angle
         float angle = Vector3.Angle(VisionForward, direction);
 
         if (angle > viewAngle / 2f)
+        {
+            if (debugVision)
+                Debug.Log("Vision: outside angle, angle " + angle);
             return;
+        }
 
         // -- Check if anything blocks the player
-        RaycastHit hit;
-
-        if (Physics.Raycast(
+        RaycastHit[] hits = Physics.RaycastAll(
             visionOrigin.position,
             direction.normalized,
-            out hit,
-            viewDistance))
-        {
-            Aspect aspect = hit.collider.GetComponent<Aspect>();
+            viewDistance);
 
-            if (aspect != null)
+        Collider closestCollider = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.transform.IsChildOf(transform))
+                continue;
+
+            if (hit.distance < closestDistance)
             {
-                enemyAI.PlayerDetected(aspect, player.position, "Vision");
+                closestDistance = hit.distance;
+                closestCollider = hit.collider;
             }
         }
+
+        if (closestCollider == null)
+        {
+            if (debugVision)
+                Debug.Log("Vision: ray hit nothing outside the spider");
+            return;
+        }
+
+        Aspect aspect = closestCollider.GetComponentInParent<Aspect>();
+
+        if (debugVision)
+            Debug.Log("Vision: ray hit " + closestCollider.name +
+                ", aspect " + (aspect != null ? aspect.aspectName.ToString() : "none"));
+
+        if (aspect != null)
+            enemyAI.PlayerDetected(aspect, player.position, "Vision");
     }
 
     void OnDrawGizmosSelected()

@@ -66,13 +66,45 @@ public abstract class EnemyAI : MonoBehaviour
     protected Queue<string> brain = new Queue<string>();
     protected Vector3 wanderDest;
     protected bool hasDest;
-    protected Quaternion searchStartRot;
-    protected Quaternion searchTargetRot;
+
+    private Dictionary<AIStates, EnemyState> states;
+    private EnemyState currentState;
+    private SearchState searchState;
 
     public Aspect Target { get; private set; }
     public Vector3 LastKnownPosition { get; private set; }
     public string LastSense { get; private set; }
     public float LastDetectionTime { get; private set; }
+
+    //-- SearchState uses these without changing the Inspector fields
+    internal bool HasSearchDestination => hasDest;
+    internal Vector3 SearchDestination => wanderDest;
+    internal float SearchTurnDuration => searchTurnTime;
+
+    internal void PickSearchDestination()
+    {
+        WanderDestination();
+    }
+
+    //-- WanderState uses the same destination as Search
+    internal bool HasWanderDestination => hasDest;
+    internal Vector3 WanderDestinationPoint => wanderDest;
+    internal float WanderSpeedMultiplier => wanderSpeedMult;
+
+    internal void PickWanderDestination()
+    {
+        WanderDestination();
+    }
+
+    internal bool ReachedWanderDestination()
+    {
+        return WanderDestinationReached();
+    }
+
+    internal void ClearWanderDestination()
+    {
+        hasDest = false;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -82,6 +114,18 @@ public abstract class EnemyAI : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, terrain);
+
+        //-- Create the states before entering Idle
+        EnemyState idleState = new IdleState(this);
+        EnemyState wanderState = new WanderState(this);
+        searchState = new SearchState(this);
+
+        states = new Dictionary<AIStates, EnemyState>
+        {
+            { idleState.Type, idleState },
+            { wanderState.Type, wanderState },
+            { searchState.Type, searchState }
+        };
 
         //=========================================================
             //State Data
@@ -132,7 +176,9 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void ProcessState() //Supports Override
     {
-        Vector2 move = Vector2.zero;
+        Vector2 move = currentState != null
+            ? currentState.Tick()
+            : Vector2.zero;
 
         switch (state)
         {
@@ -141,11 +187,6 @@ public abstract class EnemyAI : MonoBehaviour
                 break;
 
             case AIStates.Wander:
-                if (!WanderDestinationReached())
-                    move = GetWanderInput();
-                else
-                    hasDest = false;
-
                 WanderActions();
                 break;
 
@@ -202,7 +243,7 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void SearchActions() //Supports Override
     {
-        TurnToWander();
+
     }
 
     //---------------------------------------------------------
@@ -226,34 +267,8 @@ public abstract class EnemyAI : MonoBehaviour
         stateTime = 0f;
         Remember(gameObject.name + " switched to the " + state + " State");
 
-        switch (state)
-        {
-            case AIStates.Idle:
-                break;
-
-            case AIStates.Wander:
-                if (!hasDest)
-                {
-                    WanderDestination();
-                }
-                break;
-
-            case AIStates.Chase:
-                break;
-
-            case AIStates.Retreat:
-                break;
-
-            case AIStates.Attack:
-                break;
-
-            case AIStates.Search:
-                if (!hasDest)
-                    WanderDestination();
-
-                SetSearchRotation();
-                break;
-        }
+        states.TryGetValue(state, out currentState);
+        currentState?.Enter();
     }
 
     //---------------------------------------------------------
@@ -268,25 +283,12 @@ public abstract class EnemyAI : MonoBehaviour
         if (state == AIStates.Search)
         {
             stateTime = 0f;
-            SetSearchRotation();
+            searchState.Enter();
         }
         else
         {
             ChangeState(AIStates.Search);
         }
-    }
-
-    //---------------------------------------------------------
-    void SetSearchRotation()
-    {
-        searchStartRot = transform.rotation;
-
-        Vector3 direction = wanderDest - transform.position;
-        direction.y = 0f;
-
-        searchTargetRot = direction.sqrMagnitude > 0.0001f
-            ? Quaternion.LookRotation(direction, Vector3.up)
-            : searchStartRot;
     }
 
     //---------------------------------------------------------
@@ -318,20 +320,6 @@ public abstract class EnemyAI : MonoBehaviour
     {
         actionCooldowns[_state].timer =
             Time.time + Mathf.Max(0f, actionCooldowns[_state].maxTime);
-    }
-
-    //---------------------------------------------------------
-    protected void TurnToWander()
-    {
-        if (!hasDest)
-            return;
-
-        float progress = searchTurnTime > 0f
-            ? Mathf.Clamp01(stateTime / searchTurnTime)
-            : 1f;
-
-        transform.rotation =
-            Quaternion.Slerp(searchStartRot, searchTargetRot, progress);
     }
 
     //---------------------------------------------------------
@@ -367,52 +355,10 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void CalculateScores() //Supports Overriding
     {
-        switch (state)
-        {
-            case AIStates.Idle:
-                stateScores[AIStates.Wander] = (
-                    UnityEngine.Random.Range(0f, 10f) +
-                    (!WanderDestinationReached() ? 7f : 0f)
-                );
+        currentState?.Score(stateScores);
 
-                stateScores[AIStates.Search] = (
-                    UnityEngine.Random.Range(0f, 10f) +
-                    (WanderDestinationReached() ? 7f : 0f)
-                );
-
-                stateScores[AIStates.Idle] = (
-                    UnityEngine.Random.Range(0f, 10f) +
-                    (WanderDestinationReached() ? 5f : 0f)
-                );
-                break;
-
-            case AIStates.Wander:
-                if (WanderDestinationReached())
-                {
-                    stateScores[AIStates.Idle] = 100f;
-                }
-                break;
-
-            case AIStates.Search:
-                stateScores[AIStates.Wander] = (
-                    UnityEngine.Random.Range(0f, 10f) +
-                    (hasDest ? 5f : 0f)
-                );
-
-                stateScores[AIStates.Search] = (
-                    UnityEngine.Random.Range(0f, 10f) +
-                    (!hasDest ? 5f : 0f)
-                );
-                break;
-
-            case AIStates.Attack:
-                stateScores[AIStates.Idle] = 100f;
-                break;
-
-            case AIStates.Retreat:
-                stateScores[AIStates.Idle] = 100f;
-                break;
-        }
+        if (state == AIStates.Attack || state == AIStates.Retreat)
+            stateScores[AIStates.Idle] = 100f;
     }
 
     //---------------------------------------------------------
@@ -439,34 +385,6 @@ public abstract class EnemyAI : MonoBehaviour
 
         hasDest = true;
         Remember(gameObject.name + " decided to wander towards " + wanderDest);
-    }
-
-    //---------------------------------------------------------
-    protected Vector2 GetWanderInput()
-    {
-        Vector3 offset = wanderDest - transform.position;
-        offset.y = 0;
-        float arrivalRadius = 0.5f;
-        float mult = Mathf.Clamp01(wanderSpeedMult);
-        float distance = offset.magnitude;
-
-        if (distance <= arrivalRadius)
-        {
-            WanderDestination();
-            return Vector2.zero;
-        }
-
-        transform.rotation =
-            Quaternion.LookRotation(offset / distance, Vector3.up); //Instantly look towards destination
-
-        float step =
-            entityData.speed.GetCurrent() * mult * Time.fixedDeltaTime;
-
-        float inputAmount = step > 0f
-            ? Mathf.Clamp01(distance / step)
-            : 0f;
-
-        return new Vector2(0f, inputAmount * mult);
     }
 
     //---------------------------------------------------------
@@ -517,6 +435,8 @@ public abstract class EnemyAI : MonoBehaviour
 
         if (_state == state)
             return;
+
+        currentState?.Exit();
 
         prevState = state;
         StartCooldown(prevState);
