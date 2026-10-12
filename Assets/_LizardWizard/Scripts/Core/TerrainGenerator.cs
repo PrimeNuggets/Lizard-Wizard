@@ -25,12 +25,15 @@ public class TerrainGenerator : MonoBehaviour
     public float propRollLowerBound;
     public float propRollUpperBound;
     public GameObject prop1;
-    private Collider[] propcheckbuffer;
+    public GameObject prop2;
+    private Collider[] propcheckbuffer = new Collider[10];
     private Vector3 centerOfMap;
+    private Vector3 poiLocation;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
        centerOfMap = new Vector3(width/2f, depth/2f, height/2f);
+       
         //uncomment this for randomization
         //seedX = Random.Range(0f,100000f);
         //seedY = Random.Range(0f,100000f);
@@ -38,8 +41,14 @@ public class TerrainGenerator : MonoBehaviour
         //propseedY = Random.Range(0f,100000f);
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        PlaceProps(prop1);
-
+        //placeprops overrides:
+        // for perlin patterns: Placeprops (prop, float minimum %chance of NO prop)
+        // for scattering: Placeprops (prop, float lower bound of prop chance, float upper bound of propchance)
+        // for radius based random placements: PlaceProps(GameObject prop, float RadiusFromOther, float spawnRadius, Vector2 spawncenter, int NumberToPlace)
+       PlaceProps(prop2, 50f, 500f, new Vector2(centerOfMap.x, centerOfMap.z), 1000);
+        PlaceProps(prop1, propRollLowerBound, propRollUpperBound);
+        //PlaceProps(prop1, 75f);
+        
     }
     /* DO NOT UNCOMMENT 
     this is for terrain that updates live. any large size (>500x500) will start slowing computers. for small testing only.
@@ -82,7 +91,7 @@ public class TerrainGenerator : MonoBehaviour
         return Mathf.PerlinNoise(xCoord + seedX, yCoord + seedY) * Mathf.PerlinNoise(ScalexCoord + multseedX, ScaleyCoord + multseedY);
     }
 
-    void PlaceProps(GameObject prop)
+    void PlaceProps(GameObject prop, float chance)
     {
         for (int x = 0; x < width; x++)
         {
@@ -90,18 +99,18 @@ public class TerrainGenerator : MonoBehaviour
             {
                 float xCoord = (float)x / width * propscale;
                 float yCoord = (float)y / height * propscale;
-                if (Random.Range(0f, 100f)*Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY)>propRollUpperBound)
+                if (Random.Range(0f, 100f)*Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY)>chance)
                 {
                     float xRand = Random.value;
                     float yRand = Random.value;
                     //
-                    var colliders = Physics.OverlapSphereNonAlloc(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 0.0f,propcheckbuffer);
-                    if (colliders > 0) {
-                    //Debug.Log("overlap detected - "+colliders[0].name);
+                    int colliders = Physics.OverlapSphereNonAlloc(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 1.0f,propcheckbuffer);
+                    if (colliders > 1) {
+                    Debug.Log("overlap detected - "+colliders);
                     }else{
                     //spawn prop
                     Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
-
+                    Physics.SyncTransforms();
                 }
                 }else{
                      //Debug.Log("spawn aborted - highroll >" + Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY));
@@ -111,7 +120,66 @@ public class TerrainGenerator : MonoBehaviour
 
     }
     //doing a test of a different prop placement system. Preferable for objectives and PoIs
-    void PlaceProps2(GameObject prop, float radius){
-        
+    void PlaceProps(GameObject prop, float lowerroll, float upperroll)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                float xCoord = (float)x / width * propscale;
+                float yCoord = (float)y / height * propscale;
+                if (Random.Range(lowerroll, upperroll) < Mathf.PerlinNoise(xCoord + propseedX, yCoord + propseedY))
+                {
+                    float xRand = Random.value;
+                    float yRand = Random.value;
+                    //
+                    int colliders = Physics.OverlapSphereNonAlloc(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 1.0f,propcheckbuffer);
+                    if (colliders > 1) {
+                    Debug.Log("overlap detected - "+colliders);
+                    }else{
+                    //spawn prop
+                    Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
+                     Physics.SyncTransforms();
+                     }
+                }
+            }
+        }
     }
+
+
+            void PlaceProps(GameObject prop, float RadiusFromOther, float spawnRadius, Vector2 spawncenter, int NumberToPlace){
+                //if shits sideways its because of THIS MOFO
+               int placedprops = 0;
+               int failedplacements = 0;
+               
+               while(placedprops < NumberToPlace){
+                Vector2 randCircle = spawncenter+ (Random.insideUnitCircle * spawnRadius);
+                poiLocation = new Vector3(randCircle.x, GetComponent<Terrain>().terrainData.GetHeight((int)randCircle.x, (int)randCircle.y), randCircle.y);
+                poiLocation.y = GetComponent<Terrain>().terrainData.GetHeight((int)poiLocation.x, (int)poiLocation.z);
+                {
+                    //
+                    int colliders = Physics.OverlapSphereNonAlloc(poiLocation, RadiusFromOther, propcheckbuffer);
+                    if (colliders > 1) 
+                    {
+                    Debug.Log("overlap detected - "+colliders);
+                    failedplacements++;
+                    if(failedplacements > 1000)
+                        {
+                        Debug.Log("Too many failed placements - loop aborted");
+                        return;
+                        }
+                    }else{
+                    //spawn prop
+                    Instantiate(prop, poiLocation, Quaternion.identity);
+                    failedplacements = 0;
+                    Physics.SyncTransforms();
+                    placedprops++;
+
+                }
+                }
+    
+               }
+            }
+
+            
 }
