@@ -31,6 +31,8 @@ public class NPC : MonoBehaviour
         //Non-Serialized Variables
     //=========================================================
     private Aspect player;
+    private Dialogue dialogueUI;
+    private bool waitForRelease = false; //Waits for the interaction button release
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -53,6 +55,10 @@ public class NPC : MonoBehaviour
         }
         var playerInputs = player.gameObject.GetComponent<UnityEngine.InputSystem.PlayerInput>();
         interactAction = playerInputs.actions.FindAction("Player/Interact", true);
+        //=========================================================
+            //Dialogue Lookup
+        //=========================================================
+        dialogueUI = FindAnyObjectByType<Dialogue>(FindObjectsInactive.Include);
     }
 
     // Update is called once per frame
@@ -67,12 +73,21 @@ public class NPC : MonoBehaviour
         // Check if the player is close enough
         float distance = Vector3.Distance(transform.position, aspect.transform.position);
 
+        bool pressed = interactAction.IsPressed();
+        bool newPressed = pressed && !waitForRelease;
+        waitForRelease = pressed;
+
         if (distance <= iRange && aspect.aspectName == Aspect.aspect.Player)
         {
             if (canvas.activeSelf == false)
             {
                 buttonText.text = interactAction.GetBindingDisplayString(0, InputBinding.DisplayStringOptions.DontIncludeInteractions); //Fix later to account for controllers
                 canvas.SetActive(true); //Ideally start an activation animation: fade in & slide to position
+            } else
+            {
+                if (newPressed && !Dialogue.inDialogue) {
+                    dialogueUI.StartDialogue(this);
+                }
             }
         } else
         {
@@ -80,6 +95,9 @@ public class NPC : MonoBehaviour
             {
                 buttonText.text = interactAction.GetBindingDisplayString(0, InputBinding.DisplayStringOptions.DontIncludeInteractions);
                 canvas.SetActive(false); //Ideally start an deactivation animation: fade out & slide to downward
+            }
+            if (Dialogue.inDialogue && dialogueUI.npc == this) { //Prevents other npcs from ending other's dialogues
+                dialogueUI.EndDialogue();
             }
         }
     }

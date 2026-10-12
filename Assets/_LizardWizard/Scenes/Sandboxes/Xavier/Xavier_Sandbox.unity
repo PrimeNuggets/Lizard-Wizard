@@ -2113,6 +2113,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1325705955}
   m_CullTransparentMesh: 1
+--- !u!1 &1337312107 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+  m_PrefabInstance: {fileID: 2694692293406466300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1352518854
 GameObject:
   m_ObjectHideFlags: 0
@@ -2376,6 +2381,7 @@ GameObject:
   - component: {fileID: 1587425015}
   - component: {fileID: 1587425017}
   - component: {fileID: 1587425016}
+  - component: {fileID: 1587425018}
   m_Layer: 5
   m_Name: DialogueBox
   m_TagString: Untagged
@@ -2442,6 +2448,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1587425014}
   m_CullTransparentMesh: 1
+--- !u!114 &1587425018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587425014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061007d0bd3edcb4ea990e85d6bff4f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  textBox: {fileID: 1325705957}
+  charLimit: 165
+  player: {fileID: 1337312107}
+  iButtonText: {fileID: 1352518856}
 --- !u!1 &1672061982
 GameObject:
   m_ObjectHideFlags: 0
@@ -2671,6 +2693,7 @@ MonoBehaviour:
       maxTime: 15
   turnThreshold: 3
   wanderSpeedMult: 0.5
+  searchTurnTime: 1
   terrain: {fileID: 925611747}
 --- !u!143 &1714446094
 CharacterController:
@@ -2723,7 +2746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderVision
   player: {fileID: 168310115}
-  spiderAI: {fileID: 1714446093}
+  enemyAI: {fileID: 1714446093}
   visionOrigin: {fileID: 43689716}
   viewDistance: 10
   viewAngle: 90
@@ -2741,8 +2764,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a73c6c86e97be04b8c46823d497ad1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderHearing
-  hearingRange: 8
-  spiderAI: {fileID: 1714446093}
+  minimumLoudness: 0.015384615
+  enemyAI: {fileID: 1714446093}
   playerChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}
 --- !u!4 &1714446098
 Transform:
@@ -2992,6 +3015,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1140881132533310100, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 1140881132533310100, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: terrain
       value: 
@@ -3040,6 +3071,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6564538844601925545, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 6564538844601925545, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
