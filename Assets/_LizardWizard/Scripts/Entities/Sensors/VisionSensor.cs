@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class SpiderVision : MonoBehaviour
+public class VisionSensor : MonoBehaviour
 {
     public Transform player;
-    public SpiderAI spiderAI;
+
+    [FormerlySerializedAs("spiderAI")]
+    public EnemyAI enemyAI;
+
     public Transform visionOrigin;
 
     public float viewDistance = 10f;
@@ -30,7 +34,7 @@ public class SpiderVision : MonoBehaviour
 
     void CheckVision()
     {
-        if (player == null || spiderAI == null || visionOrigin == null)
+        if (player == null || enemyAI == null || visionOrigin == null)
             return;
 
         Vector3 direction = player.position - visionOrigin.position;
@@ -56,10 +60,9 @@ public class SpiderVision : MonoBehaviour
         {
             Aspect aspect = hit.collider.GetComponent<Aspect>();
 
-            // -- Tell SpiderAI when the player is seen
             if (aspect != null)
             {
-                spiderAI.PlayerDetected(aspect, "Vision");
+                enemyAI.PlayerDetected(aspect, player.position, "Vision");
             }
         }
     }

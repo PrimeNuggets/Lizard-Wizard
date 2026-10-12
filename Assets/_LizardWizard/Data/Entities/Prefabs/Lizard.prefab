@@ -473,6 +473,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
   sensitivity: 0.1
+  cameraPitch: {fileID: 2261183586174062863}
+  maxLookAngle: 75
   cameraRef: {fileID: 3495833846603984688}
   terrain: {fileID: 0}
 --- !u!114 &1015099657600050311
