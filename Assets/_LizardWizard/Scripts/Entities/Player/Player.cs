@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Entity;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
@@ -27,6 +28,15 @@ public class Player : MonoBehaviour
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
     [SerializeField] private Terrain terrain;
     //=========================================
+
+    //================================
+    //stats ?
+    //[NonSerialized] public float water;
+    //[NonSerialized] public Stat health;
+    //[NonSerialized] public Stat speed;
+    //[NonSerialized] public Stat jumpHeight;
+    //[NonSerialized] public NoiseChannel noiseChannel;
+    //=========================================
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -48,6 +58,9 @@ public class Player : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, terrain);
+        //entityData.InitializeStats();
+        //entityData.water.Set(100, true);
+
     }
 
     // Update is called once per frame
