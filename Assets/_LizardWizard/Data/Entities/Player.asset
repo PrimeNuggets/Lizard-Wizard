@@ -15,7 +15,7 @@ MonoBehaviour:
   health:
     max: 10
   water:
-    max: 0
+    max: 100
   speed:
     max: 5
   jumpHeight:
