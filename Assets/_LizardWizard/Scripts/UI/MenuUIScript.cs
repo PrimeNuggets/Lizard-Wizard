@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class MenuUIScript : MonoBehaviour
 {
-    public GameObject PauseMenu;
+    [SerializeField] private GameObject PauseMenu;
+    [SerializeField] private Image PauseOverlay;
     private bool gameIsPaused;
 
     void Start()
