@@ -219,7 +219,7 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void ChaseActions() //Supports Override
     {
-
+        //-- TODO: Chase doesn't move yet, so they just stand there. We should make a ChaseState that goes after LastKnownPosition, kinda like Wander but faster
     }
 
     //---------------------------------------------------------
@@ -357,7 +357,7 @@ public abstract class EnemyAI : MonoBehaviour
     {
         currentState?.Score(stateScores);
 
-        if (state == AIStates.Attack || state == AIStates.Retreat)
+        if (state == AIStates.Attack || state == AIStates.Retreat || state == AIStates.Chase)
             stateScores[AIStates.Idle] = 100f;
     }
 
