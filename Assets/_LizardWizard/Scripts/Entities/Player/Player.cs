@@ -2,33 +2,34 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Aspect))]
+[RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
     //=========================================
+    [Header("Entity Data")]
+    [LabelOverride("Data")] public Entity entityTemplate;
+    [NonSerialized] public Entity entityData;
+    //=========================================
     [Header("Turning")]
     [SerializeField, LabelOverride("Mouse Sensitivity")] float sensitivity;
+    [SerializeField] private Transform cameraPitch;
+    [SerializeField] private float maxLookAngle = 75f;
     //=========================================
         // Movement
     //=========================================
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction jumpAction;
-    //=========================================
-    [Header("Entity Data")]
-    [LabelOverride("Data")] public Entity entityTemplate;
-    [NonSerialized] public Entity entityData;
+    private float pitch;
     //=========================================
     [Header("Misc Data")]
+    [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
     [SerializeField] private Terrain terrain;
     //=========================================
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //=========================================================
-            //Cursor Locking
-        //=========================================================
-        SetCursorLocked(false); //Start unlocked so that it's easier to test in the editor
-
         //=========================================================
             //Controls
         //=========================================================
@@ -37,6 +38,10 @@ public class Player : MonoBehaviour
         moveAction = input.actions.FindAction("Player/Move", true);
         lookAction = input.actions.FindAction("Player/Look", true);
         jumpAction = input.actions.FindAction("Player/Jump", true);
+
+        pitch = cameraPitch.localEulerAngles.x;
+        if (pitch > 180f)
+            pitch -= 360f;
 
         //=========================================================
             //Entity Instantiation
@@ -48,50 +53,40 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //===========================================================
-            //Cursor Locking
-        //===========================================================
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            SetCursorLocked(false);
-        }
         if (Cursor.lockState != CursorLockMode.Locked)
-        {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                SetCursorLocked(true);
-            }
-        }
+            return;
+
+        Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
+
+        cameraRef.transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
+
+        //-- Keep the camera from turning too far up or down
+        pitch = Mathf.Clamp(
+            pitch - mouseDelta.y * sensitivity,
+            -maxLookAngle,
+            maxLookAngle
+        );
+
+        cameraPitch.localRotation = Quaternion.Euler(pitch, 0f, 0f);
     }
 
     void FixedUpdate() //Using this saves a lot of fps
     {
+        entityData.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
-        bool jumpPressed = jumpAction.WasPressedThisFrame();
-        //===========================================================
-            //Turning
-        //===========================================================
-        if (Cursor.lockState == CursorLockMode.Locked) {
-            Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
-            transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
-        }
+        bool jumpPressed = jumpAction.IsPressed();
         //===========================================================
             //Movement
         //===========================================================
-        entityData.ApplyMove(move, jumpPressed);
-    }
-
-    private void SetCursorLocked(bool locked)
-    {
-        Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = !locked;
+        entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
     }
 
     void OnDisable()
     {
-        SetCursorLocked(false);
+        MenuUIScript.SetCursorLocked(false);
     }
+
     void OnDestroy()
     {
         Destroy(entityData);

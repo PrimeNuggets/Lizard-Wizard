@@ -5,7 +5,8 @@ public class Aspect : MonoBehaviour
     public enum aspect
     {
         Player,
-        Enemy
+        Enemy,
+        NPC
     }
 
     public aspect aspectName;
