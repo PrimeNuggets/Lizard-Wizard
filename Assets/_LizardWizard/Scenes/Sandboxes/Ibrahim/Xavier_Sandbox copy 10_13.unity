@@ -428,6 +428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuUIScript
   PauseMenu: {fileID: 757956544}
+  PauseOverlay: {fileID: 0}
 --- !u!1 &317449138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,16 +1454,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c7e26008497564b8ef8914e5530b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainGenerator
-  width: 256
-  height: 256
-  depth: 10
-  scale: 20
-  multscale: 0
-  seedX: 0
-  seedY: 0
-  propseedX: 0
-  propseedY: 0
+  propscale: 100
+  propRollLowerBound: 0
+  propRollUpperBound: 0
   prop1: {fileID: 0}
+  prop2: {fileID: 0}
 --- !u!4 &925611749
 Transform:
   m_ObjectHideFlags: 0
@@ -3051,7 +3047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.2
+      value: 14.18
       objectReference: {fileID: 0}
     - target: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.z
