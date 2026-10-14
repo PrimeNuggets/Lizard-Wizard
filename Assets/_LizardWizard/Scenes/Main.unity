@@ -821,8 +821,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainGenerator
   propscale: 25
-  propRollLowerBound: 0
-  propRollUpperBound: 0
+  propRollLowerBound: 0.3
+  propRollUpperBound: 50
   prop1: {fileID: 2307332570978995493, guid: 07369b8adad078446920faaf0b84521c, type: 3}
   prop2: {fileID: 8372568761179522024, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
 --- !u!4 &925611749
