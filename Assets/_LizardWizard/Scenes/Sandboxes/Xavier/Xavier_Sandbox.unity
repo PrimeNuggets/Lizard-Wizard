@@ -428,6 +428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuUIScript
   PauseMenu: {fileID: 757956544}
+  PauseOverlay: {fileID: 0}
 --- !u!1 &317449138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1453,16 +1454,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c7e26008497564b8ef8914e5530b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainGenerator
-  width: 256
-  height: 256
-  depth: 10
-  scale: 20
-  multscale: 0
-  seedX: 0
-  seedY: 0
-  propseedX: 0
-  propseedY: 0
+  propscale: 100
+  propRollLowerBound: 0
+  propRollUpperBound: 0
   prop1: {fileID: 0}
+  prop2: {fileID: 0}
 --- !u!4 &925611749
 Transform:
   m_ObjectHideFlags: 0
@@ -2118,6 +2114,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
   m_PrefabInstance: {fileID: 2694692293406466300}
   m_PrefabAsset: {fileID: 0}
+--- !u!143 &1337312108 stripped
+CharacterController:
+  m_CorrespondingSourceObject: {fileID: 94468549096083774, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+  m_PrefabInstance: {fileID: 2694692293406466300}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1352518854
 GameObject:
   m_ObjectHideFlags: 0
@@ -2752,6 +2753,7 @@ MonoBehaviour:
   viewAngle: 90
   visionYawOffset: 0
   detectionRate: 0.2
+  debugVision: 0
 --- !u!114 &1714446097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3015,6 +3017,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: entityTemplate
+      value: 
+      objectReference: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 1337312108}
     - target: {fileID: 1140881132533310100, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -3037,7 +3047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.2
+      value: 15.8
       objectReference: {fileID: 0}
     - target: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.z

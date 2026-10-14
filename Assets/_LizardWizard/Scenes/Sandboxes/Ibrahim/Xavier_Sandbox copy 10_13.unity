@@ -3018,6 +3018,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: water.max
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: entityTemplate
       value: 
       objectReference: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
