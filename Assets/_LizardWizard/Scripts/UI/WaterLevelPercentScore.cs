@@ -26,12 +26,12 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     public float WaterLevel, MaxWaterLevel;
     public float WaterMovementMinDrainAmount;
-    public float WaterMovementMaxDrainAmount;
+    //public float WaterMovementMaxDrainAmount;
     public float WaterMovementMinSpeed = 0.1f;
-    public float WaterMovementMaxSpeed = 10.0f;
+    //public float WaterMovementMaxSpeed = 10.0f;
     public float WaterMagicDrainAmount;
     public float WaterTakeDamageDrainAmount;
-    public float WaterEmptyValue = 0;
+    //public float WaterEmptyValue = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
