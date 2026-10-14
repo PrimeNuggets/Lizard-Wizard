@@ -68,7 +68,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
             //WaterLevel = entityData.water.GetCurrent();
             WaterMeter.fillAmount = entityData.water.GetCurrent() / entityData.water.GetMax();
-            Debug.Log(WaterMeter.fillAmount);
+            //Debug.Log(WaterMeter.fillAmount);
             //WaterMeter.fillAmount = entityData.water.GetCurrent() / MaxWaterLevel;
             //Debug.Log(entityData.water.GetCurrent().ToString());
 
