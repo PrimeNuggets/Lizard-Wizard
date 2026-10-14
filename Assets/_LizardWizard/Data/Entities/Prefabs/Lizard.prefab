@@ -489,8 +489,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a07fb2758753984dbbcc2535af9a82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
+  entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
+  water:
+    max: 0
+  waterAmount: 0
   waterLevelPercentText: {fileID: 1140881132533310100}
-  playerController: {fileID: 0}
+  playerController: {fileID: 94468549096083774}
   WaterMeter: {fileID: 7822058994018410392}
   WaterLevel: 100
   MaxWaterLevel: 100
@@ -500,6 +504,7 @@ MonoBehaviour:
   WaterMovementMaxSpeed: 10
   WaterMagicDrainAmount: 0
   WaterTakeDamageDrainAmount: 0
+  WaterEmptyValue: 0
 --- !u!1 &2552766259529300424
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,6 +655,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a07fb2758753984dbbcc2535af9a82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
+  entityTemplate: {fileID: 0}
+  water:
+    max: 0
+  waterAmount: 0
   waterLevelPercentText: {fileID: 1140881132533310100}
   playerController: {fileID: 94468549096083774}
   WaterMeter: {fileID: 7822058994018410392}
@@ -661,6 +670,7 @@ MonoBehaviour:
   WaterMovementMaxSpeed: 0
   WaterMagicDrainAmount: 0
   WaterTakeDamageDrainAmount: 0
+  WaterEmptyValue: 0
 --- !u!1 &3495833846603984688
 GameObject:
   m_ObjectHideFlags: 0
