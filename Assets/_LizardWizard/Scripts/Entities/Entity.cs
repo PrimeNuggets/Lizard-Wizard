@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -61,7 +62,7 @@ public class Entity : ScriptableObject
     [NonSerialized] public bool grounded = false;
     [NonSerialized] public bool ctrl = false; //Whether the entity is in control of their own actions
     private readonly Movement.Physics physics = new Movement.Physics();
-    [NonSerialized] public Vector3 velocity;
+    [NonSerialized] public UnityEngine.Vector3 velocity;
     [NonSerialized] public Terrain terrain;
     [NonSerialized] public GameObject entObj;
     [NonSerialized] public CharacterController entChar;
@@ -106,7 +107,7 @@ public class Entity : ScriptableObject
         prevStateType = stateType;
         prevMoveType = moveType;
     }
-    public void ApplyMove(Vector2 move, bool jumped, Transform moveRef = null)
+    public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null)
     {
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
@@ -115,24 +116,24 @@ public class Entity : ScriptableObject
             velocity.y = -2f;
         }
         
-        move = Vector2.ClampMagnitude(move, 1f); //Processes WASD
+        move = UnityEngine.Vector2.ClampMagnitude(move, 1f); //Processes WASD
         if (!ctrl)
         {
-            move = Vector2.zero;
+            move = UnityEngine.Vector2.zero;
         }
 
         Transform reference = moveRef == null ? entObj.transform : moveRef;
-        Vector3 fwd = Vector3.ProjectOnPlane(reference.forward, Vector3.up).normalized;
-        Vector3 right = Vector3.Cross(Vector3.up, fwd);
+        UnityEngine.Vector3 fwd = UnityEngine.Vector3.ProjectOnPlane(reference.forward, UnityEngine.Vector3.up).normalized;
+        UnityEngine.Vector3 right = UnityEngine.Vector3.Cross(UnityEngine.Vector3.up, fwd);
+        float gravity = physics.applyGravity(0f, 1f);
         if (grounded && ctrl) {
-            Vector3 direction = right * move.x + fwd * move.y;
+            UnityEngine.Vector3 direction = right * move.x + fwd * move.y;
 
             velocity.x = direction.x * speed.GetCurrent();
             velocity.z = direction.z * speed.GetCurrent();
+            UnityEngine.Vector3 downhillAcceleration = UnityEngine.Vector3.ProjectOnPlane(UnityEngine.Vector3.down * gravity * 1.5f, velocity);
             if (jumped)
             {
-                float gravity = physics.applyGravity(0f, 1f);
-
                 velocity.y = Mathf.Sqrt(
                     2f *
                     Mathf.Abs(gravity) *
