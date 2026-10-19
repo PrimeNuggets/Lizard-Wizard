@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     private InputAction lookAction;
     private InputAction jumpAction;
     private float pitch;
+    private LizardAnimation lizardAnimation;
     //=========================================
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour
             //Controls
         //=========================================================
         var input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        lizardAnimation = GetComponent<LizardAnimation>();
 
         moveAction = input.actions.FindAction("Player/Move", true);
         lookAction = input.actions.FindAction("Player/Look", true);
@@ -92,7 +94,10 @@ public class Player : MonoBehaviour
         //===========================================================
             //Movement
         //===========================================================
+        bool wasGrounded = entityData.entChar.isGrounded;
         entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
+        if (wasGrounded && jumpPressed && !entityData.grounded && entityData.velocity.y > 0f)
+            lizardAnimation?.PlayJump();
     }
 
     void OnDisable()
