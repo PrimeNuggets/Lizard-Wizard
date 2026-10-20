@@ -24,6 +24,7 @@ public class NPC : MonoBehaviour
         [Header("Misc Data")]
     //===========================================
     [SerializeField] private Terrain terrain;
+    [SerializeField] private Transform mesh;
     [TextArea] public List<string> dialogue;
     [LabelOverride("Interaction Range")] public float iRange = 8f;
     private InputAction interactAction;
@@ -40,7 +41,7 @@ public class NPC : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain);
+        entityData.Initialize(gameObject, terrain, mesh);
         //=========================================================
             //Player Lookup
         //=========================================================

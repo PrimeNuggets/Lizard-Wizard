@@ -5,10 +5,8 @@ using UnityEngine;
 public sealed class LizardAnimation : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-    [SerializeField] private Transform visualRoot;
-    [SerializeField, Tooltip("On: Surf while idle, Sprawl while sliding. Off reverses them.")]
+    [SerializeField, Tooltip("On: Surf while idle, Sprawl while sliding.\nOff reverses them.")]
     private bool swapIdleAndSlideAnimations = true;
-    [SerializeField, Min(0f)] private float turnSpeed = 540f;
     [SerializeField, Min(0f)] private float groundContactDelay = 0.08f;
     private CharacterController character;
     private float groundedTime;
@@ -22,6 +20,8 @@ public sealed class LizardAnimation : MonoBehaviour
     private void LateUpdate()
     {
         if (animator == null) return;
+        animator.SetFloat("SwapClips", swapIdleAndSlideAnimations ? 1f : 0f);
+        /*
         Vector3 movement = character.velocity;
         movement.y = 0f;
 
@@ -31,10 +31,49 @@ public sealed class LizardAnimation : MonoBehaviour
         animator.SetFloat("Speed", movement.magnitude);
         animator.SetFloat("SwapClips", swapIdleAndSlideAnimations ? 1f : 0f);
 
-        //-- The Animator picks the pose; this only turns the model
-        if (visualRoot != null && movement.sqrMagnitude > 0.0001f)
-            visualRoot.rotation = Quaternion.RotateTowards(visualRoot.rotation,
-                Quaternion.LookRotation(movement), turnSpeed * Time.deltaTime);
+
+        //=============================================================
+            //Move Rotation
+        //=============================================================
+        if (visualRoot != null) {
+            Vector3 groundNormal = Vector3.up;
+            if (character.isGrounded)
+            {
+                Bounds bounds = character.bounds;
+
+                Debug.DrawRay(
+                    bounds.center,
+                    Vector3.down * (bounds.extents.y + groundProbeDist),
+                    Color.red
+                );
+
+                if (UnityEngine.Physics.Raycast(
+                        bounds.center,
+                        Vector3.down,
+                        out RaycastHit hit,
+                        bounds.extents.y + groundProbeDist,
+                        groundLayer,
+                        QueryTriggerInteraction.Ignore
+                    ))
+                {
+                    groundNormal = hit.normal;
+                    Debug.DrawRay(hit.point, hit.normal * 0.5f, Color.blue);
+                }
+            }
+
+            Vector3 forward = movement.sqrMagnitude > 0.0001f ? movement : Vector3.ProjectOnPlane(visualRoot.forward, Vector3.up);
+
+            forward = Vector3.ProjectOnPlane(forward, groundNormal);
+
+            //-- The Animator picks the pose; this only turns the model
+            if (movement.sqrMagnitude > 0.0001f) {
+                Quaternion.LookRotation(forward, groundNormal);
+                visualRoot.rotation = Quaternion.RotateTowards(
+                    visualRoot.rotation,
+                    Quaternion.LookRotation(movement), turnSpeed * Time.deltaTime
+                );
+            }
+        }*/
     }
 
     //-- Called by Player after takeoff

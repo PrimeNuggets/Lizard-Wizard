@@ -1466,6 +1466,7 @@ MonoBehaviour:
   wanderSpeedMult: 0.5
   searchTurnTime: 1
   terrain: {fileID: 0}
+  mesh: {fileID: 1481733617115328582}
   panicChance: 0.35
 --- !u!1 &4681130634356121682
 GameObject:
