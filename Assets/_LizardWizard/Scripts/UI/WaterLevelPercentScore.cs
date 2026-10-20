@@ -15,6 +15,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //Water Capacity
     //[NonSerialized] public float water;
     [SerializeField] public Stat water;
+    [NonSerialized] public Terrain terrain;
     //=========================================
 
 
@@ -36,10 +37,11 @@ public class WaterLevelPercentScore : MonoBehaviour
     void Start()
     {
         entityData = Instantiate(entityTemplate);
+        entityData.Initialize(gameObject, terrain);
         entityData.water.Set(100);
         WaterLevel = entityData.water.GetCurrent();
-        MaxWaterLevel = 100;
-        waterAmount = 100;
+        //MaxWaterLevel = 100;
+        //waterAmount = 100;
         //waterLevelPercentText.text = "H20: " + waterAmount + "%";
         waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
         //Debug.Log(entityData.water.GetCurrent().ToString());
@@ -64,7 +66,7 @@ public class WaterLevelPercentScore : MonoBehaviour
         {
             //if player is moving
             entityData.water.Set(entityData.water.GetCurrent() - (WaterMovementMinDrainAmount * Time.deltaTime));
-            //if (entityData.water.GetCurrent() < 0f) entityData.water.Set(entityData.water.GetCurrent() - entityData.water.GetCurrent());
+            if (entityData.water.GetCurrent() < 0f) entityData.water.Set(entityData.water.GetCurrent() - entityData.water.GetCurrent());
             waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
             //WaterLevel = entityData.water.GetCurrent();
             WaterMeter.fillAmount = entityData.water.GetCurrent() / entityData.water.GetMax();
@@ -92,6 +94,7 @@ public class WaterLevelPercentScore : MonoBehaviour
         {
             //update just to be sure everything is working
             //waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
+            if (entityData.water.GetCurrent() < 0f) entityData.water.Set(entityData.water.GetCurrent() - entityData.water.GetCurrent());
             waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
             //Debug.Log(entityData.water.GetCurrent().ToString());
         }
