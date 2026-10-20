@@ -21,3 +21,8 @@ MonoBehaviour:
   jumpHeight:
     max: 3
   noiseChannel: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  groundProbeDist: 0.3
+  modelTurnSpeed: 540
