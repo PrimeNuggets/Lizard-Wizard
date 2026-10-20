@@ -41,6 +41,7 @@ public class WaterLevelPercentScore : MonoBehaviour
         //for some reason the water text and fill is set to half when the terrain is involved
         //Debug.Log(entityData.water.GetCurrent().ToString());
         entityData.water.Set(100);
+        //entityData.water.Set(entityData.water.GetMax());
         Debug.Log(entityData.water.GetCurrent().ToString());
         WaterLevel = entityData.water.GetCurrent();
         //MaxWaterLevel = 100;
