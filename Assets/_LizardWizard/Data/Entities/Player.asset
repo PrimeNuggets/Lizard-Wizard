@@ -26,3 +26,4 @@ MonoBehaviour:
     m_Bits: 8
   groundProbeDist: 0.3
   modelTurnSpeed: 540
+  groundContactDelay: 0.08

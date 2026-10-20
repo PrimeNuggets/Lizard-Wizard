@@ -19,7 +19,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //=========================================
 
 
-    public int waterAmount;
+    //public int waterAmount;
     public TextMeshProUGUI waterLevelPercentText;
     //private PlayerInput playerInput;
     public CharacterController playerController;
@@ -37,8 +37,11 @@ public class WaterLevelPercentScore : MonoBehaviour
     void Start()
     {
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain);
+        //entityData.Initialize(gameObject, terrain); 
+        //for some reason the water text and fill is set to half when the terrain is involved
+        //Debug.Log(entityData.water.GetCurrent().ToString());
         entityData.water.Set(100);
+        Debug.Log(entityData.water.GetCurrent().ToString());
         WaterLevel = entityData.water.GetCurrent();
         //MaxWaterLevel = 100;
         //waterAmount = 100;

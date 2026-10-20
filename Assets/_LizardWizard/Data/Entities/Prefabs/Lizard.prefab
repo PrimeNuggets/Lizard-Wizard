@@ -502,12 +502,9 @@ MonoBehaviour:
   WaterLevel: 100
   MaxWaterLevel: 100
   WaterMovementMinDrainAmount: 1
-  WaterMovementMaxDrainAmount: 5
   WaterMovementMinSpeed: 0.5
-  WaterMovementMaxSpeed: 10
   WaterMagicDrainAmount: 0
   WaterTakeDamageDrainAmount: 0
-  WaterEmptyValue: 0
 --- !u!114 &6188666030728164474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +558,6 @@ GameObject:
   - component: {fileID: 3265150898736770250}
   - component: {fileID: 3106377248236825588}
   - component: {fileID: 1140881132533310100}
-  - component: {fileID: 2327621452983225815}
   m_Layer: 0
   m_Name: WaterAmountText
   m_TagString: Untagged
@@ -618,8 +614,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'H20: %'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -688,34 +684,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &2327621452983225815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2552766259529300424}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a07fb2758753984dbbcc2535af9a82b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
-  entityTemplate: {fileID: 0}
-  water:
-    max: 0
-  waterAmount: 0
-  waterLevelPercentText: {fileID: 1140881132533310100}
-  playerController: {fileID: 94468549096083774}
-  WaterMeter: {fileID: 7822058994018410392}
-  WaterLevel: 10
-  MaxWaterLevel: 10
-  WaterMovementMinDrainAmount: 0
-  WaterMovementMaxDrainAmount: 0
-  WaterMovementMinSpeed: 0
-  WaterMovementMaxSpeed: 0
-  WaterMagicDrainAmount: 0
-  WaterTakeDamageDrainAmount: 0
-  WaterEmptyValue: 0
 --- !u!1 &3495833846603984688
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,8 +982,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Player Info UI  '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
