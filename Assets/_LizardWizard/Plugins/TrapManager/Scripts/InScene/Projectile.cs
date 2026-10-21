@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour
             entityData = Instantiate(entityData);
         }
         EnsureRuntimeState();
-        entityData.Initialize(gameObject, terrain);
+        //entityData.Initialize(gameObject, terrain);
     }
 
     public void Consume()

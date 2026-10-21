@@ -478,7 +478,6 @@ MonoBehaviour:
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
   cameraRef: {fileID: 3495833846603984688}
-  terrain: {fileID: 0}
   mesh: {fileID: 863690504387952358}
 --- !u!114 &1015099657600050311
 MonoBehaviour:
@@ -522,7 +521,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LizardAnimation
   animator: {fileID: 8389071859309181978}
   swapIdleAndSlideAnimations: 0
-  groundContactDelay: 0.08
 --- !u!54 &4758410650257725370
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -826,7 +824,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}

@@ -37,8 +37,13 @@ public class Entity : ScriptableObject
                 this.max = value;
             }
         }
-        public void Initialize(float current)
+        public void Initialize(float current, [CallerFilePath] string file = "",
+            [CallerLineNumber] int line = 0)
         {
+            if (initialized) {
+                Debug.LogWarning($"{System.IO.Path.GetFileName(file)}:{line}\nThis stat has already been initialized.\nAborting Method");
+                return;
+            }
             Set(current);
             initialized = true;
         }
@@ -85,7 +90,6 @@ public class Entity : ScriptableObject
     [NonSerialized] public bool ctrl = false; //Whether the entity is in control of their own actions
     private readonly Movement.Physics physics = new Movement.Physics();
     [NonSerialized] public UnityEngine.Vector3 velocity;
-    [NonSerialized] public Terrain terrain;
     [NonSerialized] public GameObject entObj;
     [NonSerialized] public CharacterController entChar;
     [NonSerialized] public StateTypes stateType = StateTypes.Standing;
@@ -110,12 +114,11 @@ public class Entity : ScriptableObject
     }
     [NonSerialized] public StatusEffects status;
     
-    public void Initialize(GameObject obj, Terrain ter, Transform model = null)
+    public void Initialize(GameObject obj, Transform model = null)
     {
         InitializeStats();
         ctrl = true;
         entObj = obj;
-        terrain = ter;
         entChar = entObj.GetComponent<CharacterController>();
         aspect = entObj.GetComponent<Aspect>();
         visualRoot = model != null ? model.transform : entObj.transform;
@@ -155,19 +158,19 @@ public class Entity : ScriptableObject
 
         prevStateType = stateType;
         prevMoveType = moveType;
-
-        if (animator != null) {
-            entChar.radius = animator.GetFloat("Collider_Radius");
-            entChar.height = animator.GetFloat("Collider_Height");
-
-            UnityEngine.Vector3 center = entChar.center;
-            center.y = animator.GetFloat("Collider_Center_Y");
-            entChar.center = center;
-        }
     }
     public void AfterTick()
     {   
         AlignToGround(Time.deltaTime);
+    }
+    public void Disable()
+    {   
+        groundedTime = 0f;
+
+        if (animator == null || !animator.isInitialized) return;
+        animator.SetFloat("Speed", 0f);
+        animator.SetBool("Grounded", false);
+        animator.ResetTrigger("Jump");
     }
     public void AlignToGround(float deltaTime)
     {
@@ -254,12 +257,7 @@ public class Entity : ScriptableObject
             UnityEngine.Vector3 downhillAcceleration = UnityEngine.Vector3.ProjectOnPlane(UnityEngine.Vector3.down * gravity * 1.5f, velocity);
             if (jumped)
             {
-                velocity.y = Mathf.Sqrt(
-                    2f *
-                    Mathf.Abs(gravity) *
-                    Mathf.Max(0f, jumpHeight.GetCurrent())
-                );
-                SetStateType('A', false);
+                PlayJump(gravity);
             }
         }
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
@@ -287,6 +285,25 @@ public class Entity : ScriptableObject
         {
             velocity.y = 0f;
         }
+    }
+
+    //Now that jumping logic is separate, this opens opportunities for uncontrolled/mid-air jumps as long as a gravity value is given
+    public void PlayJump(float gravity)
+    {
+        //Physics
+        velocity.y = Mathf.Sqrt(
+            2f *
+            Mathf.Abs(gravity) *
+            Mathf.Max(0f, jumpHeight.GetCurrent())
+        );
+        SetStateType('A', false);
+        groundedTime = 0f;
+
+        //Animation
+        if (animator == null) return;
+        animator.SetBool("Grounded", false);
+        animator.ResetTrigger("Jump");
+        animator.SetTrigger("Jump");
     }
     public char GetStateType()
     {
