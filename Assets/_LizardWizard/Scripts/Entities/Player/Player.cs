@@ -5,6 +5,7 @@ using static Entity;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
+[DisallowMultipleComponent]
 public class Player : MonoBehaviour
 {
     //=========================================
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
     [SerializeField] private Terrain terrain;
+    [SerializeField] private Transform mesh;
     //=========================================
 
     //================================
@@ -59,7 +61,7 @@ public class Player : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain);
+        entityData.Initialize(gameObject, terrain, mesh);
         //entityData.InitializeStats();
         //entityData.water.Set(100, true);
 
@@ -98,6 +100,11 @@ public class Player : MonoBehaviour
         entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
         if (wasGrounded && jumpPressed && !entityData.grounded && entityData.velocity.y > 0f)
             lizardAnimation?.PlayJump();
+    }
+
+    void LateUpdate()
+    {
+        entityData.AfterTick();
     }
 
     void OnDisable()

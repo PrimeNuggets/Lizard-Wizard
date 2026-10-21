@@ -193,6 +193,7 @@ MonoBehaviour:
   canvas: {fileID: 2105906457670068138}
   buttonText: {fileID: 2817553369998084080}
   terrain: {fileID: 0}
+  mesh: {fileID: 499923885633307018}
   dialogue:
   - A speech perhaps
   - Or not
