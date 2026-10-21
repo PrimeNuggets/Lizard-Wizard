@@ -25,7 +25,7 @@ public class HealthUISystem : MonoBehaviour
     public Image HeartFrailIcon;
     public Image HeartBrokenIcon;
     private bool IsHeartShieldBroken = false;
-    private float WaterNearEmptyValue = 1;
+    private float WaterNearEmptyValue = 1f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -57,7 +57,7 @@ public class HealthUISystem : MonoBehaviour
     private void DamagePlayerHealth()
     {
         Debug.Log("Take DMG");
-        if (entityData.water.GetCurrent() > WaterNearEmptyValue || Mathf.Approximately(entityData.water.GetCurrent(), WaterNearEmptyValue))
+        if (entityData.water.GetCurrent() > WaterNearEmptyValue)
         {
             Debug.Log("Damage Blocked.");
             HeartShieldIcon.gameObject.SetActive(true);

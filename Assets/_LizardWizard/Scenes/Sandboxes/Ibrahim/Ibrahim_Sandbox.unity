@@ -1988,6 +1988,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: HeartFrailIcon
+      value: 
+      objectReference: {fileID: 1856494697}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: playerCollider
+      value: 
+      objectReference: {fileID: 1564097045}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: HeartBrokenIcon
+      value: 
+      objectReference: {fileID: 1062957610}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: HeartShieldIcon
+      value: 
+      objectReference: {fileID: 1960485744}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: WaterMovementMinDrainAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1054486938006852552, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -2152,7 +2172,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1337312107}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a4662d13fa0e0546a033b458fb51fde, type: 3}
   m_Name: 
