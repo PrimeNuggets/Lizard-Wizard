@@ -156,7 +156,7 @@ public class Player : MonoBehaviour
     {
         Spell3.CastSpellDown();
     }
-    void OnSpell4Released()
+    void OnSpell3Released()
     {
        Spell3.CastSpellReleased();
     }
