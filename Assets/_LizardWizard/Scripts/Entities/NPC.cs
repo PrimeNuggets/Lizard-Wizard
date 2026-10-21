@@ -23,7 +23,7 @@ public class NPC : MonoBehaviour
     //===========================================
         [Header("Misc Data")]
     //===========================================
-    [SerializeField] private Terrain terrain;
+    [SerializeField] private Transform mesh;
     [TextArea] public List<string> dialogue;
     [LabelOverride("Interaction Range")] public float iRange = 8f;
     private InputAction interactAction;
@@ -40,7 +40,7 @@ public class NPC : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain);
+        entityData.Initialize(gameObject, mesh);
         //=========================================================
             //Player Lookup
         //=========================================================
@@ -64,8 +64,27 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        entityData?.BeginTick();
         entityData.ApplyMove(Vector2.zero, false);
         PlayerNear(player);
+    }
+
+    void OnDisable()
+    {
+        entityData?.Disable();
+    }
+    //Executes once-per-tick after Update
+    void LateUpdate()
+    {
+        //entityData?.AfterTick(); //Aligns the entity to the ground. Since some npcs will be stuck in sand or similar situations, I'm not sure we should do this. - Xavier
+
+        Vector3 direction = player.transform.position - canvas.transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            canvas.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
+        }
     }
 
     public void PlayerNear(Aspect aspect)
@@ -101,19 +120,6 @@ public class NPC : MonoBehaviour
             }
         }
     }
-
-    //Executes once-per-tick after Update
-    void LateUpdate()
-    {
-        Vector3 direction = player.transform.position - canvas.transform.position;
-        direction.y = 0f;
-
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            canvas.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
-        }
-    }
-
 
     void OnDrawGizmosSelected()
     {

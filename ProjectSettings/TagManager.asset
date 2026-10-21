@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Terrain
   - Prop
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - Props

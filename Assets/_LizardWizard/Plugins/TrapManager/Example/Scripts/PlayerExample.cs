@@ -36,7 +36,7 @@ public class PlayerExample : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        entityData.Initialize(gameObject, terrain);
+        //entityData.Initialize(gameObject, terrain);
     }
 
     void OnEnable()

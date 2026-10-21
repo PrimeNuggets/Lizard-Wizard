@@ -23,7 +23,7 @@ public class TerrainGenerator : MonoBehaviour
     private float propseedX = 0f;
     private float propseedY = 0f;
     public float propRollLowerBound;
-    public float propRollUpperBound;
+    [Tooltip("")] public float propRollUpperBound;
     public GameObject prop1;
     public GameObject prop2;
     private Collider[] propcheckbuffer = new Collider[10];
@@ -164,7 +164,7 @@ public class TerrainGenerator : MonoBehaviour
                     {
                     Debug.Log("overlap detected - "+colliders);
                     failedplacements++;
-                    if(failedplacements > 1000)
+                    if(failedplacements > 1000) //prop limit may need a variable
                         {
                         Debug.Log("Too many failed placements - loop aborted");
                         return;

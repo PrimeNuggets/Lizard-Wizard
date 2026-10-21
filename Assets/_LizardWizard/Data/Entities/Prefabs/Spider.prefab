@@ -415,6 +415,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2610964815363077123}
+  - {fileID: 1666062756121117817}
   m_Father: {fileID: 1223126555690005243}
   m_LocalEulerAnglesHint: {x: 0, y: -85.4, z: -99.55}
 --- !u!33 &1210009928374931690
@@ -1216,7 +1217,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6470975214547581263}
-  - {fileID: 1666062756121117817}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7933288572224926886
@@ -1287,7 +1287,7 @@ CharacterController:
   serializedVersion: 3
   m_Height: 0.5
   m_Radius: 0.53
-  m_SlopeLimit: 45
+  m_SlopeLimit: 75
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -1350,6 +1350,7 @@ MonoBehaviour:
   wanderSpeedMult: 0.5
   searchTurnTime: 1
   terrain: {fileID: 0}
+  mesh: {fileID: 6470975214547581263}
 --- !u!1 &6313946474024606577
 GameObject:
   m_ObjectHideFlags: 0
@@ -1962,9 +1963,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8321890527323936454}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.5177846, y: 0.43794933, z: 0.5611178, w: 0.4746012}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.4369055, y: 1.4369053, z: 1.4369054}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6065351951722748870}
@@ -1983,7 +1984,7 @@ Transform:
   - {fileID: 8064704167868355233}
   - {fileID: 281639899690912767}
   - {fileID: 1236247672340034280}
-  m_Father: {fileID: 1223126555690005243}
+  m_Father: {fileID: 6470975214547581263}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8680127591618050618
 GameObject:
