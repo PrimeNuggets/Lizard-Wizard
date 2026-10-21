@@ -144,4 +144,28 @@ public class Player : MonoBehaviour
     {
        Spell1.CastSpellReleased();
     }
+        void OnSpell2()
+    {
+        Spell2.CastSpellDown();
+    }
+    void OnSpell2Released()
+    {
+       Spell2.CastSpellReleased();
+    }
+        void OnSpell3()
+    {
+        Spell3.CastSpellDown();
+    }
+    void OnSpell4Released()
+    {
+       Spell3.CastSpellReleased();
+    }
+        void OnSpell4()
+    {
+        Spell1.CastSpellDown();
+    }
+    void OnSpell4Released()
+    {
+       Spell4.CastSpellReleased();
+    }
 }
