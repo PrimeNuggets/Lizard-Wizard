@@ -16,7 +16,7 @@ public class Quests : ScriptableObject
     [SerializeField, LabelOverride("Name")] private string questName;
     [SerializeField, TextArea] private string description;
     [SerializeField] private List<Objective> objectiveChain;
-    public static event Action<string, int, ProcessType> process;
+    public static event Action<Quests> process;
 
     [Serializable]
     public class Objective
@@ -29,17 +29,18 @@ public class Quests : ScriptableObject
         public enum RewardType
         {
             None,
-            Water,
+            Trinket,
+            Achievement,
         }
         public int id {get; private set; }
         public string task;
         [TextArea] public string description;
         public TaskType type;
-        [SerializeField] public Dictionary<RewardType, float> reward;
+        [SerializeField] public Dictionary<RewardType, string> reward;
     }
 
-    public void StartProcess(int objIndex, ProcessType phase)
+    /*public void StartProcess(int objIndex, ProcessType phase)
     {
         process?.Invoke(questId, objIndex, phase);
-    }
+    }*/
 }
