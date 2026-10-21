@@ -23,12 +23,12 @@ public class Player : MonoBehaviour
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction jumpAction;
+    private InputAction slideAction;
     private float pitch;
     private LizardAnimation lizardAnimation;
     //=========================================
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
-    [SerializeField] private Terrain terrain;
     [SerializeField] private Transform mesh;
     //=========================================
 
@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
         moveAction = input.actions.FindAction("Player/Move", true);
         lookAction = input.actions.FindAction("Player/Look", true);
         jumpAction = input.actions.FindAction("Player/Jump", true);
+        slideAction = input.actions.FindAction("Player/Crouch", true);
 
         pitch = cameraPitch.localEulerAngles.x;
         if (pitch > 180f)
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain, mesh);
+        entityData.Initialize(gameObject, mesh);
         //entityData.InitializeStats();
         //entityData.water.Set(100, true);
 
@@ -89,7 +90,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate() //Using this saves a lot of fps
     {
-        entityData.BeginTick();
+        entityData?.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.IsPressed();
@@ -98,17 +99,16 @@ public class Player : MonoBehaviour
         //===========================================================
         bool wasGrounded = entityData.entChar.isGrounded;
         entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
-        if (wasGrounded && jumpPressed && !entityData.grounded && entityData.velocity.y > 0f)
-            lizardAnimation?.PlayJump();
     }
 
     void LateUpdate()
     {
-        entityData.AfterTick();
+        entityData?.AfterTick();
     }
 
     void OnDisable()
     {
+        entityData?.Disable();
         MenuUIScript.SetCursorLocked(false);
     }
 

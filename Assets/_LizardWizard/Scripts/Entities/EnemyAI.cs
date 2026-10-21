@@ -114,7 +114,7 @@ public abstract class EnemyAI : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain, mesh);
+        entityData.Initialize(gameObject, mesh);
 
         //-- Create the states before entering Idle
         EnemyState idleState = new IdleState(this);
@@ -137,7 +137,7 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     void FixedUpdate()
     {
-        entityData.BeginTick();
+        entityData?.BeginTick();
         stateTime += Time.fixedDeltaTime;
 
         UpdateDecision();
@@ -146,7 +146,12 @@ public abstract class EnemyAI : MonoBehaviour
 
     void LateUpdate()
     {
-        entityData.AfterTick();
+        entityData?.AfterTick();
+    }
+
+    void OnDisable()
+    {
+        entityData?.Disable();
     }
 
     //---------------------------------------------------------
