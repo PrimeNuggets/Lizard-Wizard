@@ -1,11 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static Entity;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
-[DisallowMultipleComponent]
 public class Player : MonoBehaviour
 {
     //=========================================
@@ -33,20 +31,10 @@ public class Player : MonoBehaviour
     private ISpell Spell4;
     
     private float pitch;
-    private LizardAnimation lizardAnimation;
     //=========================================
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
-    [SerializeField] private Transform mesh;
-    //=========================================
-
-    //================================
-    //stats ?
-    //[NonSerialized] public float water;
-    //[NonSerialized] public Stat health;
-    //[NonSerialized] public Stat speed;
-    //[NonSerialized] public Stat jumpHeight;
-    //[NonSerialized] public NoiseChannel noiseChannel;
+    [SerializeField] private Terrain terrain;
     //=========================================
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,7 +43,6 @@ public class Player : MonoBehaviour
             //Controls
         //=========================================================
         var input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
-        lizardAnimation = GetComponent<LizardAnimation>();
 
         moveAction = input.actions.FindAction("Player/Move", true);
         lookAction = input.actions.FindAction("Player/Look", true);
@@ -73,10 +60,7 @@ public class Player : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, mesh);
-        //entityData.InitializeStats();
-        //entityData.water.Set(100, true);
-
+        entityData.Initialize(gameObject, terrain);
     }
 
     // Update is called once per frame
@@ -101,7 +85,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate() //Using this saves a lot of fps
     {
-        entityData?.BeginTick();
+        entityData.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.IsPressed();
@@ -114,26 +98,75 @@ public class Player : MonoBehaviour
         if (spell1Action.WasReleasedThisFrame()){
             OnSpell1Released();
         }
+        
         //===========================================================
             //Movement
         //===========================================================
-        bool wasGrounded = entityData.entChar.isGrounded;
         entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
-    }
-
-    void LateUpdate()
-    {
-        entityData?.AfterTick();
     }
 
     void OnDisable()
     {
-        entityData?.Disable();
         MenuUIScript.SetCursorLocked(false);
     }
 
     void OnDestroy()
     {
         Destroy(entityData);
+    }
+//might need edits to put spellscript on player? depends how itll workz
+    void SetSpell(int SpellNumber, ISpell spellScript){
+        switch (SpellNumber){
+            case 1:
+                Spell1 = spellScript;
+                break;
+            case 2:
+                Spell2 = spellScript;
+                break;
+            case 3:
+                Spell3 = spellScript;
+                break;
+            case 4:
+                Spell4 = spellScript;
+                break;
+            default:
+                Debug.Log(SpellNumber + ": index invalid!");
+                break;
+        }
+
+    }
+
+
+    void OnSpell1()
+    {
+        Spell1.CastSpellDown();
+    }
+    void OnSpell1Released()
+    {
+       Spell1.CastSpellReleased();
+    }
+        void OnSpell2()
+    {
+        Spell2.CastSpellDown();
+    }
+    void OnSpell2Released()
+    {
+       Spell2.CastSpellReleased();
+    }
+        void OnSpell3()
+    {
+        Spell3.CastSpellDown();
+    }
+    void OnSpell3Released()
+    {
+       Spell3.CastSpellReleased();
+    }
+        void OnSpell4()
+    {
+        Spell1.CastSpellDown();
+    }
+    void OnSpell4Released()
+    {
+       Spell4.CastSpellReleased();
     }
 }
