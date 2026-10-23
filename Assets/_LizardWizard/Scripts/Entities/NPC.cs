@@ -121,6 +121,11 @@ public class NPC : MonoBehaviour
         }
     }
 
+    public void ChangeDialogue(string line)
+    {
+        //Change here
+    }
+
     void OnDrawGizmosSelected()
     {
         // -- Show interaction range
