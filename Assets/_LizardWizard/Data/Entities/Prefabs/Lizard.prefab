@@ -477,6 +477,7 @@ MonoBehaviour:
   sensitivity: 0.1
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
+  tutorialQuest: {fileID: 11400000, guid: 1a0645a462ab634429a3a456217063ae, type: 2}
   cameraRef: {fileID: 3495833846603984688}
   mesh: {fileID: 863690504387952358}
 --- !u!114 &1015099657600050311

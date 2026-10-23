@@ -28,8 +28,9 @@ public class Player : MonoBehaviour
     private float pitch;
     private LizardAnimation lizardAnimation;
     //=========================================
-        // Quests
-    //=========================================
+    [Header("Quest Data")]
+    [SerializeField] private Quests tutorialQuest;
+    [SerializeField] private QuestRunner questRunner;
     private List<Quests> ongoingQuests = new List<Quests>();
     private List<Quests> completedQuests = new List<Quests>();
     //=========================================
@@ -69,8 +70,15 @@ public class Player : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
-        //entityData.InitializeStats();
-        //entityData.water.Set(100, true);
+
+        //=========================================================
+            //Quest Initialization
+        //=========================================================
+        if (tutorialQuest != null) {
+            questRunner.SetQuest(tutorialQuest);
+            ongoingQuests.Add(questRunner.quest);
+            questRunner.StartQuest();
+        }
 
     }
 
@@ -121,5 +129,12 @@ public class Player : MonoBehaviour
     void OnDestroy()
     {
         Destroy(entityData);
+    }
+
+    public void OnQuestEnd(Quests quest)
+    {
+        completedQuests.Add(quest);
+        ongoingQuests.Remove(quest);
+        questRunner.quest = null;
     }
 }

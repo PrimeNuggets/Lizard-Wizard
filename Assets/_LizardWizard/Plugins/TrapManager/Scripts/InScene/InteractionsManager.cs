@@ -124,7 +124,7 @@ public class InteractionsManager : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = FindFirstObjectByType<InteractionsManager>();
+            instance = FindAnyObjectByType<InteractionsManager>();
         }
 
         return instance;
