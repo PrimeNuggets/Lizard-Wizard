@@ -31,7 +31,7 @@ public class HealthUISystem : MonoBehaviour
     void Start()
     {
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain);
+        entityData.Initialize(gameObject);
         entityData.water.GetCurrent();
         playerCollider = GetComponent<Collider>();
         HeartShieldIcon.gameObject.SetActive(false);

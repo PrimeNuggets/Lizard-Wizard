@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,6 +32,11 @@ public class Player : MonoBehaviour
     private ISpell Spell4;
     
     private float pitch;
+    //=========================================
+        // Quests
+    //=========================================
+    private List<Quests> ongoingQuests = new List<Quests>();
+    private List<Quests> completedQuests = new List<Quests>();
     //=========================================
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
