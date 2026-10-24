@@ -6,6 +6,7 @@ using static Entity;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(WaterLevelPercentScore))]
 [DisallowMultipleComponent]
 public class Player : MonoBehaviour
 {
@@ -70,6 +71,8 @@ public class Player : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
+        var waterLevel = GetComponent<WaterLevelPercentScore>();
+        waterLevel.StartScoring(entityData);
 
         //=========================================================
             //Quest Initialization

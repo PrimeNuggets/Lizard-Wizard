@@ -123,7 +123,7 @@ public class Entity : ScriptableObject
         aspect = entObj.GetComponent<Aspect>();
         visualRoot = model != null ? model.transform : entObj.transform;
         facingDir = UnityEngine.Vector3.ProjectOnPlane(
-            visualRoot.forward, //reference the model's forward direction separate from the visualRoot
+            visualRoot.forward,
             UnityEngine.Vector3.up
         );
         try

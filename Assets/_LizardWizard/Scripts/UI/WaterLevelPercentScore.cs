@@ -20,23 +20,24 @@ using System.Collections;
 public class WaterLevelPercentScore : MonoBehaviour
 {
     //=========================================
-    [Header("Entity Data")]
-    [LabelOverride("Data")] public Entity entityTemplate;
+    //Entity Data
     [NonSerialized] public Entity entityData;
     //=============
     //Water Capacity
     //[NonSerialized] public float water;
-    [SerializeField] public Stat water;
-    [SerializeField] public Stat health;
-    [SerializeField] public Terrain terrain;
+    //[SerializeField] public Stat water;
+    //[SerializeField] public Stat health;
+    //[SerializeField] public Terrain terrain;
+    //None of the above variables are referenced. therefore unneeded - Xavier
     //=========================================
 
 
     //public int waterAmount;
     public TextMeshProUGUI waterLevelPercentText;
     //private PlayerInput playerInput;
-    public CharacterController playerController;
-    public Collider playerCollider;
+    private CharacterController playerController;
+    private Collider playerCollider;
+    //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
     public Image WaterMeter;
 
     public float WaterLevel, MaxWaterLevel;
@@ -53,40 +54,40 @@ public class WaterLevelPercentScore : MonoBehaviour
     private bool IsHeartShieldBroken = false;
     private float WaterNearEmptyValue = 1f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void StartScoring(Entity entityTemplate) //Replacing the start method & using player entity data to remove the need for multiple initializations - Xavier
     {
-        entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject); 
+        entityData = entityTemplate;
         //for some reason the water text and fill is set to half when the terrain is involved
+        SetWater(100); //Force sets current water to 100
         //Debug.Log(entityData.water.GetCurrent().ToString());
         //entityData.water.Initialize(water.GetMax());
-        entityData.water.GetCurrent();
-        playerCollider = GetComponent<Collider>();
+        //entityData.water.GetCurrent();
+
+        playerCollider = GetComponentInChildren<Collider>(); //Colliders exist in the mesh's skeleton
         HeartShieldIcon.gameObject.SetActive(false);
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
         IsHeartShieldBroken = false;
-
-        entityData.water.Set(100);
         //entityData.water.Set(entityData.water.GetMax());
         Debug.Log(entityData.water.GetCurrent().ToString());
         WaterLevel = entityData.water.GetCurrent();
-        //MaxWaterLevel = 100;
+        MaxWaterLevel = entityData.water.GetMax();
         //waterAmount = 100;
         //waterLevelPercentText.text = "H20: " + waterAmount + "%";
-        waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
+        waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
         //Debug.Log(entityData.water.GetCurrent().ToString());
         //WaterMeter.fillAmount = MaxWaterLevel;
-        WaterMeter.fillAmount = entityData.water.GetCurrent();
+        WaterMeter.fillAmount = WaterLevel;
         //playerInput = GetComponent<PlayerInput>();
-        playerController = GetComponent<CharacterController>();
+        playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
         
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate() //No need to run every tick. Running every frame works just as gud - Xavier
     {
         WaterMovementLoss();
+        WaterLevel = entityData.water.GetCurrent();
     }
 
     private void WaterMovementLoss()
@@ -96,11 +97,11 @@ public class WaterLevelPercentScore : MonoBehaviour
         if (playerVelocity.magnitude > WaterMovementMinSpeed)
         {
             //if player is moving
-            entityData.water.Set(entityData.water.GetCurrent() - (WaterMovementMinDrainAmount * Time.deltaTime));
-            if (entityData.water.GetCurrent() < 0f) entityData.water.Set(entityData.water.GetCurrent() - entityData.water.GetCurrent());
-            waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
+            SetWater(WaterLevel - (WaterMovementMinDrainAmount * Time.deltaTime));
+            if (WaterLevel < 0f) SetWater(0); //Why subtract the same negative value when it always == 0? - Xavier
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             //WaterLevel = entityData.water.GetCurrent();
-            WaterMeter.fillAmount = entityData.water.GetCurrent() / entityData.water.GetMax();
+            WaterMeter.fillAmount = WaterLevel / MaxWaterLevel;
             //Debug.Log(WaterMeter.fillAmount);
             //WaterMeter.fillAmount = entityData.water.GetCurrent() / MaxWaterLevel;
             //Debug.Log(entityData.water.GetCurrent().ToString());
@@ -125,8 +126,8 @@ public class WaterLevelPercentScore : MonoBehaviour
         {
             //update just to be sure everything is working
             //waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
-            if (entityData.water.GetCurrent() < 0f) entityData.water.Set(entityData.water.GetCurrent() - entityData.water.GetCurrent());
-            waterLevelPercentText.text = "H20: " + entityData.water.GetCurrent().ToString("F2") + "%";
+            if (WaterLevel < 0f) SetWater(0);
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             //Debug.Log(entityData.water.GetCurrent().ToString());
         }
 
@@ -138,10 +139,15 @@ public class WaterLevelPercentScore : MonoBehaviour
         }*/
     }
 
+    void SetWater(float value)
+    {
+        entityData.water.Set(value);
+    }
+
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy")) //Look into checking aspect instead - Xavier
         {
             DamagePlayerHealth();
         }

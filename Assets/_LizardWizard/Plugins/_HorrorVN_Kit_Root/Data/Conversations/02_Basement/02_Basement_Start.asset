@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0abcc3f379c6e418c94f32e5752ca3, type: 3}
+  m_Name: 02_Basement_Start
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  lines:
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 9
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: "The air is different down here. It\u2019s too thick."
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 6
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: "It's a basement, Ares. It\u2019s supposed to smell like damp laundry
+      and regret."
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: No... look at the floor. Those aren't our footprints in the dust.
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: Probably just a draft. Or rats. Big, hungry basement rats.
+    textEffect: 2
+    targetWord: Big, hungry
+    useTextTint: 1
+    textTint: {r: 0.6679245, g: 0.2687535, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: We should  look around. Where do you want to start?
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: We should  look around. Where do you want to start?
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  choices:
+  - choiceText: Investigate the workbench
+    nextDialogue: {fileID: 11400000, guid: 58835fea8c4e5f84b97330a90bba2bca, type: 2}
+  - choiceText: Check the padlocked freezer
+    nextDialogue: {fileID: 11400000, guid: 18cf84b03acb9114aad8a39d30129c96, type: 2}
