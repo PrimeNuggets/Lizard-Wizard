@@ -120,6 +120,15 @@ public class Player : MonoBehaviour
         if (spell1Action.WasReleasedThisFrame()){
             OnSpell1Released();
         }
+        if (spell2Action.WasReleasedThisFrame()){
+        OnSpell2Released();
+        }
+        if (spell3Action.WasReleasedThisFrame()){
+            OnSpell3Released();
+        }
+        if (spell4Action.WasReleasedThisFrame()){
+            OnSpell4Released();
+        }
         //===========================================================
             //Movement
         //===========================================================
@@ -141,5 +150,37 @@ public class Player : MonoBehaviour
     void OnDestroy()
     {
         Destroy(entityData);
+    }
+    void OnSpell1()
+    {
+        Spell1.CastSpellDown();
+    }
+    void OnSpell1Released()
+    {
+       Spell1.CastSpellReleased();
+    }
+        void OnSpell2()
+    {
+        Spell2.CastSpellDown();
+    }
+    void OnSpell2Released()
+    {
+       Spell2.CastSpellReleased();
+    }
+        void OnSpell3()
+    {
+        Spell3.CastSpellDown();
+    }
+    void OnSpell3Released()
+    {
+       Spell3.CastSpellReleased();
+    }
+        void OnSpell4()
+    {
+        Spell1.CastSpellDown();
+    }
+    void OnSpell4Released()
+    {
+       Spell4.CastSpellReleased();
     }
 }
