@@ -6,6 +6,7 @@ using static Entity;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(WaterLevelPercentScore))]
 [DisallowMultipleComponent]
 public class Player : MonoBehaviour
 {
@@ -36,8 +37,9 @@ public class Player : MonoBehaviour
     private float pitch;
     private LizardAnimation lizardAnimation;
     //=========================================
-        // Quests
-    //=========================================
+    [Header("Quest Data")]
+    [SerializeField] private Quests tutorialQuest;
+    [SerializeField] private QuestRunner questRunner;
     private List<Quests> ongoingQuests = new List<Quests>();
     private List<Quests> completedQuests = new List<Quests>();
     //=========================================
@@ -80,8 +82,17 @@ public class Player : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
-        //entityData.InitializeStats();
-        //entityData.water.Set(100, true);
+        var waterLevel = GetComponent<WaterLevelPercentScore>();
+        waterLevel.StartScoring(entityData);
+
+        //=========================================================
+            //Quest Initialization
+        //=========================================================
+        if (tutorialQuest != null) {
+            questRunner.SetQuest(tutorialQuest);
+            ongoingQuests.Add(questRunner.quest);
+            questRunner.StartQuest();
+        }
 
     }
 
@@ -120,15 +131,6 @@ public class Player : MonoBehaviour
         if (spell1Action.WasReleasedThisFrame()){
             OnSpell1Released();
         }
-        if (spell2Action.WasReleasedThisFrame()){
-        OnSpell2Released();
-        }
-        if (spell3Action.WasReleasedThisFrame()){
-            OnSpell3Released();
-        }
-        if (spell4Action.WasReleasedThisFrame()){
-            OnSpell4Released();
-        }
         //===========================================================
             //Movement
         //===========================================================
@@ -151,36 +153,11 @@ public class Player : MonoBehaviour
     {
         Destroy(entityData);
     }
-    void OnSpell1()
+
+    public void OnQuestEnd(Quests quest)
     {
-        Spell1.CastSpellDown();
-    }
-    void OnSpell1Released()
-    {
-       Spell1.CastSpellReleased();
-    }
-        void OnSpell2()
-    {
-        Spell2.CastSpellDown();
-    }
-    void OnSpell2Released()
-    {
-       Spell2.CastSpellReleased();
-    }
-        void OnSpell3()
-    {
-        Spell3.CastSpellDown();
-    }
-    void OnSpell3Released()
-    {
-       Spell3.CastSpellReleased();
-    }
-        void OnSpell4()
-    {
-        Spell1.CastSpellDown();
-    }
-    void OnSpell4Released()
-    {
-       Spell4.CastSpellReleased();
+        completedQuests.Add(quest);
+        ongoingQuests.Remove(quest);
+        questRunner.quest = null;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 //using UnityEngine.Events;
 
@@ -13,10 +14,10 @@ public class Quests : ScriptableObject
         End,
     }
     [SerializeField, LabelOverride("Internal Name"), Tooltip("The name of the fired event when the event activates\nAvoid special characters & spaces")] private string questId;
-    [SerializeField, LabelOverride("Name")] private string questName;
-    [SerializeField, TextArea] private string description;
-    [SerializeField] private List<Objective> objectiveChain;
-    public static event Action<Quests> process;
+    [SerializeField, LabelOverride("Name")] public string questName;
+    [SerializeField, TextArea] public string description;
+    public List<Objective> objectiveChain;
+    public static event Action<Quests, ProcessType> process;
 
     [Serializable]
     public class Objective
@@ -25,6 +26,7 @@ public class Quests : ScriptableObject
         {
             None,
             Interaction,
+            Controls,
         }
         public enum RewardType
         {
@@ -37,10 +39,11 @@ public class Quests : ScriptableObject
         [TextArea] public string description;
         public TaskType type;
         [SerializeField] public Dictionary<RewardType, string> reward;
+        [SerializeField, LabelOverride("Completion Conditions"), Tooltip("Input the scoring key.\nThen in the values section, input the cutoff value (the objective will end if the score is greater than/equal to the cutoff)")] public Dictionary<string, int> endCon;
     }
 
-    /*public void StartProcess(int objIndex, ProcessType phase)
+    public Objective GetObjective(int index)
     {
-        process?.Invoke(questId, objIndex, phase);
-    }*/
+        return objectiveChain[index];
+    }
 }

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d1538fa8076c047b0ceba9e37f7856, type: 3}
+  m_Name: Salem_Data
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
+  characterName: Salem
+  portraits:
+  - emotion: 6
+    sprite: {fileID: 8407439551647833132, guid: 8f0378a0b2b4d5044be91e5b65e33d83, type: 3}
+  - emotion: 4
+    sprite: {fileID: 3533695572238554569, guid: 092b2bb00477ce347928ebeb3cf1f09d, type: 3}
+  - emotion: 5
+    sprite: {fileID: 7054230061189899530, guid: 7e62b20b5a2e4d249843f2b50345e587, type: 3}
+  - emotion: 2
+    sprite: {fileID: 3016186512912655275, guid: b15273934a16343418e90680bee0b931, type: 3}
+  - emotion: 0
+    sprite: {fileID: -2788650192798548540, guid: f2bb042bc302a8044a561c0a9a1d477b, type: 3}
+  - emotion: 8
+    sprite: {fileID: -3612267209290129878, guid: ec70fff5badce804aa4c70da61e2eb0d, type: 3}
+  - emotion: 7
+    sprite: {fileID: 6461287880717422311, guid: 799e05fe865fdc74dac84023b5aa2eab, type: 3}

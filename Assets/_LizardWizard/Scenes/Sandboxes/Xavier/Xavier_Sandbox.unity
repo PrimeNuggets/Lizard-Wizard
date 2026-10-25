@@ -1371,6 +1371,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
   m_PrefabInstance: {fileID: 2694692293406466300}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1337312111 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+  m_PrefabInstance: {fileID: 2694692293406466300}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337312107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4da3f9740042ef4aa55ebd149b1aa64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
 --- !u!1 &1352518854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,17 +1639,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b15b424768e4d46aaa333cd8bc2e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QuestRunner
-  quest: {fileID: 0}
   process:
   - key: {fileID: 11400000, guid: f13c006eb6232ba49a34247e2ab48bed, type: 2}
     value:
       start:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 7680004638690765322}
-            m_TargetAssemblyTypeName: NPC, Assembly-CSharp
-            m_MethodName: ChangeDialogue
-            m_Mode: 5
+          - m_Target: {fileID: 1137986305}
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
+      during:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1538617381}
+            m_TargetAssemblyTypeName: QuestRunner, Assembly-CSharp
+            m_MethodName: UpdateDisplayText
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 1137986307}
+              m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      end:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1337312111}
+            m_TargetAssemblyTypeName: Player, Assembly-CSharp
+            m_MethodName: OnQuestEnd
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 11400000, guid: f13c006eb6232ba49a34247e2ab48bed, type: 2}
+              m_ObjectArgumentAssemblyTypeName: Quests, Assembly-CSharp
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1137986305}
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1647,12 +1699,65 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+  - key: {fileID: 11400000, guid: 1a0645a462ab634429a3a456217063ae, type: 2}
+    value:
+      start:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1137986305}
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 1
+            m_CallState: 2
       during:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 1538617381}
+            m_TargetAssemblyTypeName: QuestRunner, Assembly-CSharp
+            m_MethodName: UpdateDisplayText
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 1137986307}
+              m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       end:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 1337312111}
+            m_TargetAssemblyTypeName: Player, Assembly-CSharp
+            m_MethodName: OnQuestEnd
+            m_Mode: 2
+            m_Arguments:
+              m_ObjectArgument: {fileID: 11400000, guid: 1a0645a462ab634429a3a456217063ae, type: 2}
+              m_ObjectArgumentAssemblyTypeName: Quests, Assembly-CSharp
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1137986305}
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
+            m_Mode: 6
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
 --- !u!114 &1538617382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2142,6 +2247,10 @@ PrefabInstance:
       propertyPath: terrain
       value: 
       objectReference: {fileID: 925611747}
+    - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: questRunner
+      value: 
+      objectReference: {fileID: 1538617381}
     - target: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_Name
       value: Lizard
@@ -2439,17 +2548,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 527242c364f3135498724dbd2cbfc53a, type: 3}
---- !u!114 &7680004638690765322 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4244975600916002924, guid: 527242c364f3135498724dbd2cbfc53a, type: 3}
-  m_PrefabInstance: {fileID: 7680004638690765321}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d5e8391221062f40b1bad999758a77c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NPC
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

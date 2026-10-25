@@ -196,7 +196,7 @@ public class HazardSpawner : MonoBehaviour
             return false;
         }
 
-        HazardManager[] existingHazards = FindObjectsByType<HazardManager>(FindObjectsSortMode.None);
+        HazardManager[] existingHazards = FindObjectsByType<HazardManager>();
         foreach (HazardManager hazard in existingHazards)
         {
             if (Mathf.Abs(spawnX - hazard.transform.position.x) <= hazardSpawnExclusionX)

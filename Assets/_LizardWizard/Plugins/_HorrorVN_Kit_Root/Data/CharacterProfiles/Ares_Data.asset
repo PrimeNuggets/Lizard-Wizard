@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d1538fa8076c047b0ceba9e37f7856, type: 3}
+  m_Name: Ares_Data
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterProfile
+  characterName: Ares
+  portraits:
+  - emotion: 1
+    sprite: {fileID: -2316135527601745220, guid: 5088bedbb273daf44aa249f126140500, type: 3}
+  - emotion: 9
+    sprite: {fileID: 758963177814783663, guid: abf937b80aaab5b4aa5fdedc2126d4b7, type: 3}
+  - emotion: 10
+    sprite: {fileID: -6591067048190685012, guid: 1482e2a3aa6f6e44792b30485c0ffde3, type: 3}
+  - emotion: 0
+    sprite: {fileID: -8616423346048800695, guid: 3dd8492e7006d3144b88cad523be4914, type: 3}
+  - emotion: 11
+    sprite: {fileID: 1163875276685342211, guid: 18f082de65936914992bc26ba0ae3afd, type: 3}
+  - emotion: 12
+    sprite: {fileID: -7455059329539717639, guid: b9796c7afc6214344ba1cc77629f6ef3, type: 3}
