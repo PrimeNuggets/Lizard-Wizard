@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0abcc3f379c6e418c94f32e5752ca3, type: 3}
+  m_Name: 99_TextEffects_Test
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  lines:
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: The word jitter won't hold still in my mouth.
+    textEffect: 1
+    targetWord: jitter
+    useTextTint: 1
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: The ceiling starts to wobble when the generator fails.
+    textEffect: 2
+    targetWord: wobble
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: Her name flickers like a dying light above the door.
+    textEffect: 3
+    targetWord: flickers
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: That heartbeat starts to pulse under the floorboards.
+    textEffect: 4
+    targetWord: pulse
+    useTextTint: 1
+    textTint: {r: 0.75, g: 0.1, b: 0.1, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: The hanging chains sway even when the room is still.
+    textEffect: 5
+    targetWord: hanging chains
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: This sentence starts to sink the second I read it.
+    textEffect: 6
+    targetWord: sink
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: His reflection glitch jumps every time the bulb cuts out.
+    textEffect: 7
+    targetWord: glitch jumps
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: The words color pulse like fresh blood in the sink.
+    textEffect: 8
+    targetWord: color pulse
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: The warning rotates until it feels completely wrong.
+    textEffect: 9
+    targetWord: rotates
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: I can see a ghost trail behind the shape in the hall.
+    textEffect: 10
+    targetWord: ghost trail
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: Then the hallway goes black and ONLY THIS stays visible.
+    textEffect: 11
+    targetWord: ONLY THIS
+    useTextTint: 0
+    textTint: {r: 0.86, g: 0.16, b: 0.16, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  choices: []

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0abcc3f379c6e418c94f32e5752ca3, type: 3}
+  m_Name: 02_Basement_Freezer
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  lines:
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 9
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: This freezer is padlocked from the outside. Why would you lock a freezer
+      from the outside?
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: Maybe to keep the smell in?
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: (Breaks the lock and opens it) Salem... get over here. Tell me I'm
+      seeing things.
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: "What is it\u2014"
+    textEffect: 0
+    targetWord: 
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 10
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: It's you. Salem, you're in the freezer. You're... you're blue. You've
+      been dead for hours.
+    textEffect: 0
+    targetWord: blue
+    useTextTint: 1
+    textTint: {r: 0, g: 0.740427, b: 1, a: 1}
+    useCustomOpacity: 1
+    opacityMultiplier: 0.892
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 7
+    characterNameOverride: Freezer Salem
+    portraitOverride: {fileID: 0}
+    sentence: Then who are you talking to right now, Ares?
+    textEffect: 1
+    targetWord: Then who are you talking to right now, Ares?
+    useTextTint: 0
+    textTint: {r: 1, g: 0, b: 0, a: 1}
+    useCustomOpacity: 0
+    opacityMultiplier: 1
+  choices:
+  - choiceText: Run for it
+    nextDialogue: {fileID: 11400000, guid: d659d5cfdb3382f4aa11aa0279d5db02, type: 2}

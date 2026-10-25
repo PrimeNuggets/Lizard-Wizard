@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7988f4b94b0ed94a8f15f6ceaed066c, type: 3}
+  m_Name: Tutorial
+  m_EditorClassIdentifier: Assembly-CSharp::Quests
+  questId: tutorial
+  questName: Tutorial
+  description: Learning the basics
+  objectiveChain:
+  - task: Jumping
+    description: Press Space to Jump
+    type: 2
+    reward:
+    - key: 0
+      value: 
+    endCon:
+    - key: lizard.jump
+      value: 1

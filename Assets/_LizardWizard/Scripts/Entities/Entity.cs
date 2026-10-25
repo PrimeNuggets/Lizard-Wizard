@@ -123,7 +123,7 @@ public class Entity : ScriptableObject
         aspect = entObj.GetComponent<Aspect>();
         visualRoot = model != null ? model.transform : entObj.transform;
         facingDir = UnityEngine.Vector3.ProjectOnPlane(
-            model.forward, //reference the model's forward direction separate from the visualRoot
+            visualRoot.forward,
             UnityEngine.Vector3.up
         );
         try
@@ -298,6 +298,9 @@ public class Entity : ScriptableObject
         );
         SetStateType('A', false);
         groundedTime = 0f;
+
+        //Scoring
+        Scoring.AddValue($"{entObj.name.ToLowerInvariant()}.jump", 1);
 
         //Animation
         if (animator == null) return;
