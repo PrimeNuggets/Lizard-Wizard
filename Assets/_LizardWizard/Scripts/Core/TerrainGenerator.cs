@@ -135,7 +135,7 @@ public class TerrainGenerator : MonoBehaviour
                     //
                     int colliders = Physics.OverlapSphereNonAlloc(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 1.0f,propcheckbuffer);
                     if (colliders > 1) {
-                    Debug.Log("overlap detected - "+colliders);
+                    //Debug.Log("overlap detected - "+colliders);
                     }else{
                     //spawn prop
                     Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
