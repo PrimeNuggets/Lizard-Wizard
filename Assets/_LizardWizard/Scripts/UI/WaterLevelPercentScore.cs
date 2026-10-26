@@ -35,7 +35,8 @@ public class WaterLevelPercentScore : MonoBehaviour
     //public int waterAmount;
     public TextMeshProUGUI waterLevelPercentText;
     //private PlayerInput playerInput;
-    private CharacterController playerController;
+    
+    [SerializeField] private CharacterController playerController;
     private Collider playerCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
     public Image WaterMeter;
@@ -79,7 +80,7 @@ public class WaterLevelPercentScore : MonoBehaviour
         //WaterMeter.fillAmount = MaxWaterLevel;
         WaterMeter.fillAmount = WaterLevel;
         //playerInput = GetComponent<PlayerInput>();
-        playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
+       // playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
         
     }
 
