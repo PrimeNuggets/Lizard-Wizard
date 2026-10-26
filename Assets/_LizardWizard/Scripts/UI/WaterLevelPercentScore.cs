@@ -93,6 +93,11 @@ public class WaterLevelPercentScore : MonoBehaviour
     private void WaterMovementLoss()
     {
         //gets player velocity to detrimine how fast the player is going
+        if (playerController == null)
+        {
+            Debug.LogError("Player Controller is Undefined");
+            return;
+        }
         Vector3 playerVelocity = playerController.velocity;
         if (playerVelocity.magnitude > WaterMovementMinSpeed)
         {

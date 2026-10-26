@@ -984,17 +984,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1036762786}
   m_CullTransparentMesh: 1
---- !u!114 &1062957610 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2203998472110726321, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-  m_PrefabInstance: {fileID: 2694692293406466300}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1325705955
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,17 +1634,6 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1856494697 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6776991366430144080, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-  m_PrefabInstance: {fileID: 2694692293406466300}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &1939368977
 GameObject:
   m_ObjectHideFlags: 0
@@ -1777,17 +1755,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1939368977}
   m_CullTransparentMesh: 1
---- !u!114 &1960485744 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8975901894897234988, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-  m_PrefabInstance: {fileID: 2694692293406466300}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &2694692293406466300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1797,25 +1764,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: HeartFrailIcon
-      value: 
-      objectReference: {fileID: 1856494697}
-    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: playerCollider
       value: 
       objectReference: {fileID: 1564097045}
-    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: HeartBrokenIcon
-      value: 
-      objectReference: {fileID: 1062957610}
-    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: HeartShieldIcon
-      value: 
-      objectReference: {fileID: 1960485744}
-    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: WaterMovementMinDrainAmount
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1054486938006852552, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -1928,6 +1879,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6036925979930281776, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: playerCollider
+      value: 
+      objectReference: {fileID: 1564097045}
     - target: {fileID: 6125392056788824112, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_UiScaleMode
       value: 1
@@ -1952,40 +1907,10 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      insertIndex: 7
-      addedObject: {fileID: 2694692293406466302}
     - targetCorrespondingSourceObject: {fileID: 5281819237088474127, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1564097045}
   m_SourcePrefab: {fileID: 100100000, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
---- !u!143 &2694692293406466301 stripped
-CharacterController:
-  m_CorrespondingSourceObject: {fileID: 94468549096083774, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-  m_PrefabInstance: {fileID: 2694692293406466300}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2694692293406466302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337312107}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a4662d13fa0e0546a033b458fb51fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthUISystem
-  entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
-  health:
-    max: 0
-  water:
-    max: 0
-  playerController: {fileID: 2694692293406466301}
-  playerCollider: {fileID: 1564097045}
-  HeartShieldIcon: {fileID: 1960485744}
-  HeartFrailIcon: {fileID: 1856494697}
-  HeartBrokenIcon: {fileID: 1062957610}
 --- !u!1001 &3855627235213169614
 PrefabInstance:
   m_ObjectHideFlags: 0
