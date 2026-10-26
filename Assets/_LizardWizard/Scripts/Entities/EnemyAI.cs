@@ -53,6 +53,7 @@ public abstract class EnemyAI : MonoBehaviour
         [Header("Misc")]
     //===========================================
     [SerializeField] private Terrain terrain;
+    [SerializeField] private Transform mesh;
 
     //===========================================
         //Non-Serialized
@@ -113,7 +114,7 @@ public abstract class EnemyAI : MonoBehaviour
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
-        entityData.Initialize(gameObject, terrain);
+        entityData.Initialize(gameObject, mesh);
 
         //-- Create the states before entering Idle
         EnemyState idleState = new IdleState(this);
@@ -136,11 +137,21 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     void FixedUpdate()
     {
-        entityData.BeginTick();
+        entityData?.BeginTick();
         stateTime += Time.fixedDeltaTime;
 
         UpdateDecision();
         ProcessState();
+    }
+
+    void LateUpdate()
+    {
+        entityData?.AfterTick();
+    }
+
+    void OnDisable()
+    {
+        entityData?.Disable();
     }
 
     //---------------------------------------------------------

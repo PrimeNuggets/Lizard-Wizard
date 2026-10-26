@@ -1756,10 +1756,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6188666030728164474, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: swapIdleAndSlideAnimations
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6564538844601925545, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_fontAsset
       value: 

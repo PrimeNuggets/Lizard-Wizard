@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0abcc3f379c6e418c94f32e5752ca3, type: 3}
+  m_Name: 02_Basement_Workbench
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  lines:
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 10
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: There's a tape recorder here. It looks brand new.
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 2
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: "Don't touch it. That\u2019s how people get cursed in movies."
+  - character: {fileID: 0}
+    emotion: 9
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: (Presses play) The sour cream argument plays back, but Salem's voice
+      is a distorted and guttural screeching...
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 4
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: (Voice trembling) I... I didn't say it like that. Ares, I didn't say
+      it like that!
+  choices:
+  - choiceText: Check the freezer
+    nextDialogue: {fileID: 11400000, guid: 18cf84b03acb9114aad8a39d30129c96, type: 2}
+  - choiceText: Run for it
+    nextDialogue: {fileID: 11400000, guid: d659d5cfdb3382f4aa11aa0279d5db02, type: 2}

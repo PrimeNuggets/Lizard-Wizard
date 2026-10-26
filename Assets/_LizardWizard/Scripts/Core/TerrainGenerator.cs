@@ -23,17 +23,18 @@ public class TerrainGenerator : MonoBehaviour
     private float propseedX = 0f;
     private float propseedY = 0f;
     public float propRollLowerBound;
-    public float propRollUpperBound;
+    [Tooltip("")] public float propRollUpperBound;
     public GameObject prop1;
     public GameObject prop2;
     private Collider[] propcheckbuffer = new Collider[10];
     private Vector3 centerOfMap;
     private Vector3 poiLocation;
+    private GameObject PropParent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
        centerOfMap = new Vector3(width/2f, depth/2f, height/2f);
-       
+    PropParent = new GameObject("PropParent");
         //uncomment this for randomization
         //seedX = Random.Range(0f,100000f);
         //seedY = Random.Range(0f,100000f);
@@ -119,7 +120,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
     }
-    //doing a test of a different prop placement system. Preferable for objectives and PoIs
+    
     void PlaceProps(GameObject prop, float lowerroll, float upperroll)
     {
         for (int x = 0; x < width; x++)
@@ -135,10 +136,10 @@ public class TerrainGenerator : MonoBehaviour
                     //
                     int colliders = Physics.OverlapSphereNonAlloc(new Vector3(x+xRand, 0.1f+GetComponent<Terrain>().terrainData.GetHeight(x, y), y+yRand), 1.0f,propcheckbuffer);
                     if (colliders > 1) {
-                    Debug.Log("overlap detected - "+colliders);
+                    //Debug.Log("overlap detected - "+colliders);
                     }else{
                     //spawn prop
-                    Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
+                    Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity, PropParent.transform);
                      Physics.SyncTransforms();
                      }
                 }
@@ -146,7 +147,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-
+//different prop placement system. Preferable for objectives and PoIs
             void PlaceProps(GameObject prop, float RadiusFromOther, float spawnRadius, Vector2 spawncenter, int NumberToPlace){
                 //if shits sideways its because of THIS MOFO
                int placedprops = 0;
@@ -163,14 +164,14 @@ public class TerrainGenerator : MonoBehaviour
                     {
                     Debug.Log("overlap detected - "+colliders);
                     failedplacements++;
-                    if(failedplacements > 1000)
+                    if(failedplacements > 1000) //prop limit may need a variable
                         {
                         Debug.Log("Too many failed placements - loop aborted");
                         return;
                         }
                     }else{
                     //spawn prop
-                    Instantiate(prop, poiLocation, Quaternion.identity);
+                    Instantiate(prop, poiLocation, Quaternion.identity, PropParent.transform);
                     failedplacements = 0;
                     Physics.SyncTransforms();
                     placedprops++;

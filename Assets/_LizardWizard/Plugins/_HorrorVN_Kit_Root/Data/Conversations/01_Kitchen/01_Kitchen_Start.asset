@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb0abcc3f379c6e418c94f32e5752ca3, type: 3}
+  m_Name: 01_Kitchen_Start
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  lines:
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 9
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: I can't believe you ordered Chipotle again. We just had it yesterday.
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 5
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: Look, I needed the fuel. I'm trying to hit a new rank in Tekken tonight.
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 1
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: You're going to get sour cream all over the controllers!
+  - character: {fileID: 11400000, guid: 2048032ff2c1c7a45a1a7f4fd9824ccb, type: 2}
+    emotion: 6
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: Relax, I'll wash my hands. Probably.
+  - character: {fileID: 11400000, guid: 8d88888bab11f4f47b559f553e401bf8, type: 2}
+    emotion: 0
+    characterNameOverride: 
+    portraitOverride: {fileID: 0}
+    sentence: ...
+  choices:
+  - choiceText: Take the controllers
+    nextDialogue: {fileID: 11400000, guid: 507cc4f7875ad4b47946df68cd8b0c3f, type: 2}
+  - choiceText: Let him eat
+    nextDialogue: {fileID: 11400000, guid: 36ed6252a10fd9d4a865d3fd82765995, type: 2}
