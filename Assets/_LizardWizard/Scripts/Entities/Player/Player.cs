@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
         entityData?.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
-        bool jumpPressed = jumpAction.IsPressed();
+        bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)
         bool spell1Pressed = spell1Action.IsPressed();
         bool spell2Pressed = spell2Action.IsPressed();
         bool spell3Pressed = spell3Action.IsPressed();
@@ -129,7 +129,8 @@ public class Player : MonoBehaviour
         //NOTE: This implementation of a 'released' function hypothetically might miss sometimes.
         //Stress testing i havent gotten it to miss yet, but if it starts missing try changing updateMode to FixedUpdate
         if (spell1Action.WasReleasedThisFrame()){
-            OnSpell1Released();
+            //-- TEMP: commented out until OnSpell1Released exists, it was breaking Play mode
+            // OnSpell1Released();
         }
         //===========================================================
             //Movement
