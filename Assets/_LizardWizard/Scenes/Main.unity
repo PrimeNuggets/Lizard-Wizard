@@ -824,7 +824,7 @@ MonoBehaviour:
   propRollLowerBound: 0.3
   propRollUpperBound: 50
   prop1: {fileID: 2307332570978995493, guid: 07369b8adad078446920faaf0b84521c, type: 3}
-  prop2: {fileID: 8372568761179522024, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
+  prop2: {fileID: 3544369245580720625, guid: 1e6b97e4f56e640479dfd92b4cce5fc9, type: 3}
 --- !u!4 &925611749
 Transform:
   m_ObjectHideFlags: 0
