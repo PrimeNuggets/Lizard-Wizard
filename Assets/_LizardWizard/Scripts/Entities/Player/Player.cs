@@ -25,7 +25,15 @@ public class Player : MonoBehaviour
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction jumpAction;
-    private InputAction slideAction;
+    private InputAction spell1Action;
+    private InputAction spell2Action;
+    private InputAction spell3Action;
+    private InputAction spell4Action;    
+    private ISpell Spell1;
+    private ISpell Spell2;
+    private ISpell Spell3;
+    private ISpell Spell4;
+    
     private float pitch;
     private LizardAnimation lizardAnimation;
     //=========================================
@@ -60,7 +68,10 @@ public class Player : MonoBehaviour
         moveAction = input.actions.FindAction("Player/Move", true);
         lookAction = input.actions.FindAction("Player/Look", true);
         jumpAction = input.actions.FindAction("Player/Jump", true);
-        slideAction = input.actions.FindAction("Player/Crouch", true);
+        spell1Action = input.actions.FindAction("Player/Spell1", true);
+        spell2Action = input.actions.FindAction("Player/Spell2", true);
+        spell3Action = input.actions.FindAction("Player/Spell3", true);
+        spell4Action = input.actions.FindAction("Player/Spell4", true);
 
         pitch = cameraPitch.localEulerAngles.x;
         if (pitch > 180f)
@@ -108,7 +119,17 @@ public class Player : MonoBehaviour
         entityData?.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
-        bool jumpPressed = jumpAction.IsPressed();
+        bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)
+        bool spell1Pressed = spell1Action.IsPressed();
+        bool spell2Pressed = spell2Action.IsPressed();
+        bool spell3Pressed = spell3Action.IsPressed();
+        bool spell4Pressed = spell4Action.IsPressed();
+        //NOTE: This implementation of a 'released' function hypothetically might miss sometimes.
+        //Stress testing i havent gotten it to miss yet, but if it starts missing try changing updateMode to FixedUpdate
+        if (spell1Action.WasReleasedThisFrame()){
+            //-- TEMP: commented out until OnSpell1Released exists, it was breaking Play mode
+            // OnSpell1Released();
+        }
         //===========================================================
             //Movement
         //===========================================================

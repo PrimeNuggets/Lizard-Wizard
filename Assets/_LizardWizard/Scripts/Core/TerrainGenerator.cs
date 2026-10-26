@@ -29,11 +29,12 @@ public class TerrainGenerator : MonoBehaviour
     private Collider[] propcheckbuffer = new Collider[10];
     private Vector3 centerOfMap;
     private Vector3 poiLocation;
+    private GameObject PropParent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
        centerOfMap = new Vector3(width/2f, depth/2f, height/2f);
-       
+    PropParent = new GameObject("PropParent");
         //uncomment this for randomization
         //seedX = Random.Range(0f,100000f);
         //seedY = Random.Range(0f,100000f);
@@ -119,7 +120,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
     }
-    //doing a test of a different prop placement system. Preferable for objectives and PoIs
+    
     void PlaceProps(GameObject prop, float lowerroll, float upperroll)
     {
         for (int x = 0; x < width; x++)
@@ -138,7 +139,7 @@ public class TerrainGenerator : MonoBehaviour
                     //Debug.Log("overlap detected - "+colliders);
                     }else{
                     //spawn prop
-                    Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity);
+                    Instantiate(prop, new Vector3(x + xRand, GetComponent<Terrain>().terrainData.GetHeight(x, y), y + yRand), Quaternion.identity, PropParent.transform);
                      Physics.SyncTransforms();
                      }
                 }
@@ -146,7 +147,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-
+//different prop placement system. Preferable for objectives and PoIs
             void PlaceProps(GameObject prop, float RadiusFromOther, float spawnRadius, Vector2 spawncenter, int NumberToPlace){
                 //if shits sideways its because of THIS MOFO
                int placedprops = 0;
@@ -170,7 +171,7 @@ public class TerrainGenerator : MonoBehaviour
                         }
                     }else{
                     //spawn prop
-                    Instantiate(prop, poiLocation, Quaternion.identity);
+                    Instantiate(prop, poiLocation, Quaternion.identity, PropParent.transform);
                     failedplacements = 0;
                     Physics.SyncTransforms();
                     placedprops++;
