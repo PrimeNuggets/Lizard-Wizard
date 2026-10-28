@@ -25,6 +25,7 @@ public class HealthUISystem : MonoBehaviour
     public Image HeartFrailIcon;
     public Image HeartBrokenIcon;
     private bool IsHeartShieldBroken = false;
+    private bool IsInvulnerable = false;
     private float WaterNearEmptyValue = 1f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -38,6 +39,7 @@ public class HealthUISystem : MonoBehaviour
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
         IsHeartShieldBroken = false;
+        IsInvulnerable = false;
     }
 
     // Update is called once per frame
@@ -54,33 +56,44 @@ public class HealthUISystem : MonoBehaviour
         }
     }
 
+    // script RETIRED lowk forgot.
     private void DamagePlayerHealth()
     {
         Debug.Log("Take DMG");
+        if (IsInvulnerable)
+        {
+            Debug.Log("Invulnerable right now, try again later.");
+
+        }
         if (entityData.water.GetCurrent() > WaterNearEmptyValue)
         {
             Debug.Log("Damage Blocked.");
             HeartShieldIcon.gameObject.SetActive(true);
+            IsInvulnerable = true;
             StartCoroutine(HeartIconDisplayTimer());
+            IsInvulnerable = false;
             //HeartShieldIcon.gameObject.SetActive(false);
         }     
-        else if (entityData.water.GetCurrent() == 0)
+        if (entityData.water.GetCurrent() == 0)
         {
             Debug.Log("Fatal DMG taken.");
-            if (IsHeartShieldBroken)
+            if ((entityData.water.GetCurrent() == 0) && !IsHeartShieldBroken)
+            {
+                Debug.Log("Critical Health");
+                HeartFrailIcon.gameObject.SetActive(true);
+                IsInvulnerable = true;
+                StartCoroutine(HeartIconDisplayTimer());
+                IsInvulnerable = false;
+                IsHeartShieldBroken = true;
+                //HeartFrailIcon.gameObject.SetActive(false);
+            }
+            else if (IsHeartShieldBroken)
             {
                 Debug.Log("Fainted");
                 HeartBrokenIcon.gameObject.SetActive(true);
                 StartCoroutine(HeartIconDisplayTimer());
+                IsInvulnerable = false;
                 //HeartBrokenIcon.gameObject.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("Critical Health");
-                HeartFrailIcon.gameObject.SetActive(true);
-                IsHeartShieldBroken = true;
-                StartCoroutine(HeartIconDisplayTimer());
-                //HeartFrailIcon.gameObject.SetActive(false);
             }
 
         }

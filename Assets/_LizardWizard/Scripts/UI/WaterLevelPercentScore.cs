@@ -16,12 +16,14 @@ using static Entity;
 using Unity.VisualScripting;
 using System.Threading.Tasks;
 using System.Collections;
+using static Aspect;
 
 public class WaterLevelPercentScore : MonoBehaviour
 {
     //=========================================
     //Entity Data
     [NonSerialized] public Entity entityData;
+    [NonSerialized] public Aspect aspect;
     //=============
     //Water Capacity
     //[NonSerialized] public float water;
@@ -34,6 +36,8 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     //public int waterAmount;
     public TextMeshProUGUI waterLevelPercentText;
+    //public Image waterLevelLowTextDisplay;
+    public Image healthDangerTextDisplay;
     //private PlayerInput playerInput;
     private CharacterController playerController;
     private Collider playerCollider;
@@ -52,6 +56,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     public Image HeartFrailIcon;
     public Image HeartBrokenIcon;
     private bool IsHeartShieldBroken = false;
+    private bool IsInvulnerable = false;
     private float WaterNearEmptyValue = 1f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void StartScoring(Entity entityTemplate) //Replacing the start method & using player entity data to remove the need for multiple initializations - Xavier
@@ -68,6 +73,9 @@ public class WaterLevelPercentScore : MonoBehaviour
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
         IsHeartShieldBroken = false;
+        IsInvulnerable = false;
+        healthDangerTextDisplay.gameObject.SetActive(false);
+        //waterLevelLowTextDisplay.gameObject.SetActive(false);
         //entityData.water.Set(entityData.water.GetMax());
         Debug.Log(entityData.water.GetCurrent().ToString());
         WaterLevel = entityData.water.GetCurrent();
@@ -152,51 +160,93 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        /*
         if (other.CompareTag("Enemy")) //Look into checking aspect instead - Xavier
         {
             DamagePlayerHealth();
+        } */
+        var aspects = FindObjectsByType<Aspect>();
+        foreach (var aspect in aspects)
+        if (aspect.aspectName == Aspect.aspect.Enemy && !IsInvulnerable)
+        {
+            Debug.Log("Take DMG");
+            DamagePlayerHealth();
+        }
+        else
+        {
+            Debug.Log("Invulnerable right now, try again later.");
+            //StartCoroutine(HeartIconDisplayTimer(3f));
+            //IsInvulnerable = false;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        var aspects = FindObjectsByType<Aspect>();
+        foreach (var aspect in aspects)
+        if (aspect.aspectName == Aspect.aspect.Enemy)
         {
-            //DamagePlayerHealth();
+            Debug.Log("Damage has been taken.");
+            
+            IsInvulnerable = false;
+            if (entityData.water.GetCurrent() == 0)
+            {
+                Debug.Log("Teetering on the brink, facing the abyss...");
+                MortalDanger();
+            }
             //code to then tell the script player has taken damage, and to now make sure the player knows they're on death's door.
+            //StartCoroutine(HeartIconDisplayTimer(3f));
         }
     }
 
     private void DamagePlayerHealth()
     {
-        Debug.Log("Take DMG");
-        if (entityData.water.GetCurrent() > WaterNearEmptyValue)
+        
+        if (IsInvulnerable)
+        {
+            Debug.Log("Invulnerable right now, mate.");
+
+        }  
+        else if (entityData.water.GetCurrent() > WaterNearEmptyValue)
         {
             Debug.Log("Damage Blocked.");
+            HeartFrailIcon.gameObject.SetActive(false);
+            HeartBrokenIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being healthy
+            
             HeartShieldIcon.gameObject.SetActive(true);
+            IsInvulnerable = true;
             StartCoroutine(HeartIconDisplayTimer(3f));
+            //IsInvulnerable = false;
             //HeartShieldIcon.gameObject.SetActive(false);
         }
-        else if (entityData.water.GetCurrent() == 0)
+        else if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == true)
         {
             Debug.Log("Fatal DMG taken.");
-            if (IsHeartShieldBroken == true)
-            {
-                Debug.Log("Fainted");
-                HeartBrokenIcon.gameObject.SetActive(true);
-                StartCoroutine(HeartIconDisplayTimer(3f));
-                //HeartBrokenIcon.gameObject.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("Critical Health");
-                HeartFrailIcon.gameObject.SetActive(true);
-                StartCoroutine(HeartIconDisplayTimer(12f));
-                IsHeartShieldBroken = true;
-                //HeartFrailIcon.gameObject.SetActive(false);
-            }
-
+            Debug.Log("Fainted");
+            HeartFrailIcon.gameObject.SetActive(false);
+            HeartShieldIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being on death's door, different than before where this was being called.
+            
+            HeartBrokenIcon.gameObject.SetActive(true);
+            IsInvulnerable = true;
+            StartCoroutine(HeartIconDisplayTimer(3f));
+            //IsInvulnerable = false;
+            //HeartBrokenIcon.gameObject.SetActive(false);
         }
+        else if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == false)
+        {
+            Debug.Log("Fatal DMG taken.");
+            Debug.Log("Critical Health");
+            HeartShieldIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being on death's door
+            
+            HeartFrailIcon.gameObject.SetActive(true);
+            IsInvulnerable = true;
+            StartCoroutine(HeartIconDisplayTimer(12f));
+            IsHeartShieldBroken = true;
+            //IsInvulnerable = false;
+            //HeartFrailIcon.gameObject.SetActive(false);
+        }
+
+  
 
         /*
         else if (entityData.water.GetCurrent() <= WaterEmptyValue && (IsHeartShieldBroken)) 
@@ -208,12 +258,64 @@ public class WaterLevelPercentScore : MonoBehaviour
         */
     }
 
-    IEnumerator HeartIconDisplayTimer(float time)
+    private void DoNotDamagePlayerHealth()
     {
-        yield return new WaitForSeconds(time);
-        HeartShieldIcon.gameObject.SetActive(false);
-        HeartFrailIcon.gameObject.SetActive(false);
-        HeartBrokenIcon.gameObject.SetActive(false);
+        Debug.Log("Invulnerable right now, try again later.");
+        return;
+
+    }
+
+    private void MortalDanger()
+    {
+        if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == true) 
+        {
+            healthDangerTextDisplay.gameObject.SetActive(true);
+        }
+        if (!IsHeartShieldBroken)
+        {
+            healthDangerTextDisplay.gameObject.SetActive(false);
+        }
+
+        //while (entityData.water.GetCurrent() == 0)
+        //{
+        //waterLevelLowText.gameObject.SetActive(true);
+        //}
+    }
+    IEnumerator HeartIconDisplayTimer(float TimerDuration)
+    {
+        //float TimerElapsedTime = 0f;
+        //yield return new WaitForSeconds(TimerDuration);
+        /*
+        Debug.Log("Max Invul Timer Counting Down.");
+        while (TimerElapsedTime < TimerDuration)
+        {
+            TimerElapsedTime += Time.deltaTime;
+            if (TimerElapsedTime == TimerDuration) 
+            {
+                Debug.Log("Max Invul Timer Finished. Can be damaged now.");
+                IsInvulnerable = false;
+            }
+        }
+        */
+        IsInvulnerable = true;
+
+        yield return new WaitForSeconds(TimerDuration);
+
+        if (entityData.water.GetCurrent() > WaterNearEmptyValue)
+        {
+            HeartShieldIcon.gameObject.SetActive(false);
+            IsInvulnerable = false;
+        }
+        if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == false)
+        {
+            HeartFrailIcon.gameObject.SetActive(false);
+            IsInvulnerable = false;
+        }
+        if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == true)
+        {
+            HeartBrokenIcon.gameObject.SetActive(false);
+            IsInvulnerable = false;
+        }
     }
 
 }
