@@ -270,6 +270,10 @@ public class Entity : ScriptableObject
             float landingSpeed = Mathf.Abs(velocity.y);
             velocity.y = -2f;
             SetStateType('S', true);
+            //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
+            //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
+            //-- TODO: clean landing after a flip = small speed boost + add to combo
+            //-- TODO: sand puff particles on landing (bigger on crash)
             if (prevStateType == StateTypes.Air && noiseChannel != null)
             {
                 //-- Harder landings make more noise
@@ -290,6 +294,7 @@ public class Entity : ScriptableObject
     //Now that jumping logic is separate, this opens opportunities for uncontrolled/mid-air jumps as long as a gravity value is given
     public void PlayJump(float gravity)
     {
+        //-- TODO: one flip takes 0.7s, so most height should come from launching off dune crests, not a taller jump. maybe less gravity while held
         //Physics
         velocity.y = Mathf.Sqrt(
             2f *

@@ -44,8 +44,8 @@ public class Player : MonoBehaviour
     [Header("Quest Data")]
     [SerializeField] private Quests tutorialQuest;
     [SerializeField] private QuestRunner questRunner;
-    private List<Quests> ongoingQuests = new List<Quests>();
-    private List<Quests> completedQuests = new List<Quests>();
+    [NonSerialized] public List<Quests> ongoingQuests = new List<Quests>();
+    [NonSerialized] public List<Quests> completedQuests = new List<Quests>();
     //=========================================
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
@@ -94,9 +94,7 @@ public class Player : MonoBehaviour
             //Quest Initialization
         //=========================================================
         if (tutorialQuest != null) {
-            questRunner.SetQuest(tutorialQuest);
-            ongoingQuests.Add(questRunner.quest);
-            questRunner.StartQuest();
+            StartQuest(tutorialQuest);
         }
     GetLookDir();
     }
@@ -142,7 +140,7 @@ public class Player : MonoBehaviour
         entityData?.BeginTick();
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
-        bool jumpPressed = jumpAction.IsPressed();
+        bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)
         bool spell1Pressed = spell1Action.IsPressed();
         bool spell2Pressed = spell2Action.IsPressed();
         bool spell3Pressed = spell3Action.IsPressed();
@@ -233,6 +231,8 @@ public class Player : MonoBehaviour
     public void OnQuestEnd(Quests quest)
     {
         completedQuests.Add(quest);
+        Scoring.AddValue($"quest.{quest.questId}.completed", 1); //tracks which quests have been completed
+        Scoring.AddValue($"quests_completed", 1); //tracks how many quests have been completed
         ongoingQuests.Remove(quest);
         questRunner.quest = null;
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7988f4b94b0ed94a8f15f6ceaed066c, type: 3}
   m_Name: TestQuest
   m_EditorClassIdentifier: Assembly-CSharp::Quests
-  questId: testQuest
+  questId: test
   questName: Test Quest
   description: A quest for testing purposes
   objectiveChain:
@@ -22,3 +22,4 @@ MonoBehaviour:
     reward:
     - key: 1
       value: speedBoost
+    endCon: []

@@ -48,6 +48,20 @@ public abstract class EnemyAI : MonoBehaviour
     [SerializeField, Tooltip("Grace area in degrees for turning")] protected float turnThreshold = 3f;
     [SerializeField, LabelOverride("Wander Speed Multiplier")] protected float wanderSpeedMult = 0.25f;
     [SerializeField] protected float searchTurnTime = 1f;
+    [SerializeField, LabelOverride("Search Speed Multiplier")] protected float searchSpeedMult = 0.5f;
+
+    //===========================================
+        [Header("Chase")]
+    //===========================================
+    [SerializeField, LabelOverride("Chase Speed Multiplier")] protected float chaseSpeedMult = 0.6f;
+    [SerializeField, Tooltip("Pause to notice the player before running at them")] protected float chaseReactionTime = 0.4f;
+    [SerializeField, Tooltip("Seconds to get up to full chase speed")] protected float chaseAccelTime = 0.75f;
+    [SerializeField, Tooltip("Degrees per second when turning toward the player")] protected float chaseTurnSpeed = 540f;
+    [SerializeField, Tooltip("Seconds without seeing or hearing the player before giving up the chase")] protected float loseTargetTime = 5f;
+    [SerializeField, Tooltip("Stops moving when this close to the player")] protected float chaseStopDistance = 1.5f;
+    [SerializeField, Tooltip("Gives up if the player gets this far away")] protected float giveUpDistance = 25f;
+    [SerializeField, Tooltip("Max seconds ahead to aim where the player is going. 0 = aim right at them")] protected float maxLeadTime = 0.75f;
+    [SerializeField, Tooltip("How long after a detection it still knows exactly where the player is")] protected float trackingTime = 0.5f;
 
     //===========================================
         [Header("Misc")]
@@ -72,6 +86,8 @@ public abstract class EnemyAI : MonoBehaviour
     private EnemyState currentState;
     private SearchState searchState;
 
+    private CharacterController targetController;
+
     public Aspect Target { get; private set; }
     public Vector3 LastKnownPosition { get; private set; }
     public string LastSense { get; private set; }
@@ -81,6 +97,7 @@ public abstract class EnemyAI : MonoBehaviour
     internal bool HasSearchDestination => hasDest;
     internal Vector3 SearchDestination => wanderDest;
     internal float SearchTurnDuration => searchTurnTime;
+    internal float SearchSpeedMultiplier => searchSpeedMult;
 
     internal void PickSearchDestination()
     {
@@ -107,6 +124,65 @@ public abstract class EnemyAI : MonoBehaviour
         hasDest = false;
     }
 
+    //-- ChaseState uses these
+    internal float ChaseSpeedMultiplier => chaseSpeedMult;
+    internal float ChaseTurnSpeed => chaseTurnSpeed;
+    internal float ChaseReactionTime => chaseReactionTime;
+    internal float ChaseAccelTime => chaseAccelTime;
+
+    //-- Only knows the live position right after seeing or hearing the player
+    internal bool TrackingTarget => Target != null
+        && Time.time - LastDetectionTime <= trackingTime;
+
+    internal Vector3 TargetPosition => TrackingTarget
+        ? Target.transform.position
+        : LastKnownPosition;
+
+    //-- Aim a bit ahead of where the player is going, more the faster they move
+    internal Vector3 ChaseAimPoint
+    {
+        get
+        {
+            Vector3 aim = TargetPosition;
+
+            if (!TrackingTarget || targetController == null || maxLeadTime <= 0f)
+                return aim;
+
+            Vector3 targetVelocity = targetController.velocity;
+            targetVelocity.y = 0f;
+
+            Vector3 offset = aim - transform.position;
+            offset.y = 0f;
+
+            float mySpeed = Mathf.Max(entityData.speed.GetCurrent() * chaseSpeedMult, 0.1f);
+            float leadTime = Mathf.Min(offset.magnitude / mySpeed, maxLeadTime);
+
+            return aim + targetVelocity * leadTime;
+        }
+    }
+
+    internal float ChaseStopDistance => chaseStopDistance;
+
+    internal bool LostTarget()
+    {
+        if (Time.time - LastDetectionTime > loseTargetTime)
+            return true;
+
+        Vector3 offset = TargetPosition - transform.position;
+        offset.y = 0f;
+
+        return offset.sqrMagnitude > giveUpDistance * giveUpDistance;
+    }
+
+    internal void GiveUpChase()
+    {
+        SearchAt(LastKnownPosition);
+
+        //-- Search can be on cooldown, so fall back to Idle
+        if (state == AIStates.Chase)
+            ChangeState(AIStates.Idle);
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -116,15 +192,21 @@ public abstract class EnemyAI : MonoBehaviour
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
 
+        //-- Use the scene's terrain if none was dragged in
+        if (terrain == null)
+            terrain = Terrain.activeTerrain;
+
         //-- Create the states before entering Idle
         EnemyState idleState = new IdleState(this);
         EnemyState wanderState = new WanderState(this);
+        EnemyState chaseState = new ChaseState(this);
         searchState = new SearchState(this);
 
         states = new Dictionary<AIStates, EnemyState>
         {
             { idleState.Type, idleState },
             { wanderState.Type, wanderState },
+            { chaseState.Type, chaseState },
             { searchState.Type, searchState }
         };
 
@@ -161,6 +243,9 @@ public abstract class EnemyAI : MonoBehaviour
             return;
 
         //-- Remember where the player was detected
+        if (aspect != Target)
+            targetController = aspect.GetComponentInParent<CharacterController>();
+
         Target = aspect;
         LastKnownPosition = position;
         LastSense = sense;
@@ -230,7 +315,7 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void ChaseActions() //Supports Override
     {
-        //-- TODO: Chase doesn't move yet, so they just stand there. We should make a ChaseState that goes after LastKnownPosition, kinda like Wander but faster
+
     }
 
     //---------------------------------------------------------
@@ -329,8 +414,10 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected void StartCooldown(AIStates _state)
     {
-        actionCooldowns[_state].timer =
-            Time.time + Mathf.Max(0f, actionCooldowns[_state].maxTime);
+        if (!actionCooldowns.TryGetValue(_state, out Cooldown cooldown))
+            return;
+
+        cooldown.timer = Time.time + Mathf.Max(0f, cooldown.maxTime);
     }
 
     //---------------------------------------------------------
@@ -368,13 +455,21 @@ public abstract class EnemyAI : MonoBehaviour
     {
         currentState?.Score(stateScores);
 
-        if (state == AIStates.Attack || state == AIStates.Retreat || state == AIStates.Chase)
+        //-- Chase ends itself now
+        if (state == AIStates.Attack || state == AIStates.Retreat)
             stateScores[AIStates.Idle] = 100f;
     }
 
     //---------------------------------------------------------
     protected void WanderDestination()
     {
+        if (terrain == null)
+        {
+            Debug.LogWarning(gameObject.name + " has no terrain to wander on");
+            hasDest = false;
+            return;
+        }
+
         Vector3 origin = terrain.transform.position;
         Vector3 size = terrain.terrainData.size;
         float terrainEdgeOffset = 2f;

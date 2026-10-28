@@ -367,6 +367,7 @@ GameObject:
   - component: {fileID: 2309034614299963382}
   - component: {fileID: 1015099657600050311}
   - component: {fileID: 6188666030728164474}
+  - component: {fileID: 6036925979930281776}
   - component: {fileID: 4758410650257725370}
   m_Layer: 0
   m_Name: Lizard
@@ -478,6 +479,7 @@ MonoBehaviour:
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
   tutorialQuest: {fileID: 11400000, guid: 1a0645a462ab634429a3a456217063ae, type: 2}
+  questRunner: {fileID: 0}
   cameraRef: {fileID: 3495833846603984688}
   mesh: {fileID: 863690504387952358}
 --- !u!114 &1015099657600050311
@@ -492,15 +494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a07fb2758753984dbbcc2535af9a82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
-  entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
-  water:
-    max: 0
-  health:
-    max: 0
-  terrain: {fileID: 0}
   waterLevelPercentText: {fileID: 1140881132533310100}
-  playerController: {fileID: 94468549096083774}
-  playerCollider: {fileID: 0}
   WaterMeter: {fileID: 7822058994018410392}
   WaterLevel: 100
   MaxWaterLevel: 100
@@ -508,9 +502,9 @@ MonoBehaviour:
   WaterMovementMinSpeed: 0.5
   WaterMagicDrainAmount: 0
   WaterTakeDamageDrainAmount: 0
-  HeartShieldIcon: {fileID: 0}
-  HeartFrailIcon: {fileID: 0}
-  HeartBrokenIcon: {fileID: 0}
+  HeartShieldIcon: {fileID: 8975901894897234988}
+  HeartFrailIcon: {fileID: 6776991366430144080}
+  HeartBrokenIcon: {fileID: 2203998472110726321}
 --- !u!114 &6188666030728164474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,6 +519,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LizardAnimation
   animator: {fileID: 8389071859309181978}
   swapIdleAndSlideAnimations: 0
+--- !u!114 &6036925979930281776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357876532559851445}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a4662d13fa0e0546a033b458fb51fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthUISystem
+  entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
+  health:
+    max: 0
+  water:
+    max: 0
+  playerController: {fileID: 94468549096083774}
+  playerCollider: {fileID: 0}
+  HeartShieldIcon: {fileID: 8975901894897234988}
+  HeartFrailIcon: {fileID: 6776991366430144080}
+  HeartBrokenIcon: {fileID: 2203998472110726321}
 --- !u!54 &4758410650257725370
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1887,8 +1887,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   textBox: {fileID: 1325705957}
-  charLimit: 165
   player: {fileID: 1337312107}
+  questRunner: {fileID: 1538617381}
   iButtonText: {fileID: 1352518856}
 --- !u!1 &1672061982
 GameObject:
