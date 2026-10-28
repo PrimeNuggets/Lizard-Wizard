@@ -51,6 +51,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //public float WaterMovementMaxSpeed = 10.0f;
     public float WaterMagicDrainAmount;
     public float WaterTakeDamageDrainAmount;
+    public float WaterRestRegenAmount;
     //public float WaterEmptyValue = 0;
     public Image HeartShieldIcon;
     public Image HeartFrailIcon;
@@ -95,6 +96,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     void FixedUpdate() //No need to run every tick. Running every frame works just as gud - Xavier
     {
         WaterMovementLoss();
+        WaterGain();
         WaterLevel = entityData.water.GetCurrent();
     }
 
@@ -111,7 +113,15 @@ public class WaterLevelPercentScore : MonoBehaviour
         {
             //if player is moving
             SetWater(WaterLevel - (WaterMovementMinDrainAmount * Time.deltaTime));
-            if (WaterLevel < 0f) SetWater(0); //Why subtract the same negative value when it always == 0? - Xavier
+            if (WaterLevel < 0f)
+            {
+                SetWater(0); //Why subtract the same negative value when it always == 0? - Xavier 
+            }
+            // this was to ensure the display would always be 0 and not go further.
+            if (WaterLevel <= (0f))
+            {
+                waterLevelPercentText.text = "H20: 0.00%";
+            }
             waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             //WaterLevel = entityData.water.GetCurrent();
             WaterMeter.fillAmount = WaterLevel / MaxWaterLevel;
@@ -139,7 +149,10 @@ public class WaterLevelPercentScore : MonoBehaviour
         {
             //update just to be sure everything is working
             //waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
-            if (WaterLevel < 0f) SetWater(0);
+            if (WaterLevel < 0f)
+            {
+                SetWater(0);
+            }
             waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             //Debug.Log(entityData.water.GetCurrent().ToString());
         }
@@ -157,6 +170,39 @@ public class WaterLevelPercentScore : MonoBehaviour
         entityData.water.Set(value);
     }
 
+    private void WaterGain()
+    {
+        //FORNOW this will be regen when not moving
+        if (playerController == null)
+        {
+            Debug.LogError("Player Controller is Undefined");
+            return;
+        }
+        Vector3 playerVelocity = playerController.velocity;
+        if (playerVelocity.magnitude < WaterMovementMinSpeed)
+        {
+            //if player is moving
+            SetWater(WaterLevel + (WaterRestRegenAmount * Time.deltaTime));
+            if (WaterLevel >= MaxWaterLevel)
+            {
+                SetWater(MaxWaterLevel);
+                waterLevelPercentText.text = "H20: 100.00%";
+            }
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
+            WaterMeter.fillAmount = WaterLevel / MaxWaterLevel;
+        }
+        else
+        {
+            //update just to be sure everything is working
+            //waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
+            if (WaterLevel < 0f)
+            {
+                SetWater(0);
+            }
+            waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
+            //Debug.Log(entityData.water.GetCurrent().ToString());
+        }
+    }
 
     void OnTriggerEnter(Collider other)
     {

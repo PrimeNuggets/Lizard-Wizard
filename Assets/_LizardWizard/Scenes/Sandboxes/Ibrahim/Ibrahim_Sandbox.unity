@@ -2028,6 +2028,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1564097045}
     - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: WaterRestRegenAmount
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: healthDangerTextDisplay
       value: 
       objectReference: {fileID: 1435431513}
