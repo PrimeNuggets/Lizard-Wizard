@@ -39,6 +39,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //public Image waterLevelLowTextDisplay;
     public Image healthDangerTextDisplay;
     //private PlayerInput playerInput;
+    
     private CharacterController playerController;
     private Collider playerCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
