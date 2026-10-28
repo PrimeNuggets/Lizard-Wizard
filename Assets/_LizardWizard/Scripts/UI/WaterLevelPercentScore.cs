@@ -39,6 +39,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //public Image waterLevelLowTextDisplay;
     public Image healthDangerTextDisplay;
     //private PlayerInput playerInput;
+    
     private CharacterController playerController;
     private Collider playerCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
@@ -70,6 +71,7 @@ public class WaterLevelPercentScore : MonoBehaviour
         //entityData.water.GetCurrent();
 
         playerCollider = GetComponentInChildren<Collider>(); //Colliders exist in the mesh's skeleton
+        playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
         HeartShieldIcon.gameObject.SetActive(false);
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
@@ -88,8 +90,6 @@ public class WaterLevelPercentScore : MonoBehaviour
         //WaterMeter.fillAmount = MaxWaterLevel;
         WaterMeter.fillAmount = WaterLevel;
         //playerInput = GetComponent<PlayerInput>();
-        playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
-        
     }
 
     // Update is called once per frame

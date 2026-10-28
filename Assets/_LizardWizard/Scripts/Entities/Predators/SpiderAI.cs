@@ -7,6 +7,7 @@ public class SpiderAI : EnemyAI
     public enum Attacks
     {
         Pounce,
+        Swipe,
         WebTrap
     }
 

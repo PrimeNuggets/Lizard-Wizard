@@ -16,10 +16,21 @@ public class VisionSensor : MonoBehaviour
     public float detectionRate = 0.2f;
     public bool debugVision;
 
+    //-- Once it's chasing it keeps track of the player from further away
+    [Header("While Chasing")]
+    public float chaseViewDistance = 25f;
+    public float chaseViewAngle = 240f;
+
     private float timer;
 
     private Vector3 VisionForward =>
         Quaternion.AngleAxis(visionYawOffset, Vector3.up) * transform.forward;
+
+    private bool Chasing =>
+        enemyAI != null && enemyAI.state == EnemyAI.AIStates.Chase;
+
+    private float CurrentViewDistance => Chasing ? chaseViewDistance : viewDistance;
+    private float CurrentViewAngle => Chasing ? chaseViewAngle : viewAngle;
 
     void Update()
     {
@@ -54,7 +65,7 @@ public class VisionSensor : MonoBehaviour
             return;
 
         // -- Check distance
-        if (distance > viewDistance)
+        if (distance > CurrentViewDistance)
         {
             if (debugVision)
                 Debug.Log("Vision: outside range, distance " + distance);
@@ -64,7 +75,7 @@ public class VisionSensor : MonoBehaviour
         // -- Check angle
         float angle = Vector3.Angle(VisionForward, direction);
 
-        if (angle > viewAngle / 2f)
+        if (angle > CurrentViewAngle / 2f)
         {
             if (debugVision)
                 Debug.Log("Vision: outside angle, angle " + angle);
@@ -75,7 +86,7 @@ public class VisionSensor : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(
             visionOrigin.position,
             direction.normalized,
-            viewDistance);
+            CurrentViewDistance);
 
         Collider closestCollider = null;
         float closestDistance = float.MaxValue;
@@ -114,6 +125,10 @@ public class VisionSensor : MonoBehaviour
         // -- Draw the vision range in red
         if (visionOrigin == null || viewDistance <= 0f)
             return;
+
+        //-- Yellow shows how far it can keep track of you while chasing
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(visionOrigin.position, chaseViewDistance);
 
         Gizmos.color = Color.red;
         Vector3 origin = visionOrigin.position;
