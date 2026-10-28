@@ -96,7 +96,7 @@ public class Player : MonoBehaviour
         if (tutorialQuest != null) {
             StartQuest(tutorialQuest);
         }
-    GetLookDir();
+        GetLookDir();
     }
 
     // Update is called once per frame
@@ -227,6 +227,12 @@ public class Player : MonoBehaviour
        //dumbass way to do this smh my head
        //-vv
         return  transform.GetChild(1).GetChild(0).GetChild(0).position - transform.GetChild(1).GetChild(0).position;
+    }
+    public void StartQuest(Quests quest)
+    {
+        questRunner.SetQuest(quest);
+        ongoingQuests.Add(questRunner.quest);
+        questRunner.StartQuest(questRunner.quest);
     }
     public void OnQuestEnd(Quests quest)
     {

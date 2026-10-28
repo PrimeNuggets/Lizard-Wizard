@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using System.Threading.Tasks;
 using System.Collections;
 
+//DEPRECATED
 public class HealthUISystem : MonoBehaviour
 {
 
