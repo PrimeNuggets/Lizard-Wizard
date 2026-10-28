@@ -36,6 +36,8 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     //public int waterAmount;
     public TextMeshProUGUI waterLevelPercentText;
+    //public Image waterLevelLowTextDisplay;
+    public Image healthDangerTextDisplay;
     //private PlayerInput playerInput;
     private CharacterController playerController;
     private Collider playerCollider;
@@ -72,6 +74,8 @@ public class WaterLevelPercentScore : MonoBehaviour
         HeartBrokenIcon.gameObject.SetActive(false);
         IsHeartShieldBroken = false;
         IsInvulnerable = false;
+        healthDangerTextDisplay.gameObject.SetActive(false);
+        //waterLevelLowTextDisplay.gameObject.SetActive(false);
         //entityData.water.Set(entityData.water.GetMax());
         Debug.Log(entityData.water.GetCurrent().ToString());
         WaterLevel = entityData.water.GetCurrent();
@@ -188,6 +192,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             if (entityData.water.GetCurrent() == 0)
             {
                 Debug.Log("Teetering on the brink, facing the abyss...");
+                MortalDanger();
             }
             //code to then tell the script player has taken damage, and to now make sure the player knows they're on death's door.
             //StartCoroutine(HeartIconDisplayTimer(3f));
@@ -258,6 +263,23 @@ public class WaterLevelPercentScore : MonoBehaviour
         Debug.Log("Invulnerable right now, try again later.");
         return;
 
+    }
+
+    private void MortalDanger()
+    {
+        if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == true) 
+        {
+            healthDangerTextDisplay.gameObject.SetActive(true);
+        }
+        if (!IsHeartShieldBroken)
+        {
+            healthDangerTextDisplay.gameObject.SetActive(false);
+        }
+
+        //while (entityData.water.GetCurrent() == 0)
+        //{
+        //waterLevelLowText.gameObject.SetActive(true);
+        //}
     }
     IEnumerator HeartIconDisplayTimer(float TimerDuration)
     {
