@@ -908,7 +908,7 @@ MonoBehaviour:
   propscale: 25
   propRollLowerBound: 0.3
   propRollUpperBound: 50
-  prop1: {fileID: 8372568761179522024, guid: aeb5ed776065997429ba81482f5a644f, type: 3}
+  prop1: {fileID: 3544369245580720625, guid: 1e6b97e4f56e640479dfd92b4cce5fc9, type: 3}
   prop2: {fileID: 2307332570978995493, guid: 07369b8adad078446920faaf0b84521c, type: 3}
 --- !u!4 &925611749
 Transform:
@@ -1530,6 +1530,10 @@ PrefabInstance:
     - target: {fileID: 4317887649963137419, guid: 3231cfd9591d481e97d2cf802224e126, type: 3}
       propertyPath: m_Name
       value: Scorpion
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317887649963137419, guid: 3231cfd9591d481e97d2cf802224e126, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4787143997834533633, guid: 3231cfd9591d481e97d2cf802224e126, type: 3}
       propertyPath: minimumLoudness
@@ -2297,10 +2301,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335259685254365206, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6188666030728164474, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: swapIdleAndSlideAnimations
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6564538844601925545, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
