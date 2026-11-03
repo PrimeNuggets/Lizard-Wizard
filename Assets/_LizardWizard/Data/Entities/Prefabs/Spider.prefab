@@ -1485,6 +1485,8 @@ GameObject:
   - component: {fileID: 3345918638037214944}
   - component: {fileID: 7468268549545937355}
   - component: {fileID: 5944893694182298146}
+  - component: {fileID: 8699644163036797582}
+  - component: {fileID: 4544426320989860856}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Untagged
@@ -1543,6 +1545,8 @@ MonoBehaviour:
   visionYawOffset: 0
   detectionRate: 0.2
   debugVision: 0
+  chaseViewDistance: 25
+  chaseViewAngle: 240
 --- !u!114 &2601702130888761004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1603,7 +1607,7 @@ MonoBehaviour:
       maxTime: 10
   - key: 2
     value:
-      maxTime: 4
+      maxTime: 0.5
   - key: 1
     value:
       maxTime: 12
@@ -1628,7 +1632,7 @@ MonoBehaviour:
       maxTime: 40
   - key: 4
     value:
-      maxTime: 20
+      maxTime: 1
   - key: 5
     value:
       maxTime: 5
@@ -1638,8 +1642,66 @@ MonoBehaviour:
   turnThreshold: 3
   wanderSpeedMult: 0.5
   searchTurnTime: 1
+  searchSpeedMult: 0.5
+  wanderRadius: 15
+  searchRadius: 6
+  searchPoints: 2
+  lookAroundTime: 1.5
+  lookAroundAngle: 70
+  chaseSpeedMult: 0.6
+  chaseReactionTime: 0.4
+  chaseAccelTime: 0.75
+  chaseTurnSpeed: 540
+  loseTargetTime: 5
+  chaseStopDistance: 1.5
+  giveUpDistance: 25
+  maxLeadTime: 0.75
+  trackingTime: 0.5
   terrain: {fileID: 0}
   mesh: {fileID: 4799564899094114277}
+--- !u!114 &8699644163036797582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183464572879351044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9865cc6e4e0f91246b9bc2724221c19c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleAvoidance
+  whiskerLength: 3
+  whiskerAngle: 35
+  whiskerHeight: 0.5
+  maxSlope: 60
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  stuckTime: 1
+  useNavMesh: 1
+  repathTime: 0.25
+  cornerDistance: 1
+--- !u!114 &4544426320989860856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183464572879351044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffffi
 --- !u!54 &5944893694182298146
 Rigidbody:
   m_ObjectHideFlags: 0

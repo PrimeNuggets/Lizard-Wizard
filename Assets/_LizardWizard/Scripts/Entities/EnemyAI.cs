@@ -49,6 +49,14 @@ public abstract class EnemyAI : MonoBehaviour
     [SerializeField, LabelOverride("Wander Speed Multiplier")] protected float wanderSpeedMult = 0.25f;
     [SerializeField] protected float searchTurnTime = 1f;
     [SerializeField, LabelOverride("Search Speed Multiplier")] protected float searchSpeedMult = 0.5f;
+    [SerializeField, Tooltip("How far from where it spawned it wanders")] protected float wanderRadius = 15f;
+
+    //-- What it does once it gets to the spot it's searching
+    [Header("Search")]
+    [SerializeField, Tooltip("How far from the spot it checks around")] protected float searchRadius = 6f;
+    [SerializeField, Tooltip("How many extra spots it checks nearby")] protected int searchPoints = 2;
+    [SerializeField] protected float lookAroundTime = 1.5f;
+    [SerializeField, Tooltip("How far it turns each way when looking around")] protected float lookAroundAngle = 70f;
 
     //===========================================
         [Header("Chase")]
@@ -62,6 +70,8 @@ public abstract class EnemyAI : MonoBehaviour
     [SerializeField, Tooltip("Gives up if the player gets this far away")] protected float giveUpDistance = 25f;
     [SerializeField, Tooltip("Max seconds ahead to aim where the player is going. 0 = aim right at them")] protected float maxLeadTime = 0.75f;
     [SerializeField, Tooltip("How long after a detection it still knows exactly where the player is")] protected float trackingTime = 0.5f;
+    [SerializeField, Tooltip("While chasing, it can feel the player this close even through walls")] protected float senseRadius = 6f;
+    [SerializeField, Tooltip("When it loses the player it keeps going this far the way they were heading")] protected float followThroughDistance = 5f;
 
     //===========================================
         [Header("Misc")]
@@ -87,6 +97,10 @@ public abstract class EnemyAI : MonoBehaviour
     private SearchState searchState;
 
     private CharacterController targetController;
+    private Vector3 lastKnownHeading;
+
+    private Vector3 homePosition;
+    private ObstacleAvoidance avoidance;
 
     public Aspect Target { get; private set; }
     public Vector3 LastKnownPosition { get; private set; }
@@ -98,6 +112,10 @@ public abstract class EnemyAI : MonoBehaviour
     internal Vector3 SearchDestination => wanderDest;
     internal float SearchTurnDuration => searchTurnTime;
     internal float SearchSpeedMultiplier => searchSpeedMult;
+    internal float SearchRadius => searchRadius;
+    internal int SearchPoints => searchPoints;
+    internal float LookAroundTime => lookAroundTime;
+    internal float LookAroundAngle => lookAroundAngle;
 
     internal void PickSearchDestination()
     {
@@ -143,9 +161,13 @@ public abstract class EnemyAI : MonoBehaviour
     {
         get
         {
+            //-- Can't see them, go where they were heading
+            if (!TrackingTarget)
+                return FollowThroughPoint;
+
             Vector3 aim = TargetPosition;
 
-            if (!TrackingTarget || targetController == null || maxLeadTime <= 0f)
+            if (targetController == null || maxLeadTime <= 0f)
                 return aim;
 
             Vector3 targetVelocity = targetController.velocity;
@@ -163,6 +185,36 @@ public abstract class EnemyAI : MonoBehaviour
 
     internal float ChaseStopDistance => chaseStopDistance;
 
+    internal Vector3 FollowThroughPoint => LastKnownPosition + lastKnownHeading * followThroughDistance;
+
+    //-- Up close it can feel the player through walls so corners don't lose them
+    internal void SenseNearbyTarget()
+    {
+        if (Target == null)
+            return;
+
+        Vector3 offset = Target.transform.position - transform.position;
+        offset.y = 0f;
+
+        if (offset.sqrMagnitude > senseRadius * senseRadius)
+            return;
+
+        LastKnownPosition = Target.transform.position;
+        LastDetectionTime = Time.time;
+        RememberHeading();
+    }
+
+    void RememberHeading()
+    {
+        if (targetController == null)
+            return;
+
+        Vector3 velocity = targetController.velocity;
+        velocity.y = 0f;
+
+        lastKnownHeading = velocity.sqrMagnitude > 0.25f ? velocity.normalized : Vector3.zero;
+    }
+
     internal bool LostTarget()
     {
         if (Time.time - LastDetectionTime > loseTargetTime)
@@ -176,7 +228,7 @@ public abstract class EnemyAI : MonoBehaviour
 
     internal void GiveUpChase()
     {
-        SearchAt(LastKnownPosition);
+        SearchAt(FollowThroughPoint);
 
         //-- Search can be on cooldown, so fall back to Idle
         if (state == AIStates.Chase)
@@ -209,6 +261,10 @@ public abstract class EnemyAI : MonoBehaviour
             { chaseState.Type, chaseState },
             { searchState.Type, searchState }
         };
+
+        //-- Wander stays around where it spawned
+        homePosition = transform.position;
+        avoidance = GetComponent<ObstacleAvoidance>();
 
         //=========================================================
             //State Data
@@ -250,6 +306,14 @@ public abstract class EnemyAI : MonoBehaviour
         LastKnownPosition = position;
         LastSense = sense;
         LastDetectionTime = Time.time;
+        RememberHeading();
+
+        //-- Saw them again right after losing them, just keep chasing
+        if (sense == "Vision" && state == AIStates.Search && prevState == AIStates.Chase)
+        {
+            ChangeState(AIStates.Chase);
+            return;
+        }
 
         OnPlayerDetected();
     }
@@ -303,7 +367,36 @@ public abstract class EnemyAI : MonoBehaviour
                 break;
         }
 
+        if (avoidance != null)
+            avoidance.CheckStuck(move, entityData.speed.GetCurrent());
+
         entityData.ApplyMove(move, false);
+    }
+
+    //-- States call this, the ObstacleAvoidance component does the actual work
+    internal Vector3 SteerAround(Vector3 desired)
+    {
+        desired.y = 0f;
+
+        if (avoidance == null)
+            return desired;
+
+        return avoidance.SteerAround(desired, Target != null ? Target.transform : null);
+    }
+
+    //-- Direction to walk to get to a point, goes around blocks if there's a NavMesh
+    internal Vector3 PathTowards(Vector3 point)
+    {
+        Vector3 next = avoidance != null ? avoidance.NextCorner(point) : point;
+        return SteerAround(next - transform.position);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        //-- Cyan circle is the area it wanders in
+        Gizmos.color = Color.cyan;
+        Vector3 home = Application.isPlaying ? homePosition : transform.position;
+        Gizmos.DrawWireSphere(home, wanderRadius);
     }
 
     //---------------------------------------------------------
@@ -463,31 +556,28 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected void WanderDestination()
     {
-        if (terrain == null)
-        {
-            Debug.LogWarning(gameObject.name + " has no terrain to wander on");
-            hasDest = false;
-            return;
-        }
-
-        Vector3 origin = terrain.transform.position;
-        Vector3 size = terrain.terrainData.size;
-        float terrainEdgeOffset = 2f;
-
-        float marginX = Mathf.Clamp(terrainEdgeOffset, 0f, size.x * 0.49f);
-        float marginZ = Mathf.Clamp(terrainEdgeOffset, 0f, size.z * 0.49f);
+        //-- Pick a spot around home instead of anywhere on the map
+        Vector2 random = UnityEngine.Random.insideUnitCircle * wanderRadius;
 
         wanderDest = new Vector3(
-            UnityEngine.Random.Range(
-                origin.x + marginX,
-                origin.x + size.x - marginX
-            ),
+            homePosition.x + random.x,
             transform.position.y,
-            UnityEngine.Random.Range(
-                origin.z + marginZ,
-                origin.z + size.z - marginZ
-            )
+            homePosition.z + random.y
         );
+
+        //-- Keep it on the terrain
+        if (terrain != null)
+        {
+            Vector3 origin = terrain.transform.position;
+            Vector3 size = terrain.terrainData.size;
+            float terrainEdgeOffset = 2f;
+
+            float marginX = Mathf.Clamp(terrainEdgeOffset, 0f, size.x * 0.49f);
+            float marginZ = Mathf.Clamp(terrainEdgeOffset, 0f, size.z * 0.49f);
+
+            wanderDest.x = Mathf.Clamp(wanderDest.x, origin.x + marginX, origin.x + size.x - marginX);
+            wanderDest.z = Mathf.Clamp(wanderDest.z, origin.z + marginZ, origin.z + size.z - marginZ);
+        }
 
         hasDest = true;
         Remember(gameObject.name + " decided to wander towards " + wanderDest);
@@ -502,7 +592,8 @@ public abstract class EnemyAI : MonoBehaviour
         Vector3 offset = wanderDest - transform.position;
         offset.y = 0;
 
-        return offset.sqrMagnitude <= 0.5f * 0.5f;
+        //-- 1.5 so it doesn't have to hit the exact spot
+        return offset.sqrMagnitude <= 1.5f * 1.5f;
     }
 
     //---------------------------------------------------------
