@@ -13,7 +13,7 @@ public class Quests : ScriptableObject
         During,
         End,
     }
-    [SerializeField, LabelOverride("Internal Name"), Tooltip("The name of the fired event when the event activates\nAvoid special characters & spaces")] private string questId;
+    [SerializeField, LabelOverride("Internal Name"), Tooltip("The name of the fired event when the event activates\nAvoid special characters & spaces")] public string questId;
     [SerializeField, LabelOverride("Name")] public string questName;
     [SerializeField, TextArea] public string description;
     public List<Objective> objectiveChain;

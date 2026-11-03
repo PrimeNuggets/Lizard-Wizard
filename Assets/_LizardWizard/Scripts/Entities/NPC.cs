@@ -24,7 +24,7 @@ public class NPC : MonoBehaviour
         [Header("Misc Data")]
     //===========================================
     [SerializeField] private Transform mesh;
-    [TextArea] public List<string> dialogue;
+    [SerializeField] public List<Dialogue.ConvoConds> dialogue;
     [LabelOverride("Interaction Range")] public float iRange = 8f;
     private InputAction interactAction;
     //=========================================================
