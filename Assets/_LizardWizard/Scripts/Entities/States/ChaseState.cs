@@ -18,6 +18,8 @@ public class ChaseState : EnemyState
 
     public override Vector2 Tick()
     {
+        enemy.SenseNearbyTarget();
+
         //-- Lost the player for too long, go look where they were
         if (enemy.LostTarget())
         {
@@ -25,18 +27,31 @@ public class ChaseState : EnemyState
             return Vector2.zero;
         }
 
+        //-- Got to where they were heading and they're not there, start looking around here
+        if (!enemy.TrackingTarget)
+        {
+            Vector3 toGuess = enemy.FollowThroughPoint - enemy.transform.position;
+            toGuess.y = 0f;
+
+            if (toGuess.magnitude <= enemy.ChaseStopDistance)
+            {
+                enemy.GiveUpChase();
+                return Vector2.zero;
+            }
+        }
+
         Vector3 toTarget = enemy.TargetPosition - enemy.transform.position;
         toTarget.y = 0f;
 
         //-- Close enough, just keep facing them
-        bool closeEnough = toTarget.magnitude <= enemy.ChaseStopDistance;
+        bool closeEnough = enemy.TrackingTarget && toTarget.magnitude <= enemy.ChaseStopDistance;
 
         //-- Turn to face them first before running
         bool reacting = enemy.stateTime < enemy.ChaseReactionTime;
 
         Vector3 aim = closeEnough || reacting
             ? toTarget
-            : enemy.ChaseAimPoint - enemy.transform.position;
+            : enemy.PathTowards(enemy.ChaseAimPoint);
         aim.y = 0f;
 
         if (aim.sqrMagnitude > 0.0001f)
