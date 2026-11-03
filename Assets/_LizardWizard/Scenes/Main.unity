@@ -670,30 +670,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7413363246079153008, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
-      propertyPath: m_Height
-      value: 2.4935043
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413363246079153008, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
-      propertyPath: m_Radius
-      value: 4.4713035
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413363246079153008, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413363246079153008, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
-      propertyPath: m_Center.x
-      value: 1.3044581
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413363246079153008, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
-      propertyPath: m_Center.y
-      value: 0.2724684
-      objectReference: {fileID: 0}
-    - target: {fileID: 7413363246079153008, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
-      propertyPath: m_Center.z
-      value: 1.4843702
-      objectReference: {fileID: 0}
     - target: {fileID: 7468268549545937355, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
       propertyPath: terrain
       value: 

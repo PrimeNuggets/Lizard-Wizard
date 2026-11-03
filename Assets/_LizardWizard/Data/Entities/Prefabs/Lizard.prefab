@@ -656,6 +656,7 @@ MonoBehaviour:
   WaterMovementMinSpeed: 0.5
   WaterMagicDrainAmount: 0
   WaterTakeDamageDrainAmount: 0
+  WaterRestRegenAmount: 0
   HeartShieldIcon: {fileID: 8975901894897234988}
   HeartFrailIcon: {fileID: 6776991366430144080}
   HeartBrokenIcon: {fileID: 2203998472110726321}
@@ -712,7 +713,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
-  renderers: []
+  renderers:
+  - {fileID: 5186023736517444242}
 --- !u!1 &2552766259529300424
 GameObject:
   m_ObjectHideFlags: 0

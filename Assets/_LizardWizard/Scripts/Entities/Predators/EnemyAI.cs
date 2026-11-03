@@ -418,14 +418,6 @@ public abstract class EnemyAI : MonoBehaviour
         return SteerAround(next - transform.position);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        //-- Cyan circle is the area it wanders in
-        Gizmos.color = Color.cyan;
-        Vector3 home = Application.isPlaying ? homePosition : transform.position;
-        Gizmos.DrawWireSphere(home, wanderRadius);
-    }
-
     //---------------------------------------------------------
     protected virtual void IdleActions() //Supports Override
     {
@@ -516,6 +508,13 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void OnDrawGizmosSelected()
     {
+        if (state == AIStates.Wander && DebugHandler.DevMode()) {
+            //-- Cyan circle is the area it wanders in
+            Gizmos.color = Color.cyan;
+            Vector3 home = Application.isPlaying ? homePosition : transform.position;
+            Gizmos.DrawWireSphere(home, wanderRadius);
+        }
+
         if (attacks == null || !DebugAttacks()) return;
         Gizmos.color = Color.gray; //Gray shows all possible attacks
 

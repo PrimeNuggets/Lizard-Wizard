@@ -1487,6 +1487,7 @@ GameObject:
   - component: {fileID: 5944893694182298146}
   - component: {fileID: 8699644163036797582}
   - component: {fileID: 4544426320989860856}
+  - component: {fileID: 6686383538380400922}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Untagged
@@ -1522,6 +1523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a73c6c86e97be04b8c46823d497ad1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderHearing
+  debugHearing: 0
   minimumLoudness: 0.015384615
   enemyAI: {fileID: 7468268549545937355}
   playerChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}
@@ -1597,6 +1599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af3395f4b51063643ae1991a2a17a266, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderAI
+  debugAttacks: 0
   entityTemplate: {fileID: 11400000, guid: 2bc4dca9b382c2149a96c650d6179c12, type: 2}
   actionCooldowns:
   - key: 0
@@ -1657,8 +1660,41 @@ MonoBehaviour:
   giveUpDistance: 25
   maxLeadTime: 0.75
   trackingTime: 0.5
+  attacks:
+  - attack: {fileID: 11400000, guid: 0b51fb6ba1e3ecc41b0223b489d77285, type: 2}
+    weight: 3
+    animatorBool: attack_swipe
+  senseRadius: 6
+  followThroughDistance: 5
   terrain: {fileID: 0}
   mesh: {fileID: 4799564899094114277}
+--- !u!54 &5944893694182298146
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6183464572879351044}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8699644163036797582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1702,33 +1738,41 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffffi
---- !u!54 &5944893694182298146
-Rigidbody:
+--- !u!114 &6686383538380400922
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6183464572879351044}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
+  renderers:
+  - {fileID: 2557416297789443730}
+  - {fileID: 5093249900958658327}
+  - {fileID: 5474188044846757549}
+  - {fileID: 5944497927535246149}
+  - {fileID: 2065069283074909073}
+  - {fileID: 7703547020552975699}
+  - {fileID: 1812160066526694195}
+  - {fileID: 5151611299165081082}
+  - {fileID: 5716795976233174185}
+  - {fileID: 3834015172527652772}
+  - {fileID: 547037777603453881}
+  - {fileID: 2810842086823725495}
+  - {fileID: 1407619843954866951}
+  - {fileID: 8099562891513482184}
+  - {fileID: 8204768065819192126}
+  - {fileID: 5858634158894210282}
+  - {fileID: 1304246879927204894}
+  - {fileID: 4636282048284946032}
+  - {fileID: 9095463354799208715}
+  - {fileID: 3079389349737405792}
+  - {fileID: 7128944803956547222}
+  - {fileID: 4349733354412474977}
 --- !u!1 &6313946474024606577
 GameObject:
   m_ObjectHideFlags: 0
@@ -1903,10 +1947,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.4364846
-  m_Height: 2.0937097
+  m_Radius: 4.4713035
+  m_Height: 2.4935043
   m_Direction: 1
-  m_Center: {x: 0.41671002, y: 0.07257275, z: 0.33729792}
+  m_Center: {x: 1.3044581, y: 0.2724684, z: 1.4843702}
 --- !u!1 &6912666579855927730
 GameObject:
   m_ObjectHideFlags: 0
