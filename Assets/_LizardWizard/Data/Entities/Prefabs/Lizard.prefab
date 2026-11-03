@@ -501,10 +501,12 @@ GameObject:
   - component: {fileID: 94468549096083774}
   - component: {fileID: 5090344101804402583}
   - component: {fileID: 6433813271954513251}
+  - component: {fileID: 6676226969895517658}
   - component: {fileID: 2309034614299963382}
   - component: {fileID: 1015099657600050311}
   - component: {fileID: 6188666030728164474}
   - component: {fileID: 4758410650257725370}
+  - component: {fileID: 3505008638048516822}
   m_Layer: 0
   m_Name: Lizard
   m_TagString: Untagged
@@ -598,6 +600,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Aspect
   aspectName: 0
+--- !u!114 &6676226969895517658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357876532559851445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
+  renderers:
+  - {fileID: 5186023736517444242}
 --- !u!114 &2309034614299963382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -684,6 +700,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3505008638048516822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357876532559851445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
+  renderers: []
 --- !u!1 &2552766259529300424
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,6 +1852,11 @@ PrefabInstance:
 --- !u!4 &3555360276311013233 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4729295064614251885, guid: b89fb396a0ef03440ab3232322efdf53, type: 3}
+  m_PrefabInstance: {fileID: 8139967809399183900}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5186023736517444242 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3967262824375752846, guid: b89fb396a0ef03440ab3232322efdf53, type: 3}
   m_PrefabInstance: {fileID: 8139967809399183900}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &8389071859309181978 stripped

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ChaseState : EnemyState
@@ -56,6 +57,11 @@ public class ChaseState : EnemyState
             : 1f;
 
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, accel);
+
+        if (!reacting && enemy.AttackChooser())
+        {
+            enemy.ChangeState(EnemyAI.AIStates.Attack);
+        }
 
         return new Vector2(0f, currentSpeed);
     }

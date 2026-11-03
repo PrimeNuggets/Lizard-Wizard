@@ -138,6 +138,11 @@ public class Player : MonoBehaviour
     void FixedUpdate() //Using this saves a lot of fps
     {
         entityData?.BeginTick();
+        if (entityData.IsHitPaused)
+        {
+            entityData.ApplyMove(Vector2.zero, false);
+            return;
+        }
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)

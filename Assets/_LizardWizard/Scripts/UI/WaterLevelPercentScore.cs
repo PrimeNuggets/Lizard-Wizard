@@ -100,6 +100,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     private void WaterMovementLoss()
     {
+        if (entityData.GetMoveType() == 'H') return; //Don't lose water on knockback
         //gets player velocity to detrimine how fast the player is going
         if (playerController == null)
         {
@@ -158,13 +159,13 @@ public class WaterLevelPercentScore : MonoBehaviour
     }
 
 
-    void OnTriggerEnter(Collider other)
+    /*void OnTriggerEnter(Collider other)
     {
-        /*
+        
         if (other.CompareTag("Enemy")) //Look into checking aspect instead - Xavier
         {
             DamagePlayerHealth();
-        } */
+        } 
         var aspects = FindObjectsByType<Aspect>();
         foreach (var aspect in aspects)
         if (aspect.aspectName == Aspect.aspect.Enemy && !IsInvulnerable)
@@ -197,7 +198,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             //code to then tell the script player has taken damage, and to now make sure the player knows they're on death's door.
             //StartCoroutine(HeartIconDisplayTimer(3f));
         }
-    }
+    }*/
 
     private void DamagePlayerHealth()
     {
