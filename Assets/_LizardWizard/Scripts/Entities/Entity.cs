@@ -89,6 +89,7 @@ public class Entity : ScriptableObject
     [NonSerialized] public bool grounded = false;
     [NonSerialized] public bool ctrl = false; //Whether the entity is in control of their own actions
     private readonly Movement.Physics physics = new Movement.Physics();
+    [NonSerialized] public UnityEngine.Vector3 momentum;
     [NonSerialized] public UnityEngine.Vector3 velocity;
     [NonSerialized] public GameObject entObj;
     [NonSerialized] public CharacterController entChar;
@@ -243,6 +244,7 @@ public class Entity : ScriptableObject
         if (!ctrl)
         {
             move = UnityEngine.Vector2.zero;
+
         }
 
         Transform reference = moveRef == null ? entObj.transform : moveRef;
@@ -262,7 +264,8 @@ public class Entity : ScriptableObject
         }
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
 
-        CollisionFlags collisions = entChar.Move(velocity * dt);
+        CollisionFlags collisions = entChar.Move((momentum + velocity) * dt);
+        momentum = (momentum + velocity) * 0.9f;
 
         grounded = entChar.isGrounded;
         if (grounded && velocity.y < 0f)
