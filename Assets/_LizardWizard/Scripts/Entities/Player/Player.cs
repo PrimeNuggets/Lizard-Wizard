@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
     [SerializeField] private Transform mesh;
+    [NonSerialized] public WaterLevelPercentScore waterLevel;
     //=========================================
 
     //================================
@@ -87,7 +88,7 @@ public class Player : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
-        var waterLevel = GetComponent<WaterLevelPercentScore>();
+        waterLevel = GetComponent<WaterLevelPercentScore>();
         waterLevel.StartScoring(entityData);
 
         //=========================================================

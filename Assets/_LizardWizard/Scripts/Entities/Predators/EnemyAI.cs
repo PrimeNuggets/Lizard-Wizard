@@ -43,7 +43,7 @@ public abstract class EnemyAI : MonoBehaviour
     }
 
     //===========================================
-        [Header("Debug Options")]
+        //[Header("Debug Options")]
     //===========================================
     [SerializeField] private bool debugAttacks;
     //===========================================
@@ -53,7 +53,7 @@ public abstract class EnemyAI : MonoBehaviour
     [NonSerialized] public Entity entityData;
 
     //===========================================
-        [Header("AI Config")]
+        //[Header("AI Config")]
     //===========================================
     [SerializeField] public Dictionary<AIStates, Cooldown> actionCooldowns = new Dictionary<AIStates, Cooldown>(); //SerializeField & Public cuz apparently Unity doesn't serialize just public for dictionary fields
     [SerializeField] public Dictionary<AIStates, StateTimer> actionStateTimes = new Dictionary<AIStates, StateTimer>();
@@ -83,7 +83,7 @@ public abstract class EnemyAI : MonoBehaviour
     [SerializeField, Tooltip("Max seconds ahead to aim where the player is going. 0 = aim right at them")] protected float maxLeadTime = 0.75f;
     [SerializeField, Tooltip("How long after a detection it still knows exactly where the player is")] protected float trackingTime = 0.5f;
     //===========================================
-        [Header("Attacks")]
+        //[Header("Attacks")]
     //===========================================
     [SerializeField] protected AttackList[] attacks;
     [NonSerialized] public AttackData currentAttack;
@@ -357,7 +357,7 @@ public abstract class EnemyAI : MonoBehaviour
         }
 
         brain.Enqueue(memory);
-        Debug.Log(brain.Last<string>());
+        //Debug.Log(brain.Last<string>());
     }
 
     //---------------------------------------------------------

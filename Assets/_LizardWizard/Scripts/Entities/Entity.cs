@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Entity", menuName = "Scriptable Objects/Entity")]
 public class Entity : ScriptableObject
@@ -59,7 +60,7 @@ public class Entity : ScriptableObject
         LyingDown,
         Diving,
     }
-    public enum MoveTypes // UNUSED: Defines the action that the player is taking
+    public enum MoveTypes
     {
         Unchanged,
         Idling, 
@@ -113,6 +114,7 @@ public class Entity : ScriptableObject
     private UnityEngine.Vector3 pendingKnockback;
     private bool hitPaused;
     private float animatorSpeed = 1f;
+    [NonSerialized] public bool invulnerable = false;
     //===================================================
         //TrapManager Plugin - Xavier
     //===================================================
@@ -331,11 +333,8 @@ public class Entity : ScriptableObject
         facingDir = direction.normalized;
         attackFacingLocked = true;
 
-        entObj.transform.rotation = UnityEngine.Quaternion.LookRotation(facingDir, UnityEngine.Vector3.up);
-
-        if (visualRoot != null && visualRoot != entObj.transform)
-        {
-            visualRoot.rotation = entObj.transform.rotation;
+        if (visualRoot != null) {
+            visualRoot.rotation = UnityEngine.Quaternion.LookRotation(facingDir, UnityEngine.Vector3.up);
         }
     }
     public void BeginHurt(int stunFrames, UnityEngine.Vector3 knockback, int recoveryFrames)
@@ -389,6 +388,7 @@ public class Entity : ScriptableObject
     {
         if (hitPaused && animator != null) animator.speed = animatorSpeed;
 
+        invulnerable = false;
         hitPaused = false;
         hurtActive = false;
         pauseRemaining = 0f;

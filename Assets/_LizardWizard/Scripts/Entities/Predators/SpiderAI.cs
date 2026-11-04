@@ -60,7 +60,7 @@ public class SpiderAI : EnemyAI
     void ChooseReaction()
     {
         float roll = UnityEngine.Random.Range(0f, 1f);
-        Debug.Log("Random Roll: " + roll);
+        //Debug.Log("Random Roll: " + roll);
 
         //-- Most detections lead to Chase
         //if (roll < 0.75f)

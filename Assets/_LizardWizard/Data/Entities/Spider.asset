@@ -17,7 +17,7 @@ MonoBehaviour:
   water:
     max: 0
   speed:
-    max: 7
+    max: 14
   jumpHeight:
     max: 10
   noiseChannel: {fileID: 0}
