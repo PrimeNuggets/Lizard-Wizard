@@ -11,6 +11,12 @@ public class AttackCollider : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        FindData();
+    }
+
+    //-- EnemyAI might not have made its data yet on Start, so this gets called again on hit
+    void FindData()
+    {
         entity = GetComponentInParent<Aspect>();
         switch (entity.aspectName)
         {
@@ -49,7 +55,7 @@ public class AttackCollider : MonoBehaviour
         var attack = entity.GetComponent<EnemyAI>().currentAttack;
         Aspect.aspect enemyType = enemy.GetComponent<Aspect>().aspectName;
         if (attack == null) return;
-        Debug.Log("Applying hit: " + attack.name);
+        //Debug.Log("Applying hit: " + attack.name);
 
         //=========================================
         // Palette
@@ -130,32 +136,33 @@ public class AttackCollider : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Hit: " + other.GameObject().name);
+        //Debug.Log("Hit: " + other.GameObject().name);
         Aspect entity = other.GetComponentInParent<Aspect>();
         if (entity == null) return;
         var gameObj = entity.GameObject();
-        Debug.Log(gameObj.name + " is an entity");
+        //Debug.Log(gameObj.name + " is an entity");
 
         Entity otherData = null;
         switch (entity.aspectName)
         {
             case Aspect.aspect.Enemy:
                 otherData = gameObj.GetComponent<EnemyAI>().entityData;
-                Debug.Log(gameObj.name + " is an enemy");
+                //Debug.Log(gameObj.name + " is an enemy");
                 break;
             case Aspect.aspect.NPC:
                 otherData = gameObj.GetComponent<NPC>().entityData;
-                Debug.Log(gameObj.name + " is an NPC");
+                //Debug.Log(gameObj.name + " is an NPC");
                 break;
             case Aspect.aspect.Player:
                 otherData = gameObj.GetComponent<Player>().entityData;
-                Debug.Log(gameObj.name + " is a player");
+                //Debug.Log(gameObj.name + " is a player");
                 break;
         }
-        if (otherData == entityData) return;
+        if (entityData == null) FindData();
+        if (otherData == null || otherData == entityData) return;
         if (otherData.invulnerable)
         {
-            Debug.Log(gameObj.name + " is currently invulnerable");
+            //Debug.Log(gameObj.name + " is currently invulnerable");
             return;
         }
         ApplyHit(otherData, gameObj);
