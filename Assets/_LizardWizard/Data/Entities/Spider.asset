@@ -15,9 +15,9 @@ MonoBehaviour:
   health:
     max: 10
   water:
-    max: 50
+    max: 0
   speed:
-    max: 7
+    max: 14
   jumpHeight:
     max: 10
   noiseChannel: {fileID: 0}
@@ -26,3 +26,4 @@ MonoBehaviour:
     m_Bits: 8
   groundProbeDist: 0.3
   modelTurnSpeed: 540
+  groundContactDelay: 0.08

@@ -6,8 +6,6 @@ using UnityEngine;
 public class DebuggingUI : MonoBehaviour
 {
     //==========================================================================
-    [SerializeField, LabelOverride("Developer Mode")] private bool devMode;
-    //==========================================================================
     [Header("FPS")]
     [SerializeField, LabelOverride("FPS Object")] GameObject fpsObj;
     public class FpsDisplay
@@ -23,10 +21,6 @@ public class DebuggingUI : MonoBehaviour
     void Start()
     {
         fps.text = fpsObj.GetComponent<TMP_Text>();
-        //Override outside of the editor
-        #if !UNITY_EDITOR
-            devMode = false;
-        #endif
     }
 
     void Update()
@@ -41,7 +35,7 @@ public class DebuggingUI : MonoBehaviour
             fps.updateTimer = 0f;
             fps.frames = 0;
         }
-        if (devMode)
+        if (DebugHandler.DevMode())
         {
             fpsObj.SetActive(true);
         } else

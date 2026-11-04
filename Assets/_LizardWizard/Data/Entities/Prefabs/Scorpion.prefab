@@ -1314,6 +1314,7 @@ GameObject:
   - component: {fileID: 7122935809208592146}
   - component: {fileID: 5588847623265773276}
   - component: {fileID: 5314045180830569782}
+  - component: {fileID: 2242748781045678341}
   m_Layer: 0
   m_Name: Scorpion
   m_TagString: Untagged
@@ -1349,6 +1350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a73c6c86e97be04b8c46823d497ad1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HearingSensor
+  debugHearing: 0
   minimumLoudness: 0.015384615
   enemyAI: {fileID: 7122935809208592146}
   playerChannel: {fileID: 11400000, guid: b9fb18aa3a1456c42991d2cf03a737cd, type: 2}
@@ -1424,6 +1426,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c53dfbc880b4183b08a912bc842cda4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScorpionAI
+  debugAttacks: 0
   entityTemplate: {fileID: 11400000, guid: 0153840c8ca1408aa85d01e5327133a6, type: 2}
   actionCooldowns:
   - key: 0
@@ -1484,6 +1487,9 @@ MonoBehaviour:
   giveUpDistance: 25
   maxLeadTime: 0.75
   trackingTime: 0.5
+  attacks: []
+  senseRadius: 6
+  followThroughDistance: 5
   terrain: {fileID: 0}
   mesh: {fileID: 1481733617115328582}
   panicChance: 0.35
@@ -1530,6 +1536,47 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffffi
+--- !u!114 &2242748781045678341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4317887649963137419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
+  renderers:
+  - {fileID: 7933415731812469679}
+  - {fileID: 102851944177660783}
+  - {fileID: 7461263464266513529}
+  - {fileID: 6104080068595648488}
+  - {fileID: 3191804038765755744}
+  - {fileID: 1264309947904286532}
+  - {fileID: 2173721012070902677}
+  - {fileID: 8850630274611490761}
+  - {fileID: 8362903988027605935}
+  - {fileID: 2677138496830316450}
+  - {fileID: 3872440039042012551}
+  - {fileID: 5959608618412027698}
+  - {fileID: 285253135533770914}
+  - {fileID: 4042187230576389395}
+  - {fileID: 3198796601679199189}
+  - {fileID: 7359029141660457088}
+  - {fileID: 8987079305519352324}
+  - {fileID: 2520874397116127742}
+  - {fileID: 4732267721751768743}
+  - {fileID: 8053558659647790209}
+  - {fileID: 2594872590241182480}
+  - {fileID: 4842186226606456684}
+  - {fileID: 6046262393647427685}
+  - {fileID: 8529054848399517210}
+  - {fileID: 1434764873567830658}
+  - {fileID: 482154432797167615}
+  - {fileID: 5225398914071465902}
+  - {fileID: 1209675406239997053}
 --- !u!1 &4681130634356121682
 GameObject:
   m_ObjectHideFlags: 0

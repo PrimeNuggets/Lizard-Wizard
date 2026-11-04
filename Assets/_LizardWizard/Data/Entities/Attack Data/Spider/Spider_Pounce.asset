@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b67e60094f710da43ac7ed7e517f9c3d, type: 3}
+  m_Name: Spider_Pounce
+  m_EditorClassIdentifier: Assembly-CSharp::AttackData
+  attackId: spider_pounce
+  attackName: Pounce
+  type: 0
+  anim: {fileID: 7400000, guid: c8e245a67ee5df4418576ac434f286c7, type: 2}
+  cooldown: 10
+  facingOffset: 0
+  power: 20
+  knockback: {x: 0, y: -5, z: 5}
+  range: 7
+  hitTime: 0
+  pauseTime: 10
+  recoverTime: 17
+  drainWater: 0
+  palFX:
+  - color: {r: 1, g: 1, b: 1, a: 0}
+    frames: 5
+    fadeOut: 0
+  - color: {r: 1, g: 0, b: 0, a: 0}
+    frames: 20
+    fadeOut: 1
+  flags:
+  - jump
+  - no_animtime

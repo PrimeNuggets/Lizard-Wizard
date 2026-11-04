@@ -1,15 +1,36 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(HearingSensor))]
 [RequireComponent(typeof(VisionSensor))]
 public class SpiderAI : EnemyAI
 {
-    public enum Attacks
-    {
-        Pounce,
-        Swipe,
-        WebTrap
-    }
+    /*
+        ======================================
+        Map General Attack Plan:
+        ======================================
+        - Record the intended target
+        - Make a script to attach to attack boxes
+            - Applies Pause Time
+            - Applies Hit Time to User
+            - Disables multi-detection if attack type == OneHit
+            - Store the hit as a score
+            - Add the hit to the number of successful attacks
+        - Recievers:
+            - Record the attacker
+            - Waits for the duration of the pause time
+
+        ===================================
+        Projectile Plan
+        ===================================
+        - Unhandled by attack plan & will exist seperately
+
+        ===================================
+        Trap Plan
+        ===================================
+        - Unhandled by attack plan & will exist seperately
+
+    */
 
     //=========================================================
         //General Methods
@@ -39,17 +60,17 @@ public class SpiderAI : EnemyAI
     void ChooseReaction()
     {
         float roll = UnityEngine.Random.Range(0f, 1f);
-        Debug.Log("Random Roll: " + roll);
+        //Debug.Log("Random Roll: " + roll);
 
         //-- Most detections lead to Chase
-        if (roll < 0.75f)
-        {
+        //if (roll < 0.75f)
+        //{
             ChangeState(AIStates.Chase);
-        }
-        else
-        {
-            ChangeState(AIStates.Retreat);
-        }
+        //}
+        //else
+        //{
+        //    ChangeState(AIStates.Retreat);
+        //}
     }
 
     //---------------------------------------------------------
@@ -57,5 +78,6 @@ public class SpiderAI : EnemyAI
     {
         base.AttackActions();
         //Pounce()
+        //Swipe()
     }
 }

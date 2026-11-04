@@ -33,7 +33,19 @@ public abstract class EnemyAI : MonoBehaviour
         [LabelOverride("Time")] public float maxTime = 40f;
         [NonSerialized] public float timer = 0f;
     }
+    [Serializable]
+    public class AttackList
+    {
+        public AttackData attack;
+        public float weight;
 
+        public string animatorBool;
+    }
+
+    //===========================================
+        //[Header("Debug Options")]
+    //===========================================
+    [SerializeField] private bool debugAttacks;
     //===========================================
         [Header("Entity Data")]
     //===========================================
@@ -41,7 +53,7 @@ public abstract class EnemyAI : MonoBehaviour
     [NonSerialized] public Entity entityData;
 
     //===========================================
-        [Header("AI Config")]
+        //[Header("AI Config")]
     //===========================================
     [SerializeField] public Dictionary<AIStates, Cooldown> actionCooldowns = new Dictionary<AIStates, Cooldown>(); //SerializeField & Public cuz apparently Unity doesn't serialize just public for dictionary fields
     [SerializeField] public Dictionary<AIStates, StateTimer> actionStateTimes = new Dictionary<AIStates, StateTimer>();
@@ -70,6 +82,14 @@ public abstract class EnemyAI : MonoBehaviour
     [SerializeField, Tooltip("Gives up if the player gets this far away")] protected float giveUpDistance = 25f;
     [SerializeField, Tooltip("Max seconds ahead to aim where the player is going. 0 = aim right at them")] protected float maxLeadTime = 0.75f;
     [SerializeField, Tooltip("How long after a detection it still knows exactly where the player is")] protected float trackingTime = 0.5f;
+    //===========================================
+        //[Header("Attacks")]
+    //===========================================
+    [SerializeField] protected AttackList[] attacks;
+    [NonSerialized] public AttackData currentAttack;
+    [NonSerialized] public AttackList currentAttackEntry;
+    [NonSerialized] public string prevAttack;
+
     [SerializeField, Tooltip("While chasing, it can feel the player this close even through walls")] protected float senseRadius = 6f;
     [SerializeField, Tooltip("When it loses the player it keeps going this far the way they were heading")] protected float followThroughDistance = 5f;
 
@@ -252,6 +272,7 @@ public abstract class EnemyAI : MonoBehaviour
         EnemyState idleState = new IdleState(this);
         EnemyState wanderState = new WanderState(this);
         EnemyState chaseState = new ChaseState(this);
+        EnemyState attackState = new AttackState(this);
         searchState = new SearchState(this);
 
         states = new Dictionary<AIStates, EnemyState>
@@ -259,6 +280,7 @@ public abstract class EnemyAI : MonoBehaviour
             { idleState.Type, idleState },
             { wanderState.Type, wanderState },
             { chaseState.Type, chaseState },
+            { attackState.Type, attackState },
             { searchState.Type, searchState }
         };
 
@@ -276,6 +298,11 @@ public abstract class EnemyAI : MonoBehaviour
     void FixedUpdate()
     {
         entityData?.BeginTick();
+        if (entityData.IsHitPaused)
+        {
+            entityData.ApplyMove(Vector2.zero, false);
+            return;
+        }
         stateTime += Time.fixedDeltaTime;
 
         UpdateDecision();
@@ -330,7 +357,7 @@ public abstract class EnemyAI : MonoBehaviour
         }
 
         brain.Enqueue(memory);
-        Debug.Log(brain.Last<string>());
+        //Debug.Log(brain.Last<string>());
     }
 
     //---------------------------------------------------------
@@ -391,14 +418,6 @@ public abstract class EnemyAI : MonoBehaviour
         return SteerAround(next - transform.position);
     }
 
-    void OnDrawGizmosSelected()
-    {
-        //-- Cyan circle is the area it wanders in
-        Gizmos.color = Color.cyan;
-        Vector3 home = Application.isPlaying ? homePosition : transform.position;
-        Gizmos.DrawWireSphere(home, wanderRadius);
-    }
-
     //---------------------------------------------------------
     protected virtual void IdleActions() //Supports Override
     {
@@ -414,7 +433,7 @@ public abstract class EnemyAI : MonoBehaviour
     //---------------------------------------------------------
     protected virtual void AttackActions() //Supports Override
     {
-
+        
     }
 
     //---------------------------------------------------------
@@ -449,6 +468,70 @@ public abstract class EnemyAI : MonoBehaviour
         }
     }
 
+    //---------------------------------------------------------
+    public bool AttackChooser()
+    {
+        currentAttack = null;
+        currentAttackEntry = null;
+        if (Target == null || attacks == null || attacks.Length <= 0) return false; //Omit if no attacks exist or no target exists
+        if (IsOnCooldown(AIStates.Attack)) return false;
+
+        float distance = Vector3.Distance(transform.position, Target.transform.position);
+        float totalWeight = 0f;
+
+        foreach (var atk in attacks)
+        {
+            if (atk == null || atk.attack == null || atk.weight <= 0f || atk.attack.range < distance) continue;
+
+            totalWeight += atk.weight;
+        }
+        if (totalWeight <= 0f) return false;
+        float roll = UnityEngine.Random.value * totalWeight;
+        float accumulatedWeight = 0f;
+        foreach (var atk in attacks)
+        {
+            if (atk == null || atk.attack == null || atk.weight <= 0f || atk.attack.range < distance) continue;
+
+            accumulatedWeight += atk.weight;
+
+            currentAttack = atk.attack;
+            currentAttackEntry = atk;
+            if (roll < accumulatedWeight) return true;
+        }
+        return currentAttack != null;
+    }
+    //---------------------------------------------------------
+    bool DebugAttacks()
+    {
+        return debugAttacks && DebugHandler.DevMode();
+    }
+    //---------------------------------------------------------
+    protected virtual void OnDrawGizmosSelected()
+    {
+        if (state == AIStates.Wander && DebugHandler.DevMode()) {
+            //-- Cyan circle is the area it wanders in
+            Gizmos.color = Color.cyan;
+            Vector3 home = Application.isPlaying ? homePosition : transform.position;
+            Gizmos.DrawWireSphere(home, wanderRadius);
+        }
+
+        if (attacks == null || !DebugAttacks()) return;
+        Gizmos.color = Color.gray; //Gray shows all possible attacks
+
+        foreach (var atk in attacks)
+        {
+            if (atk == null || atk.attack == null) continue;
+            float range = atk.attack.range;
+            if (range <= 0f) continue;
+            Gizmos.DrawWireSphere(transform.position, range);
+        }
+
+        if (currentAttack != null && currentAttack.range > 0f)
+        {
+            Gizmos.color = Color.red; //Red shows the selected attack
+            Gizmos.DrawWireSphere(transform.position, currentAttack.range);
+        }
+    }
     //---------------------------------------------------------
     protected void OnStateChange()
     {
@@ -549,7 +632,7 @@ public abstract class EnemyAI : MonoBehaviour
         currentState?.Score(stateScores);
 
         //-- Chase ends itself now
-        if (state == AIStates.Attack || state == AIStates.Retreat)
+        if (state == AIStates.Retreat)
             stateScores[AIStates.Idle] = 100f;
     }
 
