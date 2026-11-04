@@ -24,6 +24,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //Entity Data
     [NonSerialized] public Entity entityData;
     [NonSerialized] public Aspect aspect;
+    //eventually, the oasis could have its own data and aspect
     //=============
     //Water Capacity
     //[NonSerialized] public float water;
@@ -42,6 +43,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     
     private CharacterController playerController;
     private Collider playerCollider;
+    public Collider OasisCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
     public Image WaterMeter;
 
@@ -72,6 +74,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
         playerCollider = GetComponentInChildren<Collider>(); //Colliders exist in the mesh's skeleton
         playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
+        OasisCollider = GetComponent<Collider>();
         HeartShieldIcon.gameObject.SetActive(false);
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
@@ -96,7 +99,6 @@ public class WaterLevelPercentScore : MonoBehaviour
     void FixedUpdate() //No need to run every tick. Running every frame works just as gud - Xavier
     {
         WaterMovementLoss();
-        WaterGain();
         WaterLevel = entityData.water.GetCurrent();
     }
 
@@ -173,15 +175,11 @@ public class WaterLevelPercentScore : MonoBehaviour
     private void WaterGain()
     {
         //FORNOW this will be regen when not moving
-        if (playerController == null)
-        {
-            Debug.LogError("Player Controller is Undefined");
-            return;
-        }
+        Debug.Log("Gain Water");
         Vector3 playerVelocity = playerController.velocity;
-        if (playerVelocity.magnitude < WaterMovementMinSpeed)
+        if (playerVelocity.magnitude > WaterMovementMinSpeed)
         {
-            //if player is moving
+
             SetWater(WaterLevel + (WaterRestRegenAmount * Time.deltaTime));
             if (WaterLevel >= MaxWaterLevel)
             {
@@ -190,6 +188,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             }
             waterLevelPercentText.text = "H20: " + WaterLevel.ToString("F2") + "%";
             WaterMeter.fillAmount = WaterLevel / MaxWaterLevel;
+            Debug.Log(" Water Restored");
         }
         else
         {
@@ -223,6 +222,16 @@ public class WaterLevelPercentScore : MonoBehaviour
             Debug.Log("Invulnerable right now, try again later.");
             //StartCoroutine(HeartIconDisplayTimer(3f));
             //IsInvulnerable = false;
+        }
+        
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Oasis")) //Look into checking aspect instead - Xavier
+        {
+            Debug.Log("Getting Water");
+            WaterGain();
         }
     }
 
