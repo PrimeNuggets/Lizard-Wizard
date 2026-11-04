@@ -192,11 +192,19 @@ MonoBehaviour:
   entityTemplate: {fileID: 11400000, guid: d88ecd2a65fc66d408e22901dd6403e6, type: 2}
   canvas: {fileID: 2105906457670068138}
   buttonText: {fileID: 2817553369998084080}
-  terrain: {fileID: 0}
   mesh: {fileID: 499923885633307018}
   dialogue:
-  - A speech perhaps
-  - Or not
+  - label: Test
+    convo: {fileID: 11400000, guid: 52763ddeebe7b61468d7c361cc4041ed, type: 2}
+    conditions: 'quest.test.started == 1
+
+      quest.test.completed == 0'
+  - label: After Test
+    convo: {fileID: 11400000, guid: eb63fc09fba8ca243b6e7ee6e46202be, type: 2}
+    conditions: quest.test.completed == 1
+  - label: Default
+    convo: {fileID: 11400000, guid: 7aa0e2291eb934a4e96f4da32d11e07a, type: 2}
+    conditions: 
   iRange: 3
 --- !u!1 &5429605079547912692
 GameObject:

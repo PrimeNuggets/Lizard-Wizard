@@ -27,10 +27,13 @@ public class QuestRunner : MonoBehaviour
     {
     }
 
-    public void StartQuest()
+    public void StartQuest(Quests quest)
     {
+        this.quest = quest;
         CurrentObjective(0);
-        HandleProcess(quest, Quests.ProcessType.Start);
+        HandleProcess(this.quest, Quests.ProcessType.Start);
+        Scoring.AddValue($"quest.{this.quest.questId.ToLowerInvariant()}.started", 1);
+        Scoring.AddValue($"quests_started", 1);
     }
 
     public void SetQuest(Quests newQuest)
@@ -55,7 +58,7 @@ public class QuestRunner : MonoBehaviour
         }
         if (progress)
         {
-            ProgressQuest();
+            ProgressQuest(quest);
         }
     }
 
@@ -93,7 +96,7 @@ public class QuestRunner : MonoBehaviour
         objective = quest.objectiveChain[index];
     }
 
-    public void ProgressQuest()
+    public void ProgressQuest(Quests quest)
     {
         //Add Objective Rewards here
         int nextIndex = quest.objectiveChain.IndexOf(objective) + 1;
