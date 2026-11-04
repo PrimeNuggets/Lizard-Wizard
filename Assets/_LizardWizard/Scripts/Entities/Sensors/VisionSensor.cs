@@ -14,7 +14,7 @@ public class VisionSensor : MonoBehaviour
     public float viewAngle = 90f;
     public float visionYawOffset = 0f;
     public float detectionRate = 0.2f;
-    public bool debugVision;
+    [SerializeField] private bool debugVision;
 
     //-- Once it's chasing it keeps track of the player from further away
     [Header("While Chasing")]
@@ -44,11 +44,16 @@ public class VisionSensor : MonoBehaviour
         }
     }
 
+    bool DebugVision()
+    {
+        return debugVision && DebugHandler.DevMode();
+    }
+
     void CheckVision()
     {
         if (player == null || enemyAI == null || visionOrigin == null)
         {
-            if (debugVision)
+            if (DebugVision())
                 Debug.Log("Vision: missing player, enemy AI, or vision origin");
             return;
         }
@@ -67,7 +72,7 @@ public class VisionSensor : MonoBehaviour
         // -- Check distance
         if (distance > CurrentViewDistance)
         {
-            if (debugVision)
+            if (DebugVision())
                 Debug.Log("Vision: outside range, distance " + distance);
             return;
         }
@@ -77,7 +82,7 @@ public class VisionSensor : MonoBehaviour
 
         if (angle > CurrentViewAngle / 2f)
         {
-            if (debugVision)
+            if (DebugVision())
                 Debug.Log("Vision: outside angle, angle " + angle);
             return;
         }
@@ -105,14 +110,14 @@ public class VisionSensor : MonoBehaviour
 
         if (closestCollider == null)
         {
-            if (debugVision)
+            if (DebugVision())
                 Debug.Log("Vision: ray hit nothing outside the spider");
             return;
         }
 
         Aspect aspect = closestCollider.GetComponentInParent<Aspect>();
 
-        if (debugVision)
+        if (DebugVision())
             Debug.Log("Vision: ray hit " + closestCollider.name +
                 ", aspect " + (aspect != null ? aspect.aspectName.ToString() : "none"));
 
@@ -123,7 +128,7 @@ public class VisionSensor : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         // -- Draw the vision range in red
-        if (visionOrigin == null || viewDistance <= 0f)
+        if (visionOrigin == null || viewDistance <= 0f || !DebugVision())
             return;
 
         //-- Yellow shows how far it can keep track of you while chasing

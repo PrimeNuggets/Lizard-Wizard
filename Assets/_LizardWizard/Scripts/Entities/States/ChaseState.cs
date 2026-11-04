@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ChaseState : EnemyState
@@ -70,7 +71,13 @@ public class ChaseState : EnemyState
             ? Time.fixedDeltaTime / enemy.ChaseAccelTime
             : 1f;
 
-        currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, accel);
+        currentSpeed = closeEnough ? 0f : Mathf.MoveTowards(currentSpeed, targetSpeed, accel);
+
+        if (!reacting && enemy.AttackChooser())
+        {
+            enemy.ChangeState(EnemyAI.AIStates.Attack);
+            if (enemy.state == EnemyAI.AIStates.Attack) return Vector2.zero;
+        }
 
         return new Vector2(0f, currentSpeed);
     }

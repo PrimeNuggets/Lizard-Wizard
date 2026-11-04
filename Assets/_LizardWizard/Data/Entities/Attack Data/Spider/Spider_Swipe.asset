@@ -10,15 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b67e60094f710da43ac7ed7e517f9c3d, type: 3}
-  m_Name: Spider_AttackData
+  m_Name: Spider_Swipe
   m_EditorClassIdentifier: Assembly-CSharp::AttackData
-  attackId: 
-  attackName: 
+  attackId: spider_swipe
+  attackName: Swipe
+  type: 0
   anim: {fileID: 7400000, guid: d4508ff0de6ceef41b03ff0ec719618f, type: 2}
-  power: 0
-  knockback: 0
-  range: 0
+  cooldown: 2
+  facingOffset: 25
+  power: 10
+  knockback: {x: 2, y: -1, z: 5}
+  range: 1.5
   hitTime: 0
-  pauseTime: 0
-  inflictColor: {r: 1, g: 0, b: 0, a: 1}
-  projectiles: []
+  pauseTime: 5
+  recoverTime: 12
+  drainWater: 0
+  palFX:
+  - color: {r: 1, g: 1, b: 1, a: 0}
+    frames: 5
+    fadeOut: 0
+  - color: {r: 1, g: 0, b: 0, a: 0}
+    frames: 10
+    fadeOut: 1
+  flags: []

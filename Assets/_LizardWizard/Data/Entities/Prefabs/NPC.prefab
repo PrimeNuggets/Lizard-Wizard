@@ -113,8 +113,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2297184876084285230}
   - component: {fileID: 6792663984475335386}
+  - component: {fileID: 2172667178598109967}
   - component: {fileID: 3972457934504277636}
   - component: {fileID: 4244975600916002924}
+  - component: {fileID: 7379487940434335875}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -152,6 +154,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Aspect
   aspectName: 2
+--- !u!114 &2172667178598109967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3307658731007089761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
+  renderers:
+  - {fileID: 458409299860336068}
 --- !u!143 &3972457934504277636
 CharacterController:
   m_ObjectHideFlags: 0
@@ -206,6 +222,20 @@ MonoBehaviour:
     convo: {fileID: 11400000, guid: 7aa0e2291eb934a4e96f4da32d11e07a, type: 2}
     conditions: 
   iRange: 3
+--- !u!114 &7379487940434335875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3307658731007089761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
+  renderers:
+  - {fileID: 458409299860336068}
 --- !u!1 &5429605079547912692
 GameObject:
   m_ObjectHideFlags: 0
