@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Entity", menuName = "Scriptable Objects/Entity")]
 public class Entity : ScriptableObject
@@ -31,7 +32,9 @@ public class Entity : ScriptableObject
         {
             if (!max)
             {
-                current = value;
+                float minimum = GetMax() < 0f ? GetMax() : 0f;
+                float maximum = GetMax() >= 0f ? GetMax() : 0f;
+                current = Mathf.Clamp(value, minimum, maximum);
             } else
             {
                 this.max = value;
@@ -57,7 +60,7 @@ public class Entity : ScriptableObject
         LyingDown,
         Diving,
     }
-    public enum MoveTypes // UNUSED: Defines the action that the player is taking
+    public enum MoveTypes
     {
         Unchanged,
         Idling, 
@@ -102,8 +105,16 @@ public class Entity : ScriptableObject
     [NonSerialized] public Transform visualRoot;
     private UnityEngine.Vector3 facingDir;
     protected bool initialized = false;
-    private Animator animator;
+    [NonSerialized] public Animator animator;
     private float groundedTime;
+    [NonSerialized] public bool attackFacingLocked;
+    private bool hurtActive;
+    private float pauseRemaining;
+    private float recoveryRemaining;
+    private UnityEngine.Vector3 pendingKnockback;
+    private bool hitPaused;
+    private float animatorSpeed = 1f;
+    [NonSerialized] public bool invulnerable = false;
     //===================================================
         //TrapManager Plugin - Xavier
     //===================================================
@@ -113,6 +124,8 @@ public class Entity : ScriptableObject
         public bool onPoison;
     }
     [NonSerialized] public StatusEffects status;
+    
+    public bool IsHitPaused => hitPaused;
     
     public void Initialize(GameObject obj, Transform model = null)
     {
@@ -132,16 +145,10 @@ public class Entity : ScriptableObject
         }
         catch
         {
-            Debug.LogWarning("No animator was found under the object: " + entObj.name);
-        }
-        try
-        {
-            animator = entObj.GetComponentInChildren<Animator>();
-        }
-        catch
-        {
             Debug.LogWarning("No animator was found under the object: " + entObj.name); //Occurs so that unity doesn't treat this as a fatal error
         }
+        attackFacingLocked = false;
+        ResetHurt();
         initialized = true;
     }
     public void InitializeStats()
@@ -161,11 +168,14 @@ public class Entity : ScriptableObject
     }
     public void AfterTick()
     {   
+        if (hitPaused) return;
         AlignToGround(Time.deltaTime);
     }
     public void Disable()
     {   
         groundedTime = 0f;
+        attackFacingLocked = false;
+        ResetHurt();
 
         if (animator == null || !animator.isInitialized) return;
         animator.SetFloat("Speed", 0f);
@@ -182,7 +192,7 @@ public class Entity : ScriptableObject
         UnityEngine.Vector3 movement = velocity;
         movement.y = 0;
 
-        if (movement.sqrMagnitude > 0.0001f)
+        if (!attackFacingLocked && movement.sqrMagnitude > 0.0001f)
         {
             facingDir = movement.normalized;
         }
@@ -234,6 +244,8 @@ public class Entity : ScriptableObject
     {
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
+        if (TickHurt(dt)) return;
+
         if (grounded && velocity.y < 0f)
         {
             velocity.y = -2f;
@@ -269,7 +281,7 @@ public class Entity : ScriptableObject
         {
             float landingSpeed = Mathf.Abs(velocity.y);
             velocity.y = -2f;
-            SetStateType('S', true);
+            SetStateType('S', GetMoveType() == 'A' ? ctrl : true); //Force grounded if not attacking
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
             //-- TODO: clean landing after a flip = small speed boost + add to combo
@@ -312,6 +324,87 @@ public class Entity : ScriptableObject
         animator.SetBool("Grounded", false);
         animator.ResetTrigger("Jump");
         animator.SetTrigger("Jump");
+    }
+    public void SetAttackFacing(UnityEngine.Vector3 direction)
+    {
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f) return;
+        facingDir = direction.normalized;
+        attackFacingLocked = true;
+
+        if (visualRoot != null) {
+            visualRoot.rotation = UnityEngine.Quaternion.LookRotation(facingDir, UnityEngine.Vector3.up);
+        }
+    }
+    public void BeginHurt(int stunFrames, UnityEngine.Vector3 knockback, int recoveryFrames)
+    {
+        hurtActive = true;
+        pauseRemaining = Mathf.Max(0, stunFrames) / 60f;
+        recoveryRemaining = Mathf.Max(1, recoveryFrames) / 60f;
+        pendingKnockback = knockback;
+
+        ctrl = false;
+        SetMoveType('H');
+
+        BeginHitTime(stunFrames);
+        
+        if (!hitPaused)
+        {
+            velocity += pendingKnockback;
+            pendingKnockback = UnityEngine.Vector3.zero;
+        }
+    }
+    private bool TickHurt(float dt)
+    {
+        if (hitPaused)
+        {
+            pauseRemaining = Mathf.Max(0f, pauseRemaining - dt);
+            if (pauseRemaining > 0f) return true;
+
+            hitPaused = false;
+            if (animator != null) animator.speed = animatorSpeed;
+            if (hurtActive) {
+                velocity += pendingKnockback;
+                pendingKnockback = UnityEngine.Vector3.zero;
+            }
+
+            return false;
+        }
+        if (!hurtActive) return false;
+
+        ctrl = false;
+        recoveryRemaining = Mathf.Max(0f, recoveryRemaining - dt);
+        if (recoveryRemaining <= 0f)
+        {
+            hurtActive = false;
+            SetMoveType('I');
+            ctrl = true;
+        }
+
+        return false;
+    }
+    private void ResetHurt()
+    {
+        if (hitPaused && animator != null) animator.speed = animatorSpeed;
+
+        invulnerable = false;
+        hitPaused = false;
+        hurtActive = false;
+        pauseRemaining = 0f;
+        recoveryRemaining = 0f;
+        pendingKnockback = UnityEngine.Vector3.zero;
+    }
+    public void BeginHitTime(int frames)
+    {
+        float duration = Mathf.Max(0, frames) / 60f;
+        if (duration <= 0f) return;
+
+        if (!hitPaused && animator != null) animatorSpeed = animator.speed;
+
+        pauseRemaining = Mathf.Max(pauseRemaining, duration);
+        hitPaused = true;
+        if (animator != null) animator.speed = 0f;
     }
     public char GetStateType()
     {

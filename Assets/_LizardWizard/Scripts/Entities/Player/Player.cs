@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
     [Header("Misc Data")]
     [SerializeField, Tooltip("Meant to rotate the camera without rotating the whole player"), LabelOverride("Camera Reference")] private GameObject cameraRef;
     [SerializeField] private Transform mesh;
+    [NonSerialized] public WaterLevelPercentScore waterLevel;
     //=========================================
 
     //================================
@@ -87,7 +88,7 @@ public class Player : MonoBehaviour
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
-        var waterLevel = GetComponent<WaterLevelPercentScore>();
+        waterLevel = GetComponent<WaterLevelPercentScore>();
         waterLevel.StartScoring(entityData);
 
         //=========================================================
@@ -138,6 +139,11 @@ public class Player : MonoBehaviour
     void FixedUpdate() //Using this saves a lot of fps
     {
         entityData?.BeginTick();
+        if (entityData.IsHitPaused)
+        {
+            entityData.ApplyMove(Vector2.zero, false);
+            return;
+        }
         //Variables
         Vector2 move = moveAction.ReadValue<Vector2>();
         bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)

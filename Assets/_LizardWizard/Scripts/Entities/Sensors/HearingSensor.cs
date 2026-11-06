@@ -3,6 +3,10 @@ using UnityEngine.Serialization;
 
 public class HearingSensor : MonoBehaviour
 {
+    [Header("Debugging")]
+    [SerializeField] private bool debugHearing;
+
+    [Header("Data")]
     [Min(0.001f)]
     public float minimumLoudness = 1f / 65f;
 
@@ -40,6 +44,7 @@ public class HearingSensor : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
+        if (!debugHearing || !DebugHandler.DevMode()) return;
         //-- Blue shows how far a normal sound can be heard
         float threshold = Mathf.Max(0.001f, minimumLoudness);
         float range = Mathf.Sqrt(Mathf.Max(0f, 1f / threshold - 1f));
