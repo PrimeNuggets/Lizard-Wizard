@@ -124,6 +124,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
   m_PrefabInstance: {fileID: 2694692293406466300}
   m_PrefabAsset: {fileID: 0}
+--- !u!136 &178179581 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 1119912823587196516, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+  m_PrefabInstance: {fileID: 631561819127143116}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &224475879
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a17487eb21fff43853bf98f756dd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebuggingUI
-  devMode: 1
   fpsObj: {fileID: 224475879}
 --- !u!114 &226893735
 MonoBehaviour:
@@ -611,6 +615,7 @@ MonoBehaviour:
   SpellSlot2: {fileID: 1722809102}
   SpellSlot3: {fileID: 1377814820}
   SpellSlot4: {fileID: 2109635955}
+  steamDashSpell: {fileID: 0}
 --- !u!1001 &562275374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1419,6 +1424,37 @@ RectTransform:
   m_AnchoredPosition: {x: -180, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 0}
+--- !u!1 &1184891890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1184891891}
+  m_Layer: 0
+  m_Name: OasisEmpty
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1184891891
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184891890}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 118.53352, y: 9.0369, z: 98.77365}
+  m_LocalScale: {x: 0.23084025, y: 0.23084022, z: 0.23084022}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1220802989
 GameObject:
   m_ObjectHideFlags: 0
@@ -3368,6 +3404,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109635953}
   m_CullTransparentMesh: 1
+--- !u!1001 &631561819127143116
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 125.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 104.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724445716117730542, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393987392273149524, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
+      propertyPath: m_Name
+      value: OasisWaterHoleLocalObject
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f012751ff0851384d98dd5976702d5fc, type: 3}
 --- !u!1001 &2694692293406466300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3383,6 +3476,14 @@ PrefabInstance:
     - target: {fileID: 863690504387952358, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: OasisCollider
+      value: 
+      objectReference: {fileID: 178179581}
+    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: WaterRestRegenAmount
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1140881132533310100, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_fontAsset
@@ -3707,3 +3808,5 @@ SceneRoots:
   - {fileID: 7680004638690765321}
   - {fileID: 562275374}
   - {fileID: 1526962700}
+  - {fileID: 631561819127143116}
+  - {fileID: 1184891891}
