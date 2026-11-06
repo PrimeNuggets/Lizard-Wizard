@@ -389,7 +389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a17487eb21fff43853bf98f756dd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebuggingUI
-  devMode: 1
   fpsObj: {fileID: 224475879}
 --- !u!114 &226893735
 MonoBehaviour:
@@ -616,6 +615,7 @@ MonoBehaviour:
   SpellSlot2: {fileID: 1722809102}
   SpellSlot3: {fileID: 1377814820}
   SpellSlot4: {fileID: 2109635955}
+  steamDashSpell: {fileID: 0}
 --- !u!1001 &562275374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3483,7 +3483,7 @@ PrefabInstance:
       objectReference: {fileID: 178179581}
     - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: WaterRestRegenAmount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1140881132533310100, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_fontAsset
