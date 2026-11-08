@@ -1,5 +1,4 @@
 using System;
-using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -32,7 +31,8 @@ public class Entity : ScriptableObject
             if (!max)
             {
                 current = value;
-            } else
+            }
+            else
             {
                 this.max = value;
             }
@@ -40,7 +40,8 @@ public class Entity : ScriptableObject
         public void Initialize(float current, [CallerFilePath] string file = "",
             [CallerLineNumber] int line = 0)
         {
-            if (initialized) {
+            if (initialized)
+            {
                 Debug.LogWarning($"{System.IO.Path.GetFileName(file)}:{line}\nThis stat has already been initialized.\nAborting Method");
                 return;
             }
@@ -60,13 +61,13 @@ public class Entity : ScriptableObject
     public enum MoveTypes // UNUSED: Defines the action that the player is taking
     {
         Unchanged,
-        Idling, 
+        Idling,
         Attacking,
         Guarding,
         Hurt,
     }
     //===================================================
-        //Serializable Variables
+    //Serializable Variables
     //===================================================
     [Header("Stats")]
     public Stat health;
@@ -84,12 +85,14 @@ public class Entity : ScriptableObject
     [Min(0f)] public float groundContactDelay = 0.08f;
 
     //===================================================
-        //Non-Serializable Variables
+    //Non-Serializable Variables
     //===================================================
     [NonSerialized] public bool grounded = false;
+    [NonSerialized] public bool crouched = false;
     [NonSerialized] public bool ctrl = false; //Whether the entity is in control of their own actions
     private readonly Movement.Physics physics = new Movement.Physics();
     [NonSerialized] public UnityEngine.Vector3 momentum;
+    [NonSerialized] public UnityEngine.Vector3 storedMomentum;
     [NonSerialized] public UnityEngine.Vector3 velocity;
     [NonSerialized] public GameObject entObj;
     [NonSerialized] public CharacterController entChar;
@@ -102,11 +105,12 @@ public class Entity : ScriptableObject
     private Aspect aspect;
     [NonSerialized] public Transform visualRoot;
     private UnityEngine.Vector3 facingDir;
+    private UnityEngine.Vector3 GroundNormal;
     protected bool initialized = false;
     private Animator animator;
     private float groundedTime;
     //===================================================
-        //TrapManager Plugin - Xavier
+    //TrapManager Plugin - Xavier
     //===================================================
     public class StatusEffects
     {
@@ -114,7 +118,7 @@ public class Entity : ScriptableObject
         public bool onPoison;
     }
     [NonSerialized] public StatusEffects status;
-    
+
     public void Initialize(GameObject obj, Transform model = null)
     {
         InitializeStats();
@@ -161,11 +165,11 @@ public class Entity : ScriptableObject
         prevMoveType = moveType;
     }
     public void AfterTick()
-    {   
+    {
         AlignToGround(Time.deltaTime);
     }
     public void Disable()
-    {   
+    {
         groundedTime = 0f;
 
         if (animator == null || !animator.isInitialized) return;
@@ -173,26 +177,13 @@ public class Entity : ScriptableObject
         animator.SetBool("Grounded", false);
         animator.ResetTrigger("Jump");
     }
-    public void AlignToGround(float deltaTime)
+
+    //OKAY SO i separated getting ground normals out and realized this is gonna be on every entity
+    //which is, uh, maybe a few raycasts per frame. apparently first 100 raycasts per frame are basically free cpu wise
+    //so! if performance starts suffering, or if you wanna make this bitch more efficient for the toasters among us
+    //make this thing memoized, as in if it already ran this frame just throw the shit it already calculated and skip the raycast
+    public Vector3 GetGroundNormal()
     {
-        if (visualRoot == null) {
-            Debug.LogError("AlignToGround: Entity Data references no GameObject");
-            return;
-        }
-
-        UnityEngine.Vector3 movement = velocity;
-        movement.y = 0;
-
-        if (movement.sqrMagnitude > 0.0001f)
-        {
-            facingDir = movement.normalized;
-        }
-        if (animator != null) {
-            groundedTime = grounded ? groundedTime + deltaTime : 0f;
-            animator.SetBool("Grounded", grounded && groundedTime >= groundContactDelay);
-            animator.SetFloat("Speed", movement.magnitude);
-        }
-
         UnityEngine.Vector3 normal = UnityEngine.Vector3.up;
         if (grounded)
         {
@@ -218,8 +209,35 @@ public class Entity : ScriptableObject
             {
                 normal = hit.normal;
                 Debug.DrawRay(hit.point, normal * 0.5f);
+
             }
+
         }
+        return normal;
+    }
+    public void AlignToGround(float deltaTime)
+    {
+        if (visualRoot == null)
+        {
+            Debug.LogError("AlignToGround: Entity Data references no GameObject");
+            return;
+        }
+
+        UnityEngine.Vector3 movement = velocity;
+        //movement.y = 0;
+
+        if (movement.sqrMagnitude > 0.0001f)
+        {
+            facingDir = movement.normalized;
+        }
+        if (animator != null)
+        {
+            groundedTime = grounded ? groundedTime + deltaTime : 0f;
+            animator.SetBool("Grounded", grounded && groundedTime >= groundContactDelay);
+            animator.SetFloat("Speed", movement.magnitude);
+        }
+
+        Vector3 normal = GetGroundNormal();
         UnityEngine.Vector3 forward = UnityEngine.Vector3.ProjectOnPlane(facingDir, normal);
         if (forward.sqrMagnitude < 0.0001f) return;
 
@@ -233,13 +251,17 @@ public class Entity : ScriptableObject
     }
     public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null)
     {
+        if (crouched)
+        {
+            GroundNormal = GetGroundNormal();
+        }
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
         if (grounded && velocity.y < 0f)
         {
             velocity.y = -2f;
         }
-        
+
         move = UnityEngine.Vector2.ClampMagnitude(move, 1f); //Processes WASD
         if (!ctrl)
         {
@@ -251,7 +273,8 @@ public class Entity : ScriptableObject
         UnityEngine.Vector3 fwd = UnityEngine.Vector3.ProjectOnPlane(reference.forward, UnityEngine.Vector3.up).normalized;
         UnityEngine.Vector3 right = UnityEngine.Vector3.Cross(UnityEngine.Vector3.up, fwd);
         float gravity = physics.applyGravity(0f, 1f);
-        if (grounded && ctrl) {
+        if (grounded && ctrl)
+        {
             UnityEngine.Vector3 direction = right * move.x + fwd * move.y;
 
             velocity.x = direction.x * speed.GetCurrent();
@@ -264,14 +287,26 @@ public class Entity : ScriptableObject
         }
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
 
-        CollisionFlags collisions = entChar.Move((momentum + velocity) * dt);
-        momentum = (momentum + velocity) * 0.9f;
+        CollisionFlags collisions = entChar.Move((momentum + storedMomentum + velocity) * dt);
+
+        if (momentum.magnitude < UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal).magnitude)
+        {
+            // storedMomentum += UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal).normalized;
+            // momentum = UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GetGroundNormal());
+
+        }
+        else
+        {
+            momentum *= 0.9f;
+            storedMomentum *= 0.9f;
+        }
 
         grounded = entChar.isGrounded;
         if (grounded && velocity.y < 0f)
         {
             float landingSpeed = Mathf.Abs(velocity.y);
             velocity.y = -2f;
+            storedMomentum = UnityEngine.Vector3.ProjectOnPlane(new Vector3(0.0f, -landingSpeed, 0.0f), GroundNormal);
             SetStateType('S', true);
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
@@ -283,14 +318,15 @@ public class Entity : ScriptableObject
                 float strength = Mathf.Clamp(landingSpeed / 15f, 0.5f, 2f);
                 noiseChannel.Raise(entObj.transform.position, aspect, strength);
             }
-        } else if (!grounded)
+        }
+        else if (!grounded)
         {
             SetStateType('A', ctrl);
         }
 
         if ((collisions & CollisionFlags.Above) != 0 && velocity.y > 0f)
         {
-            velocity.y = 0f;
+            //velocity.y = 0f;
         }
     }
 
@@ -361,7 +397,8 @@ public class Entity : ScriptableObject
     }
     public void SetStateType(char state, bool ctrl)
     {
-        if (!stateTypeChanged) {
+        if (!stateTypeChanged)
+        {
             prevStateType = stateType;
         }
         switch (state)
@@ -408,7 +445,8 @@ public class Entity : ScriptableObject
     }
     public void SetMoveType(char move)
     {
-        if (!moveTypeChanged) {
+        if (!moveTypeChanged)
+        {
             prevMoveType = moveType;
         }
         switch (move)
@@ -442,4 +480,5 @@ public class Entity : ScriptableObject
             moveType = prevMoveType;
         }
     }
+
 }

@@ -6,9 +6,9 @@ public class TerrainGenerator : MonoBehaviour
     private int height = 1024;
     //width and height of the terrain. Must be equal! 
     // it scales the dunes with it- increasing it will NOT make more dunes it will make BIGGER dunes
-    private int depth = 25;
+    private int depth = 35;
     //depth is how high the hills go.
-    private float scale = 80f;
+    private float scale = 40f;
     //scale of the perlin noise map. higher = more dunes across the map.
     private float multscale = 10f;
     public float propscale = 100f;

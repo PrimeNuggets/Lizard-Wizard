@@ -20,15 +20,16 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform cameraPitch;
     [SerializeField] private float maxLookAngle = 75f;
     //=========================================
-        // Movement
+    // Movement
     //=========================================
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction jumpAction;
+    private InputAction crouchAction;
     private InputAction spell1Action;
     private InputAction spell2Action;
     private InputAction spell3Action;
-    private InputAction spell4Action;   
+    private InputAction spell4Action;
 
     [Header("Spell List")]
     [SerializeField] private ISpell Spell1;
@@ -36,8 +37,8 @@ public class Player : MonoBehaviour
     [SerializeField] private ISpell Spell3;
     [SerializeField] private ISpell Spell4;
     public SteamDash testspell1;
-   
-    
+
+
     private float pitch;
     private LizardAnimation lizardAnimation;
     //=========================================
@@ -65,7 +66,7 @@ public class Player : MonoBehaviour
     {
         SetSpell(testspell1, 1);
         //=========================================================
-            //Controls
+        //Controls
         //=========================================================
         var input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         lizardAnimation = GetComponent<LizardAnimation>();
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour
         moveAction = input.actions.FindAction("Player/Move", true);
         lookAction = input.actions.FindAction("Player/Look", true);
         jumpAction = input.actions.FindAction("Player/Jump", true);
+        crouchAction = input.actions.FindAction("Player/Crouch", true);
         spell1Action = input.actions.FindAction("Player/Spell1", true);
         spell2Action = input.actions.FindAction("Player/Spell2", true);
         spell3Action = input.actions.FindAction("Player/Spell3", true);
@@ -83,7 +85,7 @@ public class Player : MonoBehaviour
             pitch -= 360f;
 
         //=========================================================
-            //Entity Instantiation
+        //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
@@ -91,9 +93,10 @@ public class Player : MonoBehaviour
         waterLevel.StartScoring(entityData);
 
         //=========================================================
-            //Quest Initialization
+        //Quest Initialization
         //=========================================================
-        if (tutorialQuest != null) {
+        if (tutorialQuest != null)
+        {
             StartQuest(tutorialQuest);
         }
         GetLookDir();
@@ -118,21 +121,26 @@ public class Player : MonoBehaviour
 
         cameraPitch.localRotation = Quaternion.Euler(pitch, 0f, 0f);
 
-                //NOTE: This implementation of a 'released' function hypothetically might miss sometimes.
+        //NOTE: This implementation of a 'released' function hypothetically might miss sometimes.
         //Stress testing i havent gotten it to miss yet, but if it starts missing(esp in high framerate) try changing updateMode to FixedUpdate
         //or move this to update ig idk
-        if (spell1Action.WasReleasedThisFrame()){
+        if (spell1Action.WasReleasedThisFrame())
+        {
             OnSpell1Released();
         }
-        if (spell2Action.WasReleasedThisFrame()){
-        OnSpell2Released();
+        if (spell2Action.WasReleasedThisFrame())
+        {
+            OnSpell2Released();
         }
-        if (spell3Action.WasReleasedThisFrame()){
+        if (spell3Action.WasReleasedThisFrame())
+        {
             OnSpell3Released();
         }
-        if (spell4Action.WasReleasedThisFrame()){
+        if (spell4Action.WasReleasedThisFrame())
+        {
             OnSpell4Released();
         }
+
     }
 
     void FixedUpdate() //Using this saves a lot of fps
@@ -145,9 +153,11 @@ public class Player : MonoBehaviour
         bool spell2Pressed = spell2Action.IsPressed();
         bool spell3Pressed = spell3Action.IsPressed();
         bool spell4Pressed = spell4Action.IsPressed();
+        bool crouchPressed = crouchAction.IsPressed();
+        entityData.crouched = crouchPressed;
 
         //===========================================================
-            //Movement
+        //Movement
         //===========================================================
         bool wasGrounded = entityData.entChar.isGrounded;
         entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
@@ -169,64 +179,68 @@ public class Player : MonoBehaviour
         Destroy(entityData);
     }
 
+
     void OnSpell1()
     {
         Spell1.CastSpellDown();
     }
     void OnSpell1Released()
     {
-       Spell1.CastSpellReleased();
+        Spell1.CastSpellReleased();
     }
-        void OnSpell2()
+    void OnSpell2()
     {
         Spell2.CastSpellDown();
     }
     void OnSpell2Released()
     {
-       Spell2.CastSpellReleased();
+        Spell2.CastSpellReleased();
     }
-        void OnSpell3()
+    void OnSpell3()
     {
         Spell3.CastSpellDown();
     }
     void OnSpell3Released()
     {
-       Spell3.CastSpellReleased();
+        Spell3.CastSpellReleased();
     }
-        void OnSpell4()
+    void OnSpell4()
     {
         Spell1.CastSpellDown();
     }
     void OnSpell4Released()
     {
-       Spell4.CastSpellReleased();
+        Spell4.CastSpellReleased();
     }
-    public void SetSpell(ISpell spell, int slot){
-        switch(slot){
+    public void SetSpell(ISpell spell, int slot)
+    {
+        switch (slot)
+        {
             case 1:
-            Spell1 = spell;
-            break;
+                Spell1 = spell;
+                break;
             case 2:
-            Spell2 = spell;
-            break;
+                Spell2 = spell;
+                break;
             case 3:
-            Spell3 = spell;
-            break;
+                Spell3 = spell;
+                break;
             case 4:
-            Spell4 = spell;
-            break;
+                Spell4 = spell;
+                break;
             default:
-            Debug.Log("invalid slot assignment" + slot);
-            break;
+                Debug.Log("invalid slot assignment" + slot);
+                break;
         }
     }
-    public Vector3 GetLookDir(){
-       //OKAY IM DOING DUMB SHIT FOR THIS
-       //the children gotta be in the right order
-       //camera ref is 2nd, camera 1st inside that, reticle 1st inside that
-       //dumbass way to do this smh my head
-       //-vv
-        return  transform.GetChild(1).GetChild(0).GetChild(0).position - transform.GetChild(1).GetChild(0).position;
+    public Vector3 GetLookDir()
+    {
+        //OKAY IM DOING DUMB SHIT FOR THIS
+        //the children gotta be in the right order
+        //camera ref is 2nd, camera 1st inside that, reticle 1st inside that
+        //dumbass way to do this smh my head
+        //-vv
+        return transform.GetChild(1).GetChild(0).GetChild(0).position - transform.GetChild(1).GetChild(0).position;
     }
     public void StartQuest(Quests quest)
     {
