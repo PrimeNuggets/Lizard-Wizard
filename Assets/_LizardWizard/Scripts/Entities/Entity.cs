@@ -106,6 +106,8 @@ public class Entity : ScriptableObject
     [NonSerialized] public Transform visualRoot;
     private UnityEngine.Vector3 facingDir;
     private UnityEngine.Vector3 GroundNormal;
+    private UnityEngine.Vector3 LastGroundNormal;
+
     protected bool initialized = false;
     private Animator animator;
     private float groundedTime;
@@ -251,15 +253,37 @@ public class Entity : ScriptableObject
     }
     public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null)
     {
-        if (crouched)
+        //If i can get this working:
+        //Slide gains momentum from hills, but slides down
+        //Run loses momentum over time, but can maintain it up hills
+
+        switch (GetStateType())
         {
-            GroundNormal = GetGroundNormal();
+            //AIRSTRAFE
+            case 'A':
+                //  Debug.Log("air");
+                break;
+            //DIVING
+            case 'D':
+                // Debug.Log("dive");
+                break;
+            //RUNNING
+            case 'S':
+                //  Debug.Log("stand");
+                break;
+            //SLIDING
+            case 'C':
+                //  Debug.Log("Crouch");
+                break;
         }
+
+        LastGroundNormal = GroundNormal;
+        GroundNormal = GetGroundNormal();
         float dt = Time.deltaTime;
         grounded = entChar.isGrounded;
         if (grounded && velocity.y < 0f)
         {
-            velocity.y = -2f;
+            //  velocity.y = -0.1f;
         }
 
         move = UnityEngine.Vector2.ClampMagnitude(move, 1f); //Processes WASD
@@ -273,40 +297,50 @@ public class Entity : ScriptableObject
         UnityEngine.Vector3 fwd = UnityEngine.Vector3.ProjectOnPlane(reference.forward, UnityEngine.Vector3.up).normalized;
         UnityEngine.Vector3 right = UnityEngine.Vector3.Cross(UnityEngine.Vector3.up, fwd);
         float gravity = physics.applyGravity(0f, 1f);
-        if (grounded && ctrl)
+        if (ctrl)
         {
             UnityEngine.Vector3 direction = right * move.x + fwd * move.y;
 
             velocity.x = direction.x * speed.GetCurrent();
             velocity.z = direction.z * speed.GetCurrent();
+            //yea take a look at this maybe idk
             UnityEngine.Vector3 downhillAcceleration = UnityEngine.Vector3.ProjectOnPlane(UnityEngine.Vector3.down * gravity * 1.5f, velocity);
-            if (jumped)
+            if (jumped && grounded)
             {
                 PlayJump(gravity);
             }
         }
         velocity.y = physics.applyGravity(velocity.y, dt); //Handles gravity
 
+        momentum = entChar.velocity * 0.9f;
+        //Debug.Log(momentum);
+
+        //Check if top of hill
+        if (Vector3.Dot(GroundNormal, Vector3.up) < Vector3.Dot(LastGroundNormal, Vector3.up) && entChar.velocity.y > 0)
+        {
+            //Debug.Log("hilltop");
+        }
+
+        //
         CollisionFlags collisions = entChar.Move((momentum + storedMomentum + velocity) * dt);
+        //
+        // storedMomentum += UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal).normalized;
+        // momentum = UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GetGroundNormal());
 
-        if (momentum.magnitude < UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal).magnitude)
-        {
-            // storedMomentum += UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal).normalized;
-            // momentum = UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GetGroundNormal());
 
-        }
-        else
-        {
-            momentum *= 0.9f;
-            storedMomentum *= 0.9f;
-        }
+        //okokokok new idea
+        //storedMomentum keeps u going
+        //use LERP
+        //storedMomentum = storedMomentum + Vector3.Scale(velocity, Vector3.Lerp(storedMomentum.normalized, velocity.normalized, Time.deltaTime));
+        //ok maybe not like that 
+        //2am coding fail lmao
 
         grounded = entChar.isGrounded;
         if (grounded && velocity.y < 0f)
         {
             float landingSpeed = Mathf.Abs(velocity.y);
-            velocity.y = -2f;
-            storedMomentum = UnityEngine.Vector3.ProjectOnPlane(new Vector3(0.0f, -landingSpeed, 0.0f), GroundNormal);
+            // velocity.y = -0.1f;
+
             SetStateType('S', true);
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
@@ -340,8 +374,16 @@ public class Entity : ScriptableObject
             Mathf.Abs(gravity) *
             Mathf.Max(0f, jumpHeight.GetCurrent())
         );
-        SetStateType('A', false);
-        groundedTime = 0f;
+        if (crouched)
+        {
+            SetStateType('D', true);
+            groundedTime = 0f;
+        }
+        else
+        {
+            SetStateType('A', true);
+            groundedTime = 0f;
+        }
 
         //Scoring
         Scoring.AddValue($"{entObj.name.ToLowerInvariant()}.jump", 1);
@@ -478,6 +520,33 @@ public class Entity : ScriptableObject
         if (moveType == MoveTypes.Unchanged)
         {
             moveType = prevMoveType;
+        }
+    }
+    public void CrouchDown()
+    {
+        Debug.Log("CrouchDown");
+        if (GetStateType() == 'A') //Air --> Dive
+        {
+            SetStateType('D', true);
+            Debug.Log(GetStateType());
+        }
+        if (GetStateType() == 'S') //Stand --> Crouch
+        {
+            SetStateType('C', true);
+            Debug.Log(GetStateType());
+        }
+    }
+    public void CrouchUp()
+    {
+        if (GetStateType() == 'C') //Crouch --> Stand
+        {
+            SetStateType('S', true);
+            Debug.Log(GetStateType());
+        }
+        if (GetStateType() == 'D') //Dive --> Air
+        {
+            SetStateType('A', true);
+            Debug.Log(GetStateType());
         }
     }
 

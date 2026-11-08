@@ -140,6 +140,10 @@ public class Player : MonoBehaviour
         {
             OnSpell4Released();
         }
+        if (crouchAction.WasReleasedThisFrame())
+        {
+            OnCrouchReleased();
+        }
 
     }
 
@@ -179,7 +183,14 @@ public class Player : MonoBehaviour
         Destroy(entityData);
     }
 
-
+    void OnCrouch()
+    {
+        entityData.CrouchDown();
+    }
+    void OnCrouchReleased()
+    {
+        entityData.CrouchUp();
+    }
     void OnSpell1()
     {
         Spell1.CastSpellDown();
