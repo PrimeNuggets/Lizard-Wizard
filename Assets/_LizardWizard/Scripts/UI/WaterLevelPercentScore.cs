@@ -42,6 +42,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     
     private CharacterController playerController;
     private Collider playerCollider;
+    public Collider OasisCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
     public Image WaterMeter;
 
@@ -72,6 +73,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
         playerCollider = GetComponentInChildren<Collider>(); //Colliders exist in the mesh's skeleton
         playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
+        OasisCollider = GetComponent<Collider>();
         HeartShieldIcon.gameObject.SetActive(false);
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
@@ -99,7 +101,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     void FixedUpdate() //No need to run every tick. Running every frame works just as gud - Xavier
     {
         WaterMovementLoss();
-        WaterGain();
+        //WaterGain();
 
 
         string text = "H20: " + WaterPercentage().ToString("F2") + "%";
@@ -206,6 +208,17 @@ public class WaterLevelPercentScore : MonoBehaviour
             }
             waterLevelPercentText.text = "H20: " + WaterPercentage().ToString("F2") + "%";
             //Debug.Log(entityData.water.GetCurrent().ToString());
+        }
+    
+    
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Oasis")) //Look into checking aspect instead - Xavier
+        {
+            Debug.Log("Getting Water");
+            WaterGain();
         }
     }
 
