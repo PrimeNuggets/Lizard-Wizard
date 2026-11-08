@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
+using static DebugHandler;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
@@ -685,7 +686,7 @@ public abstract class EnemyAI : MonoBehaviour
         Vector3 direction = wanderDest - transform.position;
         direction.y = 0f;
 
-        if (direction.sqrMagnitude < 0.0001)
+        if (!VerifyVector(direction))
             return true;
 
         return Vector3.Angle(transform.forward, direction) <= turnThreshold;

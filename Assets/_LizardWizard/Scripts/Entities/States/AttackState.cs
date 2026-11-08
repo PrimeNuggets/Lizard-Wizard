@@ -6,6 +6,9 @@ public class AttackState : EnemyState
     private readonly Movement.Physics physics = new Movement.Physics();
     private bool endsOnLanding;
     private bool airborne;
+    private Vector3 lungeDirection;
+    private float lungeTimeRemaining;
+    private float lungeDistanceRemaining;
     public AttackState(EnemyAI enemy) : base(enemy)
     {
     }
@@ -25,6 +28,10 @@ public class AttackState : EnemyState
                 Vector3 offsetDirection = Quaternion.AngleAxis(enemy.currentAttack.facingOffset, Vector3.up) * direction.normalized;
                 enemy.entityData.SetAttackFacing(offsetDirection);
             }
+        }
+        if (enemy.currentAttack.flags.Contains("lunge"))
+        {
+            //enemy.entityData.ApplyMove(enemy.entityData.speed.GetCurrent());
         }
         if (enemy.currentAttack.flags.Contains("jump"))
         {
@@ -127,5 +134,13 @@ public class AttackState : EnemyState
 
         enemy.entityData.velocity.x = horizontalVelocity.x;
         enemy.entityData.velocity.z = horizontalVelocity.z;
+    }
+    private void BeginLunge()
+    {
+        
+    }
+    private void TickLunge()
+    {
+        
     }
 }
