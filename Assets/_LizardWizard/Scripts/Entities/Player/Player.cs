@@ -154,6 +154,7 @@ public class Player : MonoBehaviour
                 entityData.ApplyMove(Vector2.zero, false);
                 return;
             }
+            Scoring.SetValue($"{name.ToLowerInvariant()}.water", (int)Mathf.Round(entityData.water.GetCurrent()));
         #endregion
         //=========================================================
         #region Movement
@@ -214,7 +215,9 @@ public class Player : MonoBehaviour
     }
     void OnDestroy()
     {
-        Destroy(entityData);
+        #region Entity Processing
+            Destroy(entityData);
+        #endregion
     }
     
     #region Spell Methods

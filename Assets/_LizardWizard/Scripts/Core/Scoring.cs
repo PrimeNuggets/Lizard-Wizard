@@ -24,6 +24,14 @@ public class Scoring : MonoBehaviour
         scoreList[key] = current + incr;
     }
 
+    public static void SetValue(string key, int incr)
+    {
+        key = key.ToLowerInvariant(); //ToLowerInvariant is better for language compatability
+
+        scoreList.TryGetValue(key, out int current);
+        scoreList[key] = incr;
+    }
+
     public static int FindValue(string key)
     {
         key = key.ToLowerInvariant();
