@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
+using static DebugHandler;
 
 //-- Casts a few rays in front of the enemy and bends its direction around walls and steep dunes
 //-- Ray + hit normal avoidance is from Aversa, Kyaw & Peters - Unity Artificial Intelligence Programming 4th ed., Ch. 6 (Avoiding obstacles)
 public class ObstacleAvoidance : MonoBehaviour
 {
+    [SerializeField] private bool debug;
     public float whiskerLength = 3f;
     [Tooltip("Angle of the side rays")] public float whiskerAngle = 35f;
     [Tooltip("Height of the rays above the enemy's pivot")] public float whiskerHeight = 0.5f;
@@ -107,7 +109,7 @@ public class ObstacleAvoidance : MonoBehaviour
     public Vector3 SteerAround(Vector3 desired, Transform ignore = null)
     {
         desired.y = 0f;
-        if (desired.sqrMagnitude < 0.0001f)
+        if (!VerifyVector(desired))
             return desired;
 
         desired.Normalize();
@@ -216,9 +218,15 @@ public class ObstacleAvoidance : MonoBehaviour
         unstuckUntil = Time.time + 0.75f;
     }
 
+    bool Debug()
+    {
+        return debug ? DebugHandler.DevMode() : false;
+    }
+
     //-- Green rays show what it checks for walls
     void OnDrawGizmosSelected()
     {
+        if (!Debug()) return;
         Gizmos.color = Color.green;
         Vector3 origin = transform.position + Vector3.up * whiskerHeight;
 

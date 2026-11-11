@@ -33,6 +33,7 @@ public class Quests : ScriptableObject
             None,
             Trinket,
             Achievement,
+            CritterSave,
         }
         public int id {get; private set; }
         public string task;

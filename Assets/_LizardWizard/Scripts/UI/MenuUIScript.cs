@@ -9,6 +9,7 @@ public class MenuUIScript : MonoBehaviour
 {
     [SerializeField] private GameObject PauseMenu;
     [SerializeField] private Image PauseOverlay;
+    [SerializeField] private TMP_Text assistedCritters;
     private bool gameIsPaused;
     private InputAction pauseAction; //-- Esc or Start, from the player's input actions
 
@@ -24,19 +25,22 @@ public class MenuUIScript : MonoBehaviour
     }
     void Update()
     {
-        if (PausePressed())
-        {
-            if (gameIsPaused)
+        #region Pause
+            if (PausePressed())
             {
-                ResumeGameplay();
+                if (gameIsPaused)
+                {
+                    ResumeGameplay();
+                }
+                else
+                {
+                    PauseGame();
+                }
             }
-            else
-            {
-                PauseGame();
-            }
-        }
+        #endregion
         if (!gameIsPaused)
         {
+            assistedCritters.text = "Critters Assisted: " + Scoring.FindValue("npc.saved").ToString();
             if (Cursor.lockState != CursorLockMode.Locked)
             {
                 if ((Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) || GamepadUsed())
