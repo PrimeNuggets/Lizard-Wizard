@@ -508,6 +508,7 @@ GameObject:
   - component: {fileID: 4758410650257725370}
   - component: {fileID: 3505008638048516822}
   - component: {fileID: 3693692350651771262}
+  - component: {fileID: 7334572558071058003}
   m_Layer: 0
   m_Name: Lizard
   m_TagString: Untagged
@@ -629,6 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
   sensitivity: 0.1
+  stickSensitivity: 180
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
   testspell1: {fileID: 0}
@@ -1920,3 +1922,18 @@ MonoBehaviour:
   standard:
     enabled: 0
     strength: 1
+--- !u!114 &7334572558071058003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357876532559851445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66fc2d69d2d049abb799d94411027ddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandheldSupport
+  capFrameRate: 1
+  handheldFps: 60
+  simulateHandheld: 0

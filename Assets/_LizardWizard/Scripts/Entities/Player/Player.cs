@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     //=========================================
     [Header("Turning")]
     [SerializeField, LabelOverride("Mouse Sensitivity")] float sensitivity;
+    [SerializeField, LabelOverride("Stick Sensitivity"), Tooltip("Degrees per second at full tilt")] float stickSensitivity = 180f; //-- controller look
     [SerializeField] private Transform cameraPitch;
     [SerializeField] private float maxLookAngle = 75f;
     //=========================================
@@ -108,11 +109,15 @@ public class Player : MonoBehaviour
 
         Vector2 mouseDelta = lookAction.ReadValue<Vector2>();
 
-        cameraRef.transform.Rotate(Vector3.up, mouseDelta.x * sensitivity, Space.World);
+        //-- mouse gives pixels per frame, sticks give -1..1 so they need deltaTime or it's super slow
+        bool fromStick = !(lookAction.activeControl?.device is Pointer);
+        float lookSens = fromStick ? stickSensitivity * Time.deltaTime : sensitivity;
+
+        cameraRef.transform.Rotate(Vector3.up, mouseDelta.x * lookSens, Space.World);
 
         //-- Keep the camera from turning too far up or down
         pitch = Mathf.Clamp(
-            pitch - mouseDelta.y * sensitivity,
+            pitch - mouseDelta.y * lookSens,
             -maxLookAngle,
             maxLookAngle
         );
