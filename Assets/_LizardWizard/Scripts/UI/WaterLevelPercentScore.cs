@@ -39,7 +39,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //public Image waterLevelLowTextDisplay;
     public Image healthDangerTextDisplay;
     //private PlayerInput playerInput;
-    
+
     private CharacterController playerController;
     private Collider playerCollider;
     public Collider OasisCollider;
@@ -209,8 +209,8 @@ public class WaterLevelPercentScore : MonoBehaviour
             waterLevelPercentText.text = "H20: " + WaterPercentage().ToString("F2") + "%";
             //Debug.Log(entityData.water.GetCurrent().ToString());
         }
-    
-    
+
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -231,17 +231,17 @@ public class WaterLevelPercentScore : MonoBehaviour
         } 
         var aspects = FindObjectsByType<Aspect>();
         foreach (var aspect in aspects)
-        if (aspect.aspectName == Aspect.aspect.Enemy && !IsInvulnerable)
-        {
-            Debug.Log("Take DMG");
-            DamagePlayerHealth();
-        }
-        else
-        {
-            Debug.Log("Invulnerable right now, try again later.");
-            //StartCoroutine(HeartIconDisplayTimer(3f));
-            //IsInvulnerable = false;
-        }
+            if (aspect.aspectName == Aspect.aspect.Enemy && !IsInvulnerable)
+            {
+                Debug.Log("Take DMG");
+                DamagePlayerHealth();
+            }
+            else
+            {
+                //Debug.Log("Invulnerable right now, try again later.");
+                //StartCoroutine(HeartIconDisplayTimer(3f));
+                //IsInvulnerable = false;
+            }
     }
 
     private void OnTriggerExit(Collider other)
@@ -267,7 +267,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     {
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being healthy
-        
+
         HeartShieldIcon.gameObject.SetActive(true);
         //StartCoroutine(HeartIconDisplayTimer(3f));
         //IsInvulnerable = false;
@@ -276,7 +276,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     {
         HeartFrailIcon.gameObject.SetActive(false);
         HeartShieldIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being on death's door, different than before where this was being called.
-        
+
         HeartBrokenIcon.gameObject.SetActive(true);
         //IsInvulnerable = true;
         //StartCoroutine(HeartIconDisplayTimer(3f));
@@ -285,7 +285,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     {
         if (Water() > 0 || IsHeartShieldBroken) return;
         HeartShieldIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being on death's door
-        
+
         HeartFrailIcon.gameObject.SetActive(true);
         //IsInvulnerable = true;
         //StartCoroutine(HeartIconDisplayTimer(12f));
@@ -302,7 +302,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     /*private void DamagePlayerHealth()
     {
-        
+
         if (IsInvulnerable)
         {
             Debug.Log("Invulnerable right now, mate.");
@@ -345,7 +345,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     public void MortalDanger()
     {
-        if (Water() <= 0 && IsHeartShieldBroken == true) 
+        if (Water() <= 0 && IsHeartShieldBroken == true)
         {
             healthDangerTextDisplay.gameObject.SetActive(true);
         }

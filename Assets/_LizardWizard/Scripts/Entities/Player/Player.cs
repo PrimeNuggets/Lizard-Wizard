@@ -148,6 +148,29 @@ public class Player : MonoBehaviour
 
             cameraPitch.localRotation = Quaternion.Euler(pitch, 0f, 0f);
         #endregion
+        //NOTE: This implementation of a 'released' function hypothetically might miss sometimes.
+        //Stress testing i havent gotten it to miss yet, but if it starts missing(esp in high framerate) try changing updateMode to FixedUpdate
+        //or move this to update ig idk
+        if (spell1Action.WasReleasedThisFrame())
+        {
+            OnSpellReleased(1);
+        }
+        if (spell2Action.WasReleasedThisFrame())
+        {
+            OnSpellReleased(2);
+        }
+        if (spell3Action.WasReleasedThisFrame())
+        {
+            OnSpellReleased(3);
+        }
+        if (spell4Action.WasReleasedThisFrame())
+        {
+            OnSpellReleased(4);
+        }
+        if (crouchAction.WasReleasedThisFrame())
+        {
+            OnCrouchReleased();
+        }
     }
     void FixedUpdate() //Using this saves a lot of fps
     {
@@ -167,6 +190,8 @@ public class Player : MonoBehaviour
             bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)
             bool wasGrounded = entityData.entChar.isGrounded;
             bool jumped = entityData.jumped; //stores the jumped bool before it updates
+            bool crouchPressed = crouchAction.IsPressed();
+            entityData.crouched = crouchPressed;
 
             entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
 
@@ -223,6 +248,14 @@ public class Player : MonoBehaviour
         #region Entity Processing
             Destroy(entityData);
         #endregion
+    }
+    void OnCrouch()
+    {
+        entityData.CrouchDown();
+    }
+    void OnCrouchReleased()
+    {
+        entityData.CrouchUp();
     }
     
     #region Spell Methods
