@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using static DebugHandler;
 
 [CreateAssetMenu(fileName = "Entity", menuName = "Scriptable Objects/Entity")]
 public class Entity : ScriptableObject
@@ -121,6 +122,7 @@ public class Entity : ScriptableObject
     private UnityEngine.Vector3 pendingKnockback;
     private bool hitPaused;
     private float animatorSpeed = 1f;
+    public bool jumped { get; private set; } = false;
     [NonSerialized] public bool invulnerable = false;
     //===================================================
     //TrapManager Plugin - Xavier
@@ -252,7 +254,7 @@ public class Entity : ScriptableObject
 
         Vector3 normal = GetGroundNormal();
         UnityEngine.Vector3 forward = UnityEngine.Vector3.ProjectOnPlane(facingDir, normal);
-        if (forward.sqrMagnitude < 0.0001f) return;
+        if (!VerifyVector(forward)) return;
 
         UnityEngine.Quaternion target = UnityEngine.Quaternion.LookRotation(forward, normal);
 
@@ -485,7 +487,7 @@ public class Entity : ScriptableObject
     {
         direction.y = 0f;
 
-        if (direction.sqrMagnitude < 0.0001f) return;
+        if (!VerifyVector(direction)) return;
         facingDir = direction.normalized;
         attackFacingLocked = true;
 
