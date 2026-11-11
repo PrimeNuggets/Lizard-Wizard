@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.WSA;
+//using UnityEngine.WSA;
 
 public class SpellSlotButtonTest : MonoBehaviour
 {
@@ -9,6 +9,10 @@ public class SpellSlotButtonTest : MonoBehaviour
     [SerializeField] private Button SpellSlot2;
     [SerializeField] private Button SpellSlot3;
     [SerializeField] private Button SpellSlot4;
+
+    [SerializeField] private SteamDash steamDashSpell;
+
+    private ISpell[] equippedSpells = new ISpell[4];
 
     // Update is called once per frame
     void Update()
@@ -30,6 +34,11 @@ public class SpellSlotButtonTest : MonoBehaviour
 
         if (keyboard != null)
         {
+            if (keyboard.gKey.wasPressedThisFrame && steamDashSpell != null) 
+            {
+                EquipSpell(1, steamDashSpell);
+            }
+
             if (keyboard.qKey.wasPressedThisFrame)
             {
                 SpellSelect(3);
@@ -39,6 +48,18 @@ public class SpellSlotButtonTest : MonoBehaviour
                 SpellSelect(4);
             }
         }
+    }
+
+    public void EquipSpell(int spellSlotNum, ISpell spell)
+    {
+        if (spellSlotNum < 1 || spellSlotNum > equippedSpells.Length)
+        {
+            return;
+        }
+
+        equippedSpells[spellSlotNum - 1] = spell;
+
+        Debug.Log("Equipped a spell in slot " + spellSlotNum);
     }
 
     private void SpellSelect(int spellSlotNum)
@@ -75,6 +96,20 @@ public class SpellSlotButtonTest : MonoBehaviour
 
     public void Spellcast(int spellSlotNum)
     {
-        Debug.Log("Spell " + spellSlotNum + " has been cast!");
+        if (spellSlotNum < 1 || spellSlotNum > equippedSpells.Length)
+        {
+            return;
+        }
+
+        ISpell spell = equippedSpells[spellSlotNum - 1];
+
+        if (spell == null)
+        {
+            Debug.Log("No sorcery equipped in slot " + spellSlotNum);
+            return;
+        }
+
+        spell.CastSpellDown();
+        spell.CastSpellReleased();
     }
 }

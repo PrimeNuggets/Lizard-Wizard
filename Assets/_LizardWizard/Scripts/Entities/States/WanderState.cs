@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class WanderState : EnemyState
 {
+    private float timer;
+
     public WanderState(EnemyAI enemy) : base(enemy)
     {
     }
@@ -13,11 +15,16 @@ public class WanderState : EnemyState
     {
         if (!enemy.HasWanderDestination)
             enemy.PickWanderDestination();
+
+        timer = 0f;
     }
 
     public override Vector2 Tick()
     {
-        if (enemy.ReachedWanderDestination())
+        timer += Time.fixedDeltaTime;
+
+        //-- Taking too long, give up on this spot
+        if (enemy.ReachedWanderDestination() || timer > 10f)
         {
             enemy.ClearWanderDestination();
             return Vector2.zero;
@@ -25,7 +32,7 @@ public class WanderState : EnemyState
 
         Vector3 offset = enemy.WanderDestinationPoint - enemy.transform.position;
         offset.y = 0;
-        float arrivalRadius = 0.5f;
+        float arrivalRadius = 1.5f;
         float mult = Mathf.Clamp01(enemy.WanderSpeedMultiplier);
         float distance = offset.magnitude;
 
@@ -35,8 +42,16 @@ public class WanderState : EnemyState
             return Vector2.zero;
         }
 
-        enemy.transform.rotation =
-            Quaternion.LookRotation(offset / distance, Vector3.up); //Instantly look towards destination
+        //-- Turn smoothly now since steering can change the direction every frame
+        Vector3 direction = enemy.PathTowards(enemy.WanderDestinationPoint);
+
+        if (direction.sqrMagnitude > 0.0001f)
+        {
+            enemy.transform.rotation = Quaternion.RotateTowards(
+                enemy.transform.rotation,
+                Quaternion.LookRotation(direction, Vector3.up),
+                enemy.ChaseTurnSpeed * Time.fixedDeltaTime);
+        }
 
         float step =
             enemy.entityData.speed.GetCurrent() * mult * Time.fixedDeltaTime;
@@ -45,7 +60,10 @@ public class WanderState : EnemyState
             ? Mathf.Clamp01(distance / step)
             : 0f;
 
-        return new Vector2(0f, inputAmount * mult);
+        //-- Turn first then walk, otherwise it circles the spot
+        float facing = Mathf.Clamp01(Vector3.Dot(enemy.transform.forward, direction.normalized));
+
+        return new Vector2(0f, inputAmount * mult * facing);
     }
 
     public override void Score(Dictionary<EnemyAI.AIStates, float> scores)

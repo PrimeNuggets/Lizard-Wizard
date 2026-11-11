@@ -65,6 +65,11 @@ public class NPC : MonoBehaviour
     void FixedUpdate()
     {
         entityData?.BeginTick();
+        if (entityData.IsHitPaused)
+        {
+            entityData.ApplyMove(Vector2.zero, false);
+            return;
+        }
         entityData.ApplyMove(Vector2.zero, false);
         PlayerNear(player);
     }

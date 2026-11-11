@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: Assembly-CSharp::Entity
   health:
-    max: 10
+    max: 30
   water:
     max: 100
   speed:
