@@ -39,7 +39,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     //public Image waterLevelLowTextDisplay;
     public Image healthDangerTextDisplay;
     //private PlayerInput playerInput;
-    
+
     private CharacterController playerController;
     private Collider playerCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
@@ -167,52 +167,52 @@ public class WaterLevelPercentScore : MonoBehaviour
         } */
         var aspects = FindObjectsByType<Aspect>();
         foreach (var aspect in aspects)
-        if (aspect.aspectName == Aspect.aspect.Enemy && !IsInvulnerable)
-        {
-            Debug.Log("Take DMG");
-            DamagePlayerHealth();
-        }
-        else
-        {
-            Debug.Log("Invulnerable right now, try again later.");
-            //StartCoroutine(HeartIconDisplayTimer(3f));
-            //IsInvulnerable = false;
-        }
+            if (aspect.aspectName == Aspect.aspect.Enemy && !IsInvulnerable)
+            {
+                Debug.Log("Take DMG");
+                DamagePlayerHealth();
+            }
+            else
+            {
+                //Debug.Log("Invulnerable right now, try again later.");
+                //StartCoroutine(HeartIconDisplayTimer(3f));
+                //IsInvulnerable = false;
+            }
     }
 
     private void OnTriggerExit(Collider other)
     {
         var aspects = FindObjectsByType<Aspect>();
         foreach (var aspect in aspects)
-        if (aspect.aspectName == Aspect.aspect.Enemy)
-        {
-            Debug.Log("Damage has been taken.");
-            
-            IsInvulnerable = false;
-            if (entityData.water.GetCurrent() == 0)
+            if (aspect.aspectName == Aspect.aspect.Enemy)
             {
-                Debug.Log("Teetering on the brink, facing the abyss...");
-                MortalDanger();
+                Debug.Log("Damage has been taken.");
+
+                IsInvulnerable = false;
+                if (entityData.water.GetCurrent() == 0)
+                {
+                    Debug.Log("Teetering on the brink, facing the abyss...");
+                    MortalDanger();
+                }
+                //code to then tell the script player has taken damage, and to now make sure the player knows they're on death's door.
+                //StartCoroutine(HeartIconDisplayTimer(3f));
             }
-            //code to then tell the script player has taken damage, and to now make sure the player knows they're on death's door.
-            //StartCoroutine(HeartIconDisplayTimer(3f));
-        }
     }
 
     private void DamagePlayerHealth()
     {
-        
+
         if (IsInvulnerable)
         {
             Debug.Log("Invulnerable right now, mate.");
 
-        }  
+        }
         else if (entityData.water.GetCurrent() > WaterNearEmptyValue)
         {
             Debug.Log("Damage Blocked.");
             HeartFrailIcon.gameObject.SetActive(false);
             HeartBrokenIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being healthy
-            
+
             HeartShieldIcon.gameObject.SetActive(true);
             IsInvulnerable = true;
             StartCoroutine(HeartIconDisplayTimer(3f));
@@ -225,7 +225,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             Debug.Log("Fainted");
             HeartFrailIcon.gameObject.SetActive(false);
             HeartShieldIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being on death's door, different than before where this was being called.
-            
+
             HeartBrokenIcon.gameObject.SetActive(true);
             IsInvulnerable = true;
             StartCoroutine(HeartIconDisplayTimer(3f));
@@ -237,7 +237,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             Debug.Log("Fatal DMG taken.");
             Debug.Log("Critical Health");
             HeartShieldIcon.gameObject.SetActive(false); //make sure to hide the other ui when context changes to being on death's door
-            
+
             HeartFrailIcon.gameObject.SetActive(true);
             IsInvulnerable = true;
             StartCoroutine(HeartIconDisplayTimer(12f));
@@ -246,7 +246,7 @@ public class WaterLevelPercentScore : MonoBehaviour
             //HeartFrailIcon.gameObject.SetActive(false);
         }
 
-  
+
 
         /*
         else if (entityData.water.GetCurrent() <= WaterEmptyValue && (IsHeartShieldBroken)) 
@@ -267,7 +267,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     private void MortalDanger()
     {
-        if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == true) 
+        if ((entityData.water.GetCurrent() == 0) && IsHeartShieldBroken == true)
         {
             healthDangerTextDisplay.gameObject.SetActive(true);
         }
