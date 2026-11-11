@@ -1,6 +1,7 @@
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using static DebugHandler;
 
 [RequireComponent(typeof(Collider))]
 public class AttackCollider : MonoBehaviour
@@ -92,7 +93,7 @@ public class AttackCollider : MonoBehaviour
             Transform attacker = entity.transform;
 
             Vector3 forward = Vector3.ProjectOnPlane(attacker.forward, Vector3.up).normalized;
-            if (forward.sqrMagnitude < 0.0001f) forward = Vector3.forward;
+            if (!VerifyVector(forward)) forward = Vector3.forward;
 
             Vector3 right = Vector3.Cross(Vector3.up, forward);
 

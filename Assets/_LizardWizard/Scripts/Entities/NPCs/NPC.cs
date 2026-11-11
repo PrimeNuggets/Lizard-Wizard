@@ -34,13 +34,14 @@ public class NPC : MonoBehaviour
     private Dialogue dialogueUI;
     private bool waitForRelease = false; //Waits for the interaction button release
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected virtual void Start()
     {
         //=========================================================
             //Entity Instantiation
         //=========================================================
         entityData = Instantiate(entityTemplate);
         entityData.Initialize(gameObject, mesh);
+        entityData.water.Set(0); //All NPCs start with no water
         //=========================================================
             //Player Lookup
         //=========================================================
@@ -62,7 +63,7 @@ public class NPC : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         entityData?.BeginTick();
         if (entityData.IsHitPaused)
@@ -126,15 +127,28 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public void ChangeDialogue(string line)
+    /*public void ChangeDialogue(string line)
     {
         //Change here
-    }
+    }*/
 
     void OnDrawGizmosSelected()
     {
         // -- Show interaction range
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, iRange);
+    }
+
+    public void Save(float water)
+    {
+        entityData.water.Set(water);
+        var player = this.player.gameObject.GetComponent<Player>();
+        player.entityData.water.Set(
+            player.entityData.water.GetCurrent() -
+            water
+        );
+        //Update Saved Count
+        Scoring.AddValue($"npc.saved", 1);
+        Scoring.AddValue($"npc.{gameObject.name.ToLowerInvariant()}.saved", 1);
     }
 }

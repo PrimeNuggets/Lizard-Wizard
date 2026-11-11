@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using static DebugHandler;
 
 [CreateAssetMenu(fileName = "Entity", menuName = "Scriptable Objects/Entity")]
 public class Entity : ScriptableObject
@@ -114,6 +115,7 @@ public class Entity : ScriptableObject
     private UnityEngine.Vector3 pendingKnockback;
     private bool hitPaused;
     private float animatorSpeed = 1f;
+    public bool jumped { get; private set; } = false;
     [NonSerialized] public bool invulnerable = false;
     //===================================================
         //TrapManager Plugin - Xavier
@@ -230,7 +232,7 @@ public class Entity : ScriptableObject
             }
         }
         UnityEngine.Vector3 forward = UnityEngine.Vector3.ProjectOnPlane(facingDir, normal);
-        if (forward.sqrMagnitude < 0.0001f) return;
+        if (!VerifyVector(forward)) return;
 
         UnityEngine.Quaternion target = UnityEngine.Quaternion.LookRotation(forward, normal);
 
@@ -282,6 +284,7 @@ public class Entity : ScriptableObject
             float landingSpeed = Mathf.Abs(velocity.y);
             velocity.y = -2f;
             SetStateType('S', GetMoveType() == 'A' ? ctrl : true); //Force grounded if not attacking
+            this.jumped = false;
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
             //-- TODO: clean landing after a flip = small speed boost + add to combo
@@ -314,6 +317,7 @@ public class Entity : ScriptableObject
             Mathf.Max(0f, jumpHeight.GetCurrent())
         );
         SetStateType('A', false);
+        jumped = true;
         groundedTime = 0f;
 
         //Scoring
@@ -329,7 +333,7 @@ public class Entity : ScriptableObject
     {
         direction.y = 0f;
 
-        if (direction.sqrMagnitude < 0.0001f) return;
+        if (!VerifyVector(direction)) return;
         facingDir = direction.normalized;
         attackFacingLocked = true;
 
