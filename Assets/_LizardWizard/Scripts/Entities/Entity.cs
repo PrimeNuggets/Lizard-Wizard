@@ -329,7 +329,7 @@ public class Entity : ScriptableObject
                 velocity.y -= 1.0f;
                 //Friction
                 momentum *= 0.9f;
-                //
+
                 if (ctrl)
                 {
                     if (Vector3.Scale(momentum, new Vector3(1f, 0f, 1f)).magnitude < speed.GetCurrent())
@@ -340,6 +340,14 @@ public class Entity : ScriptableObject
                     }
                     //TODO: Add removal of storedMomentum that would be cancelled by movement
 
+                }
+                if ((storedMomentum + momentum).magnitude > storedMomentum.magnitude)
+                {
+                    storedMomentum *= 0.95f;
+                }
+                else
+                {
+                    storedMomentum += momentum;
                 }
 
                 break;
@@ -394,8 +402,8 @@ public class Entity : ScriptableObject
             {//LANDING CODE
                 Debug.Log("LANDED");
                 Debug.Log(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized));
-                momentum *= 1.0f + Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized);
-                storedMomentum *= 1.0f + Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized);
+                momentum *= 1.0f - MathF.Pow(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized), 2f);
+                storedMomentum *= 1.0f - MathF.Pow(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized), 2f);
             }
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
