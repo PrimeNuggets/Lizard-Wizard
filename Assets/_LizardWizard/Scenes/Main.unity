@@ -361,10 +361,10 @@ RectTransform:
   - {fileID: 224475880}
   - {fileID: 1036762787}
   - {fileID: 1672061983}
+  - {fileID: 1104353609}
   - {fileID: 1587425015}
   - {fileID: 1538617380}
   - {fileID: 757956545}
-  - {fileID: 1104353609}
   - {fileID: 462036184}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3740,12 +3740,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 5090344101804402583, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: m_DefaultControlScheme
+      value: Gamepad
+      objectReference: {fileID: 0}
     - target: {fileID: 5335259685254365206, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6188666030728164474, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: swapIdleAndSlideAnimations
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6564538844601925545, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
