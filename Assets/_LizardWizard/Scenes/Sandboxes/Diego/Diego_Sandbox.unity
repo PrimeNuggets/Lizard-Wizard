@@ -384,7 +384,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97a17487eb21fff43853bf98f756dd25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebuggingUI
-  devMode: 1
   fpsObj: {fileID: 224475879}
 --- !u!114 &226893735
 MonoBehaviour:
@@ -611,6 +610,7 @@ MonoBehaviour:
   SpellSlot2: {fileID: 1722809102}
   SpellSlot3: {fileID: 1377814820}
   SpellSlot4: {fileID: 2109635955}
+  steamDashSpell: {fileID: 1337312120}
 --- !u!1001 &562275374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1349,7 +1349,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 462036185}
         m_TargetAssemblyTypeName: SpellSlotButtonTest, Assembly-CSharp
         m_MethodName: Spellcast
         m_Mode: 3
@@ -1711,6 +1711,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4da3f9740042ef4aa55ebd149b1aa64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
+--- !u!114 &1337312120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337312107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe72d458b301004ca7e083ef77f32d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SteamDash
+  dashspeed: 5
 --- !u!1 &1352518854
 GameObject:
   m_ObjectHideFlags: 0
@@ -3397,6 +3410,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 925611747}
     - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      propertyPath: testspell1
+      value: 
+      objectReference: {fileID: 1337312120}
+    - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: questRunner
       value: 
       objectReference: {fileID: 1538617381}
@@ -3460,6 +3477,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1337312120}
     - targetCorrespondingSourceObject: {fileID: 5335259685254365206, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1790711807}
