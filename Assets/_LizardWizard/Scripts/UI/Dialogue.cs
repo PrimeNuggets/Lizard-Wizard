@@ -148,6 +148,10 @@ public class Dialogue : MonoBehaviour
 
     public void ContinueDialogue()
     {
+        if (currentConvo.Save(currentLineIndex))
+        {
+            SaveNPC(currentConvo.GetSaveCost(currentLineIndex));
+        } 
         UpdateQuest();
         if (currentLineIndex + 1 < currentConvo.lines.Count)
         {
@@ -169,6 +173,12 @@ public class Dialogue : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void SaveNPC(float water)
+    {
+        if (npc == null) return;
+        npc.Save(water);
+    }
+
     void UpdateText()
     {
         //Check if the line is greater than 165 characters
@@ -186,6 +196,9 @@ public class Dialogue : MonoBehaviour
             bool completed = playerComp.completedQuests.Contains(quest);
 
             if (ongoing && !completed) { //Checks if the quest is an ongoing quest
+                var reqObjective = currentConvo.GetProgressionObjective(currentLineIndex);
+                if (questRunner.objective != reqObjective) return;
+                
                 questRunner.ProgressQuest(quest);
             } else if (!ongoing && !completed)
             {

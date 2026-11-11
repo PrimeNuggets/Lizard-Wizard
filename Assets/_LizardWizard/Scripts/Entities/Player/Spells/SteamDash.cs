@@ -1,5 +1,7 @@
 using UnityEngine;
 
+//May be better as a scriptable object rather than a new script for each spell.
+
 public class SteamDash : MonoBehaviour, ISpell
 {
     private GameObject Player;

@@ -506,7 +506,6 @@ GameObject:
   - component: {fileID: 1015099657600050311}
   - component: {fileID: 6188666030728164474}
   - component: {fileID: 4758410650257725370}
-  - component: {fileID: 3505008638048516822}
   m_Layer: 0
   m_Name: Lizard
   m_TagString: Untagged
@@ -627,13 +626,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   entityTemplate: {fileID: 11400000, guid: 87c4389bb6441644f92356071d7c0fb4, type: 2}
+  cameraRef: {fileID: 3495833846603984688}
   sensitivity: 0.1
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
   testspell1: {fileID: 0}
   tutorialQuest: {fileID: 11400000, guid: 1a0645a462ab634429a3a456217063ae, type: 2}
   questRunner: {fileID: 0}
-  cameraRef: {fileID: 3495833846603984688}
+  achievements: []
+  landingChecks:
+  - {fileID: 6740626599022600374}
+  - {fileID: 8646931370333966511}
+  checkDist: 0.2
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 8
+  checkThresholds:
+  - name: Perfect
+    min: -10
+    max: 10
+  - name: Good
+    min: -25
+    max: 25
+  - name: Ok
+    min: -50
+    max: 50
+  - name: Bad
+    min: -180
+    max: 180
+  showDebug: 0
   mesh: {fileID: 863690504387952358}
 --- !u!114 &1015099657600050311
 MonoBehaviour:
@@ -649,8 +670,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaterLevelPercentScore
   waterLevelPercentText: {fileID: 1140881132533310100}
   healthDangerTextDisplay: {fileID: 4043747866392178649}
+  OasisCollider: {fileID: 0}
   WaterMeter: {fileID: 7822058994018410392}
-  WaterLevel: 100
   MaxWaterLevel: 100
   WaterMovementMinDrainAmount: 1
   WaterMovementMinSpeed: 0.5
@@ -701,20 +722,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3505008638048516822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2357876532559851445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93316b20d68fff24daa908de211ee041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
-  renderers:
-  - {fileID: 5186023736517444242}
 --- !u!1 &2552766259529300424
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,7 +1687,7 @@ Transform:
   m_GameObject: {fileID: 7299569572426317782}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.05, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1861,8 +1868,30 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 3967262824375752846, guid: b89fb396a0ef03440ab3232322efdf53, type: 3}
   m_PrefabInstance: {fileID: 8139967809399183900}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6740626599022600374 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3277914323561806506, guid: b89fb396a0ef03440ab3232322efdf53, type: 3}
+  m_PrefabInstance: {fileID: 8139967809399183900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5db6c60096d444caaa38b33765e515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LandingCheck
 --- !u!95 &8389071859309181978 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 332424081205044742, guid: b89fb396a0ef03440ab3232322efdf53, type: 3}
   m_PrefabInstance: {fileID: 8139967809399183900}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8646931370333966511 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 645962930854709939, guid: b89fb396a0ef03440ab3232322efdf53, type: 3}
+  m_PrefabInstance: {fileID: 8139967809399183900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5db6c60096d444caaa38b33765e515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LandingCheck
