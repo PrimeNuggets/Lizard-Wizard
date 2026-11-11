@@ -564,6 +564,7 @@ GameObject:
   m_Component:
   - component: {fileID: 462036184}
   - component: {fileID: 462036185}
+  - component: {fileID: 1560724158}
   m_Layer: 5
   m_Name: SpellSlotsUI
   m_TagString: Untagged
@@ -3704,6 +3705,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 527242c364f3135498724dbd2cbfc53a, type: 3}
+--- !u!114 &1560724158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 462036183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4cca2fde91445b59bc91be1bc9e582c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpellSlotPrompts
+  slotCount: 4
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
