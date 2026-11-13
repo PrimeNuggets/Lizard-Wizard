@@ -375,7 +375,7 @@ public class Entity : ScriptableObject
                 //without control slide will behave the same as stand
                 if (ctrl)
                 {
-                    storedMomentum += UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal);
+                    storedMomentum += UnityEngine.Vector3.ProjectOnPlane((velocity), GroundNormal);
 
                     //Slide strafe currently same as airstrafe. unhappy with current behavior. experiment. --vv
                     velocity += direction * (1.0f - Vector3.Dot(direction.normalized, (Vector3.Scale((storedMomentum), new Vector3(1f, 0f, 1f))).normalized));
