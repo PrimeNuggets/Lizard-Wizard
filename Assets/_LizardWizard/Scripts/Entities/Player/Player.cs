@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
             private InputAction moveAction;
             private InputAction lookAction;
             private InputAction jumpAction;
+            private InputAction crouchAction;
             private float pitch;
         #endregion
         //=========================================
@@ -86,6 +87,7 @@ public class Player : MonoBehaviour
             moveAction = input.actions.FindAction("Player/Move", true);
             lookAction = input.actions.FindAction("Player/Look", true);
             jumpAction = input.actions.FindAction("Player/Jump", true);
+            crouchAction = input.actions.FindAction("Player/Crouch", true);
             spell1Action = input.actions.FindAction("Player/Spell1", true);
             spell2Action = input.actions.FindAction("Player/Spell2", true);
             spell3Action = input.actions.FindAction("Player/Spell3", true);

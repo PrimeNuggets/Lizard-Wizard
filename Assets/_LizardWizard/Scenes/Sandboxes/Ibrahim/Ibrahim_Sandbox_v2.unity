@@ -404,6 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuUIScript
   PauseMenu: {fileID: 757956544}
   PauseOverlay: {fileID: 0}
+  assistedCritters: {fileID: 0}
 --- !u!1 &392742788 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2056835494477494572, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
@@ -3481,10 +3482,6 @@ PrefabInstance:
       propertyPath: OasisCollider
       value: 
       objectReference: {fileID: 178179581}
-    - target: {fileID: 1015099657600050311, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: WaterRestRegenAmount
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1140881132533310100, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_fontAsset
       value: 
