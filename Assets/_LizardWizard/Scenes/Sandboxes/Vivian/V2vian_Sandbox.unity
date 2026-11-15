@@ -403,8 +403,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuUIScript
   PauseMenu: {fileID: 757956544}
-  PauseOverlay: {fileID: 0}
-  assistedCritters: {fileID: 0}
+  PauseOverlay: {fileID: 757956546}
+  assistedCritters: {fileID: 1036762788}
 --- !u!1 &392742788 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2056835494477494572, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
@@ -739,6 +739,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8606048053897511835, guid: 3ac5fcc903338b84590d8547b62382f8, type: 3}
   m_PrefabInstance: {fileID: 3855627235213169614}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &757956546 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2090685233187063594, guid: 3ac5fcc903338b84590d8547b62382f8, type: 3}
+  m_PrefabInstance: {fileID: 3855627235213169614}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757956544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1 &774433979
 GameObject:
   m_ObjectHideFlags: 0
@@ -2367,7 +2378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 134.42
+      value: 139.4
       objectReference: {fileID: 0}
     - target: {fileID: 3845105510410925825, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_LocalPosition.y
