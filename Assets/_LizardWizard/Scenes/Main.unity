@@ -361,10 +361,10 @@ RectTransform:
   - {fileID: 224475880}
   - {fileID: 1036762787}
   - {fileID: 1672061983}
+  - {fileID: 1104353609}
   - {fileID: 1587425015}
   - {fileID: 1538617380}
   - {fileID: 757956545}
-  - {fileID: 1104353609}
   - {fileID: 462036184}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -947,7 +947,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 0c0673f581604dc89e56fce266e31bf2, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -3742,10 +3742,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5335259685254365206, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6188666030728164474, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: swapIdleAndSlideAnimations
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6564538844601925545, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}

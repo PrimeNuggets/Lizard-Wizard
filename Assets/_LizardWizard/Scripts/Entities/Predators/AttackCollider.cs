@@ -52,8 +52,17 @@ public class AttackCollider : MonoBehaviour
         //=========================================
         // Initialization
         //=========================================
-        if (entity.aspectName != Aspect.aspect.Enemy || otherData == null || hitOver || otherData == entityData) return;
-        var attack = entity.GetComponent<EnemyAI>().currentAttack;
+        if (otherData == null || hitOver || otherData == entityData) return;
+        AttackData attack = entity.GetComponent<EnemyAI>()?.currentAttack;
+        switch (entity.aspectName)
+        {
+            case Aspect.aspect.NPC:
+                //attack = entity.GetComponent<NPC>().currentAttack;
+                break;
+            case Aspect.aspect.Player:
+                attack = entity.GetComponent<Player>().currentAttack;
+                break;
+        }
         Aspect.aspect enemyType = enemy.GetComponent<Aspect>().aspectName;
         if (attack == null) return;
         //Debug.Log("Applying hit: " + attack.name);
@@ -72,7 +81,7 @@ public class AttackCollider : MonoBehaviour
         //if (moveGuarded && !attack.flags.Contains("unguardable")) damage *= AttackData.GUARD_DAMAGE_REDUCTION;
         float absorbedDamage = Mathf.Min(otherData.water.GetCurrent(), damage);
         float remainingDamage = damage - absorbedDamage;
-        //Damage to Water
+        //Damage
         otherData.water.Set(
             otherData.water.GetCurrent() -
             absorbedDamage
@@ -90,7 +99,7 @@ public class AttackCollider : MonoBehaviour
         // Knockback
         //=========================================
         if (!attack.flags.Contains("no_flinch")) {
-            Transform attacker = entity.transform;
+            Transform attacker = entityData.visualRoot != null ? entityData.visualRoot : entity.transform;
 
             Vector3 forward = Vector3.ProjectOnPlane(attacker.forward, Vector3.up).normalized;
             if (!VerifyVector(forward)) forward = Vector3.forward;

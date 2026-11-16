@@ -132,8 +132,8 @@ public class AttackState : EnemyState
 
         Vector3 horizontalVelocity = horizontalDistance / Mathf.Max(flightTime, 0.001f);
 
-        enemy.entityData.velocity.x = horizontalVelocity.x;
-        enemy.entityData.velocity.z = horizontalVelocity.z;
+        enemy.entityData.momentum.x = horizontalVelocity.x;
+        enemy.entityData.momentum.z = horizontalVelocity.z;
     }
     private void BeginLunge()
     {
