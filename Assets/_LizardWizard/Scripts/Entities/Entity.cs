@@ -124,6 +124,7 @@ public class Entity : ScriptableObject
     private float animatorSpeed = 1f;
     public bool jumped { get; private set; } = false;
     [NonSerialized] public bool invulnerable = false;
+    private float yposStorage;
     //===================================================
     //TrapManager Plugin - Xavier
     //===================================================
@@ -142,6 +143,7 @@ public class Entity : ScriptableObject
         ctrl = true;
         entObj = obj;
         entChar = entObj.GetComponent<CharacterController>();
+        yposStorage = entObj.transform.position.y;
         aspect = entObj.GetComponent<Aspect>();
         visualRoot = model != null ? model.transform : entObj.transform;
         facingDir = UnityEngine.Vector3.ProjectOnPlane(
@@ -264,6 +266,11 @@ public class Entity : ScriptableObject
             modelTurnSpeed * deltaTime
         );
     }
+    public void VerticalMomentum()
+    {
+        momentum.y = (entObj.transform.position.y - yposStorage) * 5;
+        yposStorage = entObj.transform.position.y;
+    }
     public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null)
     {
         //Setup Input
@@ -342,7 +349,7 @@ public class Entity : ScriptableObject
                 //downforce
                 velocity.y -= 1.0f;
                 //Friction
-                momentum *= 0.9f;
+                momentum *= 0.99f;
 
                 if (ctrl)
                 {
@@ -357,29 +364,30 @@ public class Entity : ScriptableObject
                 }
                 if ((storedMomentum + momentum).magnitude > storedMomentum.magnitude)
                 {
-                    storedMomentum *= 0.95f;
+                    storedMomentum *= 0.99f;
                 }
                 else
                 {
                     storedMomentum += momentum;
                 }
+                VerticalMomentum();
 
                 break;
             //SLIDING
             case 'C':
                 //downforce
-                velocity.y -= 1.0f;
+                velocity.y -= 2.0f;
                 //friction
-                storedMomentum *= 0.95f;
-                momentum *= 0.9f;
+
                 //without control slide will behave the same as stand
                 if (ctrl)
                 {
                     storedMomentum += UnityEngine.Vector3.ProjectOnPlane((velocity), GroundNormal);
 
                     //Slide strafe currently same as airstrafe. unhappy with current behavior. experiment. --vv
-                    velocity += direction * (1.0f - Vector3.Dot(direction.normalized, (Vector3.Scale((storedMomentum), new Vector3(1f, 0f, 1f))).normalized));
+                    storedMomentum += direction * (1.0f - Vector3.Dot(direction.normalized, (Vector3.Scale((storedMomentum), new Vector3(1f, 0f, 1f))).normalized));
                 }
+                VerticalMomentum();
 
                 break;
         }
@@ -389,6 +397,7 @@ public class Entity : ScriptableObject
         }
         //State before moving. Used to check landings.
         LastState = GetStateType();
+        yposStorage = entObj.transform.position.y;
         //MOVE
         CollisionFlags collisions = entChar.Move((momentum + storedMomentum + velocity) * dt);
         //POSTMOVE BELOW
@@ -416,8 +425,10 @@ public class Entity : ScriptableObject
             {//LANDING CODE
                 Debug.Log("LANDED");
                 Debug.Log(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized));
+                //VerticalMomentum();
                 momentum *= 1.0f - MathF.Pow(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized), 2f);
                 storedMomentum *= 1.0f - MathF.Pow(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized), 2f);
+                LastState = 'S';
             }
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
