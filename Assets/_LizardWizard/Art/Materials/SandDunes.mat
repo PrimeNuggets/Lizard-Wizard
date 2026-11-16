@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SandDunes
+  m_Shader: {fileID: 4800000, guid: 03b971e0832345d4810c76042feddeb9, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _AmbientStrength: 0.5
+    - _BandSoftness: 0.35
+    - _ColorBands: 4
+    - _DistortAmplitude: 0.15
+    - _DistortNoiseScale: 2
+    - _GrainColorBlend: 0.06
+    - _GrainDensity: 20
+    - _GrainFadeEnd: 35
+    - _GrainFadeStart: 10
+    - _GrainShineStrength: 0.5
+    - _HazeEnd: 220
+    - _HazeStart: 40
+    - _NormalSampleRadius: 0.05
+    - _NormalStrength: 0.04
+    - _PatternScale: 0.025
+    - _PolygonSides: 4
+    - _RimPower: 4
+    - _RippleColorStrength: 0.15
+    - _RippleCoverage: 0.55
+    - _RippleCoverageScale: 0.03
+    - _RippleFadeDistance: 60
+    - _RippleFlatness: 0.8
+    - _RippleFrequency: 0.8
+    - _RippleSharpness: 0.78
+    - _RippleStrength: 0.08
+    - _RippleWarp: 2.5
+    - _RippleWarpScale: 0.08
+    - _ShadeGradient: 0.35
+    - _ShadeSoftness: 0.12
+    - _ShadeThreshold: 0.05
+    - _ShineDuneHeightMin: 0.5
+    - _ShineThreshold: 0.97
+    - _SineAmplitude: 0.3
+    - _SineFrequency: 2
+    - _SineRotation: 0.4
+    - _SubstrateDuneHeightMax: 0.12
+    - _SubstrateGrainHeightMax: 0.5
+    - _SubstrateTightening: 4
+    - _ValleyHeightMax: 15
+    - _ValleyHeightMin: 0
+    m_Colors:
+    - _HazeColor: {r: 0.97, g: 0.86, b: 0.74, a: 0.45}
+    - _RimColor: {r: 1, g: 0.85, b: 0.65, a: 0.35}
+    - _SandHighColor: {r: 0.99, g: 0.82, b: 0.56, a: 1}
+    - _SandLowColor: {r: 0.87, g: 0.6, b: 0.36, a: 1}
+    - _ShadowColor: {r: 0.62, g: 0.45, b: 0.5, a: 1}
+    - _ShineColor: {r: 1.6, g: 1.45, b: 1.2, a: 1}
+    - _SlopeColor: {r: 0.86, g: 0.52, b: 0.32, a: 0.5}
+    - _SubstrateColor: {r: 0.8, g: 0.52, b: 0.32, a: 1}
+    - _UVTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _ValleyColor: {r: 0.82, g: 0.5, b: 0.33, a: 0.45}
+    - _WindDirection: {r: 1, g: 0.35, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
