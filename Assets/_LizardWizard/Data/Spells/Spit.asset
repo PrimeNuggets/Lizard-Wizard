@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c42ad385a207f964e91d00cee01a4910, type: 3}
+  m_Name: Spit
+  m_EditorClassIdentifier: Assembly-CSharp::SpellData
+  attackId: spit
+  attackName: Spit
+  type: 0
+  anim: {fileID: 0}
+  cooldown: 2
+  facingOffset: 0
+  power: 2
+  knockback: {x: 0, y: 0, z: 3}
+  range: 5
+  hitTime: 0
+  pauseTime: 5
+  recoverTime: 6
+  drainWater: 0
+  palFX:
+  - color: {r: 1, g: 1, b: 1, a: 0}
+    frames: 2
+    fadeOut: 0
+  - color: {r: 0, g: 0.82474124, b: 1, a: 0}
+    frames: 10
+    fadeOut: 1
+  flags: []
+  cost: 5
+  element: 1
+  maxChargeTime: 3
+  moveSpell: 0
+  velocity: {x: 0, y: 0, z: 0}
+  spellObj: {fileID: 631337921903981496, guid: d3e68a639ec332f4f9f4e5f8c81f1f80, type: 3}
+  objVelocity: {x: 0, y: 0, z: 10}
+  decel: 1

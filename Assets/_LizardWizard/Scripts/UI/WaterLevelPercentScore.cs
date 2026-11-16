@@ -69,7 +69,7 @@ public class WaterLevelPercentScore : MonoBehaviour
         SetWater(100); //Force sets current water to 100
         playerCollider = GetComponentInChildren<Collider>(); //Colliders exist in the mesh's skeleton
         playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
-        OasisCollider = GetComponent<Collider>();
+        OasisCollider = GetComponent<Collider>(); //May want to handle this in the oasis rather than the player if oasis will be spawned
         HeartShieldIcon.gameObject.SetActive(false);
         HeartFrailIcon.gameObject.SetActive(false);
         HeartBrokenIcon.gameObject.SetActive(false);
@@ -149,6 +149,7 @@ public class WaterLevelPercentScore : MonoBehaviour
     void UpdateText(string text)
     {
         waterLevelPercentText.text = text;
+        WaterMeter.fillAmount = WaterPercentage() / 100f;
     }
 
     void SetWater(float value)
