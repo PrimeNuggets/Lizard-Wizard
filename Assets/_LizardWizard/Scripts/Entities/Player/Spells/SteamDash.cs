@@ -5,7 +5,7 @@ using UnityEngine;
 public class SteamDash : MonoBehaviour, ISpell
 {
     private GameObject Player;
-    private int element = 2;
+    private ISpell.Elements element = ISpell.Elements.Steam;
     private float chargetime = 0.0f;
     private float maxcharge = 1.0f;
     
@@ -16,10 +16,10 @@ public class SteamDash : MonoBehaviour, ISpell
     void Start(){
         Player = gameObject;
     }
-    public int GetElement(){
+    public ISpell.Elements GetElement(){
         return element;
     }
-    public void SetElement(int setTo){
+    public void SetElement(ISpell.Elements setTo){
         element = setTo; 
         //Use this to change visual effects and spawned objects if the element changes.
     }
@@ -27,6 +27,7 @@ public class SteamDash : MonoBehaviour, ISpell
     public void CastSpellDown(){
         Debug.Log("Charging");
     }
+    public void CastSpellTick(float dt) {}
     public void CastSpellReleased(){
         Debug.Log("Fwoosh!");
         Player.GetComponent<Player>().entityData.velocity = Player.GetComponent<Player>().GetLookDir() * dashspeed;
@@ -34,5 +35,10 @@ public class SteamDash : MonoBehaviour, ISpell
 
     public void UpgradeSpell(){
 
+    }
+
+    public bool IsOnCooldown()
+    {
+        return false;
     }
 }

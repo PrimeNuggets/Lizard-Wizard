@@ -296,6 +296,7 @@ public abstract class EnemyAI : MonoBehaviour
                 entityData.ApplyMove(Vector2.zero, false);
                 return;
             }
+            if (entityData.health.GetCurrent() <= 0f) Destroy(gameObject);
         #endregion
         #region State Processing
             stateTime += Time.fixedDeltaTime;

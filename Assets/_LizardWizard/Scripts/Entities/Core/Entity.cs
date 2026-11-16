@@ -192,6 +192,10 @@ public class Entity : ScriptableObject
         animator.ResetTrigger("Jump");
     }
 
+    public Vector3 GetLookDir(Camera cam = null, Transform ret = null) {
+        if (cam != null && ret != null) return (ret.position - cam.transform.position).normalized;
+        return visualRoot.forward;
+    }
     //OKAY SO i separated getting ground normals out and realized this is gonna be on every entity
     //which is, uh, maybe a few raycasts per frame. apparently first 100 raycasts per frame are basically free cpu wise
     //so! if performance starts suffering, or if you wanna make this bitch more efficient for the toasters among us
@@ -224,7 +228,6 @@ public class Entity : ScriptableObject
             {
                 normal = hit.normal;
                 Debug.DrawRay(hit.point, normal * 0.5f);
-
             }
 
         }
@@ -342,7 +345,7 @@ public class Entity : ScriptableObject
                 //downforce
                 velocity.y -= 1.0f;
                 //Friction
-                momentum *= 0.9f;
+                momentum *= 0.8f;
 
                 if (ctrl)
                 {
@@ -416,7 +419,14 @@ public class Entity : ScriptableObject
             {//LANDING CODE
                 Debug.Log("LANDED");
                 Debug.Log(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized));
-                momentum *= 1.0f - MathF.Pow(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized), 2f);
+
+                momentum *= (
+                    1.0f -
+                    MathF.Pow(
+                        Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized),
+                        2f
+                    )
+                );
                 storedMomentum *= 1.0f - MathF.Pow(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized), 2f);
             }
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
@@ -510,7 +520,7 @@ public class Entity : ScriptableObject
 
         if (!hitPaused)
         {
-            velocity += pendingKnockback;
+            momentum += pendingKnockback;
             pendingKnockback = UnityEngine.Vector3.zero;
         }
     }
@@ -525,7 +535,7 @@ public class Entity : ScriptableObject
             if (animator != null) animator.speed = animatorSpeed;
             if (hurtActive)
             {
-                velocity += pendingKnockback;
+                momentum += pendingKnockback;
                 pendingKnockback = UnityEngine.Vector3.zero;
             }
 
