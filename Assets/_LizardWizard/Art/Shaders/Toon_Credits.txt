@@ -1,0 +1,40 @@
+Toon shader (Toon.shader, ToonLighting.hlsl, ToonLines.shader, Scripts/Editor/OutlineNormalsBaker.cs)
+
+Written for our characters and props. These are the tutorials it's based on:
+
+- Remapping the light dot product from -1..1 to 0..1 to drive the shading:
+  michaelsgamelab, Unity URP Cel Shading Tutorial
+  https://www.youtube.com/watch?v=WQ0Gf1Ncjuw
+  Their project is at https://github.com/michaelsgamelab/Cel-Shading but none of it was copied in.
+  Instead of their step nodes we look the remapped value up in a painted ramp texture (Textures/Ramps).
+
+- Half angle specular, banded additional lights:
+  Unity, "Custom lighting in Shader Graph: Expanding your graphs in 2019" (character and concept by Minions Art)
+  https://unity.com/blog/engine-platform/custom-lighting-in-shader-graph-expanding-your-graphs-in-2019
+
+- Fresnel rim on the lit side:
+  Daniel Ilett, Shader Graph Basics part 7 (custom lighting)
+  https://danielilett.com/2024-05-07-tut7-11-intro-to-shader-graph-part-7/
+
+- Inverted hull outline and storing smoothed normals for it:
+  RVFX (FX Nari), URP outline shader video
+  We bake the smoothed normals on import in Unity instead of Houdini, and store them in tangent
+  space in uv3 instead of vertex colors so they work on skinned meshes.
+
+- Screen space lines from depth + normals with a renderer feature (ToonLines):
+  Shader Graph outline video using a Sobel filter on depth and normals
+  We use the built in Full Screen Pass feature and a small HLSL shader instead of a custom feature,
+  and the lines are a darker version of the surface color instead of solid black. Also picks up
+  dents (nostrils, cracks) and fades out with distance.
+
+- One shared lighting file for every asset, split into diffuse/specular/rim/ambient:
+  Unite Copenhagen 2019, Learn how to do stylized shading with Shader Graph
+  https://www.slideshare.net/slideshow/learn-how-to-do-stylized-shading-with-shader-graph-unite-copenhagen-2019/179584810
+  Unity, Customize the Lighting Model With Shader Graph's New Sample Content
+  https://www.youtube.com/watch?v=4v2fgeJa8z4
+
+Usage: make a material with LizardWizard/Toon, it picks up ToonRamp_Warm by default. Paint a new ramp
+(shadow on the left, lit on the right) to change how a material shades. Outline Width 0 turns the outline off.
+Models in Art/ get smoothed outline normals automatically when they import.
+Props are Cull Off with no hull outline for now (some prop meshes have flipped faces), ToonLines draws their lines.
+ToonLines settings are on Materials/ToonLines.mat, the pass is on Settings/PC_Renderer.
