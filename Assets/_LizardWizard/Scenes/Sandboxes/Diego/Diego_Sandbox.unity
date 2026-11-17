@@ -749,7 +749,7 @@ MonoBehaviour:
   SpellSlot2: {fileID: 1722809102}
   SpellSlot3: {fileID: 1377814820}
   SpellSlot4: {fileID: 2109635955}
-  steamDashSpell: {fileID: 1337312120}
+  steamDashSpell: {fileID: 0}
 --- !u!1001 &562275374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1101,11 +1101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c7e26008497564b8ef8914e5530b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainGenerator
-  propscale: 25
-  propRollLowerBound: 0.3
-  propRollUpperBound: 50
-  prop1: {fileID: 3544369245580720625, guid: 1e6b97e4f56e640479dfd92b4cce5fc9, type: 3}
-  prop2: {fileID: 2307332570978995493, guid: 07369b8adad078446920faaf0b84521c, type: 3}
+  props: []
 --- !u!4 &925611749
 Transform:
   m_ObjectHideFlags: 0
@@ -2045,17 +2041,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4da3f9740042ef4aa55ebd149b1aa64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
---- !u!114 &1337312120 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6731368914994049131, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-  m_PrefabInstance: {fileID: 2694692293406466300}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337312107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fe72d458b301004ca7e083ef77f32d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteamDash
 --- !u!1 &1352518854
 GameObject:
   m_ObjectHideFlags: 0
@@ -3749,18 +3734,6 @@ PrefabInstance:
       propertyPath: questRunner
       value: 
       objectReference: {fileID: 1538617381}
-    - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: achievements.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: 'achievements.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 4e1b4baa9db5b4f4784f5c35a321dfdd, type: 2}
-    - target: {fileID: 2309034614299963382, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
-      propertyPath: 'achievements.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: c5d0f30fcb3dca64c9a213d4634bfde5, type: 2}
     - target: {fileID: 2357876532559851445, guid: 7628744b3a6ddc0418dc51481baa85cd, type: 3}
       propertyPath: m_Name
       value: Lizard

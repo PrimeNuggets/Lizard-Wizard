@@ -241,8 +241,8 @@ public class Entity : ScriptableObject
             return;
         }
 
-        UnityEngine.Vector3 movement = velocity;
-        //movement.y = 0;
+        UnityEngine.Vector3 movement = momentum + storedMomentum + velocity;
+        movement.y = 0;
 
         if (movement.sqrMagnitude > 0.0001f)
         {

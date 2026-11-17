@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
         #endregion
         //=========================================
         #region Spells
+            public Transform firePosition;
             private InputAction spell1Action;
             private InputAction spell2Action;
             private InputAction spell3Action;
@@ -291,6 +292,7 @@ public class Player : MonoBehaviour
             spells[slot] = Instantiate(spell);
             spells[slot].root = gameObject;
             spells[slot].rootData = entityData;
+            spells[slot].firePosition = firePosition;
         }
     #endregion
     public Vector3 GetLookDir() { //Subject to move to Entity.cs

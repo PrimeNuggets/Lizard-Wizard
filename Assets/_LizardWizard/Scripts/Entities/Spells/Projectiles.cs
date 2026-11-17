@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 public class Projectiles : MonoBehaviour
 {
     [NonSerialized] public GameObject root;
@@ -12,7 +13,23 @@ public class Projectiles : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        var projCollider = GetComponentInChildren<ProjectileCollider>();
+        Entity rootData = root.GetComponent<Player>().entityData;
+        for (var i = 0; i < 2; i++)
+        {
+            if (rootData == null)
+            {
+                if (i == 0)
+                {
+                    rootData = root.GetComponent<EnemyAI>().entityData;
+                } else rootData = root.GetComponent<NPC>().entityData;
+            }
+        }
+        if (projCollider != null)
+        {
+            projCollider.entity = root.GetComponent<Aspect>();
+            projCollider.entityData = rootData;
+        }
     }
 
     // Update is called once per frame

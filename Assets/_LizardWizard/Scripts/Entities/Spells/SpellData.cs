@@ -21,6 +21,7 @@ public class SpellData : AttackData, ISpell
     [LabelOverride("Decelerates?")] public bool decel;
     [NonSerialized] public GameObject root;
     [NonSerialized] public Entity rootData;
+    [NonSerialized] public Transform firePosition;
     private bool charging;
     private float cooldownRemaining;
 
@@ -90,10 +91,8 @@ public class SpellData : AttackData, ISpell
         if (spellObj != null)
         {
             Quaternion rotation = Quaternion.LookRotation(forward);
-            Vector3 spawnPosition = root.transform.position + forward * 2f;
-            spawnPosition.y += 1f;
 
-            var projObj = Instantiate(spellObj, spawnPosition, rotation, root.transform);
+            var projObj = Instantiate(spellObj, firePosition.position, rotation);
             var projectile = projObj.GetComponent<Projectiles>();
 
             projectile.data = Instantiate(this);

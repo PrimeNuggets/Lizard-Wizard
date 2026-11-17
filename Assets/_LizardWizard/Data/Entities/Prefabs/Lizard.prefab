@@ -522,7 +522,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3845105510410925825}
+  m_Father: {fileID: 327742626667027044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6919259485187200382
 MeshFilter:
@@ -774,8 +774,6 @@ Transform:
   - {fileID: 327742626667027044}
   - {fileID: 4711928944161590238}
   - {fileID: 116659925815143579}
-  - {fileID: 546076799028821870}
-  - {fileID: 4195958694154876407}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &94468549096083774
@@ -878,12 +876,15 @@ MonoBehaviour:
   stickSensitivity: 180
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
+  firePosition: {fileID: 1382476531751593656}
   spells:
   - {fileID: 11400000, guid: c69a926d0ac37844aba9f4c6f40025d9, type: 2}
   - {fileID: 11400000, guid: 0c4e938fba894fe4dbedc46f9c291568, type: 2}
   tutorialQuest: {fileID: 11400000, guid: 1a0645a462ab634429a3a456217063ae, type: 2}
   questRunner: {fileID: 0}
-  achievements: []
+  achievements:
+  - {fileID: 11400000, guid: 4e1b4baa9db5b4f4784f5c35a321dfdd, type: 2}
+  - {fileID: 11400000, guid: c5d0f30fcb3dca64c9a213d4634bfde5, type: 2}
   landingChecks:
   - {fileID: 6740626599022600374}
   - {fileID: 8646931370333966511}
@@ -1282,6 +1283,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2261183586174062863}
+  - {fileID: 546076799028821870}
+  - {fileID: 4195958694154876407}
   m_Father: {fileID: 3845105510410925825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3572744147699948294
@@ -2145,12 +2148,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7218887812692266939}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 12.79, z: 0}
   m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3845105510410925825}
+  m_Father: {fileID: 327742626667027044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &806143247562305354
 MeshFilter:

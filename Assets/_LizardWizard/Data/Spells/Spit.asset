@@ -16,7 +16,7 @@ MonoBehaviour:
   attackName: Spit
   type: 0
   anim: {fileID: 0}
-  cooldown: 2
+  cooldown: 1.5
   facingOffset: 0
   power: 2
   knockback: {x: 0, y: 0, z: 3}
