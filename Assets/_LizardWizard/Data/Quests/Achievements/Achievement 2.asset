@@ -23,5 +23,5 @@ MonoBehaviour:
     - key: 2
       value: helpedCritter
     endCon:
-    - key: quest.test.completed
+    - key: npc.saved
       value: 1
