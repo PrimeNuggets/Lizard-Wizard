@@ -241,8 +241,8 @@ public class Entity : ScriptableObject
             return;
         }
 
-        UnityEngine.Vector3 movement = velocity;
-        //movement.y = 0;
+        UnityEngine.Vector3 movement = momentum + storedMomentum + velocity;
+        movement.y = 0;
 
         if (movement.sqrMagnitude > 0.0001f)
         {
@@ -457,6 +457,8 @@ public class Entity : ScriptableObject
         {
             //velocity.y = 0f;
         }
+
+        Scoring.AddValue($"{entObj.name.ToLowerInvariant()}.move", (int)(velocity.x + velocity.z));
     }
 
     //Now that jumping logic is separate, this opens opportunities for uncontrolled/mid-air jumps as long as a gravity value is given

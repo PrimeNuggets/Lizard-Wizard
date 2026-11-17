@@ -8,7 +8,7 @@ public class AttackCollider : MonoBehaviour
 {
     private Aspect entity;
     private Entity entityData;
-    private bool hitOver = false;
+    protected bool hitOver = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,7 +47,7 @@ public class AttackCollider : MonoBehaviour
         hitOver = true;
     }
 
-    void ApplyHit(Entity otherData, GameObject enemy)
+    public virtual void ApplyHit(Entity otherData, GameObject enemy)
     {
         //=========================================
         // Initialization

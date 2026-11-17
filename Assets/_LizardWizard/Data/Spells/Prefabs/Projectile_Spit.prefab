@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 1989844754131556852}
   - component: {fileID: 6177743666718361972}
   - component: {fileID: 3534445525567799446}
-  - component: {fileID: 2794895660975811087}
+  - component: {fileID: 2022275414175992452}
   m_Layer: 0
   m_Name: LizardSpellWaterSpit
   m_TagString: Untagged
@@ -159,7 +159,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3974834149593524364, guid: 8d276ca8ce0800441ac7d538c835941e, type: 3}
---- !u!114 &2794895660975811087
+--- !u!114 &2022275414175992452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,6 +168,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 3685082698111509215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3c03f4d7cc012e40aabed9e1e542290, type: 3}
+  m_Script: {fileID: 11500000, guid: 3159125a0410e134794253f37210bd96, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AttackCollider
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectileCollider
