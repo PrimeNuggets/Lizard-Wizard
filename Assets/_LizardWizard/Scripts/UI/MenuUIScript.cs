@@ -89,6 +89,7 @@ public class MenuUIScript : MonoBehaviour
     public void lizardFunny()
     {
         Debug.Log("Lizard...");
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("Lizard");
     }
 
     public void saveGame()
