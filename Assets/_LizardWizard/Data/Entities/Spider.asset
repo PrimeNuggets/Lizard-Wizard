@@ -19,7 +19,7 @@ MonoBehaviour:
   speed:
     max: 14
   jumpHeight:
-    max: 10
+    max: 8
   noiseChannel: {fileID: 0}
   groundLayer:
     serializedVersion: 2
