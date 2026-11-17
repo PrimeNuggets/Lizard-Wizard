@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Aspect))]
 [RequireComponent(typeof(CharacterController))]
@@ -20,6 +21,10 @@ public class NPC : MonoBehaviour
     //===========================================
     [SerializeField, LabelOverride("Interaction Canvas")] private GameObject canvas;
     [SerializeField, LabelOverride("Interaction Button Text")] private TMP_Text buttonText;
+    [SerializeField, LabelOverride("Controller Button Sprite"), Tooltip("round button used on controller")] private Sprite padButtonSprite;
+    [SerializeField, LabelOverride("Controller Button Color")] private Color padButtonColor = new Color(0.17f, 0.17f, 0.17f);
+    [SerializeField, LabelOverride("PlayStation Button Color"), Tooltip("white like the dualsense buttons")] private Color psButtonColor = new Color(0.95f, 0.95f, 0.95f);
+    [SerializeField, LabelOverride("Controller Button Size"), Range(0.3f, 1f)] private float padButtonScale = 0.75f;
     //===========================================
         [Header("Misc Data")]
     //===========================================
@@ -27,6 +32,10 @@ public class NPC : MonoBehaviour
     [SerializeField] public List<Dialogue.ConvoConds> dialogue;
     [LabelOverride("Interaction Range")] public float iRange = 8f;
     private InputAction interactAction;
+    private PlayerInput playerInputs;
+    private Image buttonBox; //-- the box behind the button text
+    private Sprite keySprite;
+    private Color keyColor;
     //=========================================================
         //Non-Serialized Variables
     //=========================================================
@@ -54,12 +63,35 @@ public class NPC : MonoBehaviour
                 break; //This logic will need to be altered if multiplayer is desired
             }
         }
-        var playerInputs = player.gameObject.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        playerInputs = player.gameObject.GetComponent<UnityEngine.InputSystem.PlayerInput>();
         interactAction = playerInputs.actions.FindAction("Player/Interact", true);
+        buttonBox = buttonText.transform.parent.GetComponent<Image>();
+        if (buttonBox != null)
+        {
+            keySprite = buttonBox.sprite;
+            keyColor = buttonBox.color;
+        }
         //=========================================================
             //Dialogue Lookup
         //=========================================================
         dialogueUI = FindAnyObjectByType<Dialogue>(FindObjectsInactive.Include);
+    }
+
+    //-- keycap box on keyboard, round button on controller
+    //-- ps = white button dark shape, xbox = dark button colored letter
+    private void UpdatePrompt()
+    {
+        bool onPad = playerInputs != null && playerInputs.currentControlScheme == "Gamepad";
+        bool playstation = Gamepad.current is UnityEngine.InputSystem.DualShock.DualShockGamepad;
+
+        buttonText.text = ButtonIcons.For(interactAction, playerInputs);
+
+        if (buttonBox != null && padButtonSprite != null)
+        {
+            buttonBox.sprite = onPad ? padButtonSprite : keySprite;
+            buttonBox.color = !onPad ? keyColor : playstation ? psButtonColor : padButtonColor;
+            buttonBox.rectTransform.localScale = Vector3.one * (onPad ? padButtonScale : 1f);
+        }
     }
 
     // Update is called once per frame
@@ -104,9 +136,9 @@ public class NPC : MonoBehaviour
 
         if (distance <= iRange && aspect.aspectName == Aspect.aspect.Player)
         {
+            UpdatePrompt(); //-- every frame so it swaps if you pick up the controller mid prompt
             if (canvas.activeSelf == false)
             {
-                buttonText.text = interactAction.GetBindingDisplayString(0, InputBinding.DisplayStringOptions.DontIncludeInteractions); //Fix later to account for controllers
                 canvas.SetActive(true); //Ideally start an activation animation: fade in & slide to position
             } else
             {
@@ -118,7 +150,6 @@ public class NPC : MonoBehaviour
         {
             if (canvas.activeSelf == true)
             {
-                buttonText.text = interactAction.GetBindingDisplayString(0, InputBinding.DisplayStringOptions.DontIncludeInteractions);
                 canvas.SetActive(false); //Ideally start an deactivation animation: fade out & slide to downward
             }
             if (Dialogue.inDialogue && dialogueUI.npc == this) { //Prevents other npcs from ending other's dialogues
