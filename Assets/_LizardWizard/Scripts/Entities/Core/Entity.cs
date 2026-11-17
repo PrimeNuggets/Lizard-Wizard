@@ -457,6 +457,8 @@ public class Entity : ScriptableObject
         {
             //velocity.y = 0f;
         }
+
+        Scoring.AddValue($"{entObj.name.ToLowerInvariant()}.move", (int)(velocity.x + velocity.z));
     }
 
     //Now that jumping logic is separate, this opens opportunities for uncontrolled/mid-air jumps as long as a gravity value is given

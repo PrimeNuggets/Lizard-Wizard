@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
             [NonSerialized] public List<Quests> completedQuests = new List<Quests>();
             public List<Quests> achievements;
             [NonSerialized] public List<Quests> completedAchievements = new List<Quests>();
+            [NonSerialized] private float movementToAchieve;
         #endregion
         //=========================================
         #region Landing
@@ -204,7 +205,22 @@ public class Player : MonoBehaviour
             bool crouchPressed = crouchAction.IsPressed();
             entityData.crouched = crouchPressed;
 
+            Vector3 previousPosition = transform.position;
+
             entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
+
+            Vector3 movement = transform.position - previousPosition;
+            movement.y = 0f;
+
+            movementToAchieve += movement.magnitude;
+
+            int wholeMovingUnits = Mathf.FloorToInt(movementToAchieve);
+
+            if (wholeMovingUnits > 0)
+            {
+                Scoring.AddValue("lizard.move", wholeMovingUnits);
+                movementToAchieve -= wholeMovingUnits;
+            }
 
             bool landed = !wasGrounded && entityData.entChar.isGrounded;
 
@@ -270,6 +286,7 @@ public class Player : MonoBehaviour
             if (slot >= spells.Length) return;
             spells[slot].CastSpellReleased();
         }
+        public SpellData GetSpell(int slot) => spells != null && slot >= 0 && slot < spells.Length ? spells[slot] : null; //-- for the hud
         public void SetSpell(SpellData spell, int slot){
             spells[slot] = Instantiate(spell);
             spells[slot].root = gameObject;
@@ -301,15 +318,16 @@ public class Player : MonoBehaviour
         }
         public void StartAchievement(Quests quest)
         {
-            questRunner.StartQuest(questRunner.quest);
+            questRunner.TrackAchievement(quest, OnAchievementEnd);
         }
         public void OnAchievementEnd(Quests quest)
         {
             completedAchievements.Add(quest);
-            Scoring.AddValue($"achievement.{quest.questId}.completed", 1); //tracks which quests have been completed
-            Scoring.AddValue($"achievements_completed", 1); //tracks how many quests have been completed
+
+            Scoring.AddValue($"achievement.{quest.questId}.completed", 1); //tracks which achievements have been completed
+            Scoring.AddValue($"achievements_completed", 1); //tracks how many achievements have been completed
+
             achievements.Remove(quest);
-            questRunner.quest = null;
         }
     #endregion
 }
