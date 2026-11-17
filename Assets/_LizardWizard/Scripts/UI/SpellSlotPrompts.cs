@@ -1,19 +1,32 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 //-- Swaps the spell slot button hints (LMB, Q...) to the controller ones (L2, LT...) when you're on a pad
-//-- Put it on SpellSlotsUI, it finds SpellSlot1-4 by name and keeps the "Spell 1" part of the text
 //-- Button names come from the input system itself so DualSense shows L2/R2 and xbox shows LT/RT
 //-- https://docs.unity3d.com/Packages/com.unity.inputsystem@1.11/api/UnityEngine.InputSystem.InputControl.html
+//-- spells with an icon show the icon + cooldown sweep + button in the white circle
+//-- no icon = old green box with "Spell 1 (LMB)"
 public class SpellSlotPrompts : MonoBehaviour
 {
-    [SerializeField] private int slotCount = 4;
+    [Serializable]
+    private class Slot
+    {
+        public Image background;
+        public TMP_Text label;
+        public Image icon;
+        [Tooltip("Filled image on top of the icon")] public Image cooldown;
+        [Tooltip("Text in the white circle")] public TMP_Text badge;
+        [NonSerialized] public string labelStart;
+        [NonSerialized] public InputAction action;
+    }
 
-    private TMP_Text[] texts;
-    private string[] labels;
-    private InputAction[] actions;
+    [SerializeField] private Slot[] slots;
+
     private PlayerInput playerInput;
+    private Player player;
 
     private bool lastWasPad;
     private Gamepad lastPad;
@@ -22,25 +35,24 @@ public class SpellSlotPrompts : MonoBehaviour
     void Start()
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
+        player = FindAnyObjectByType<Player>();
 
-        texts = new TMP_Text[slotCount];
-        labels = new string[slotCount];
-        actions = new InputAction[slotCount];
-        for (int i = 0; i < slotCount; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            Transform slot = transform.Find("SpellSlot" + (i + 1));
-            if (slot == null) continue;
-            texts[i] = slot.GetComponentInChildren<TMP_Text>(true);
-            if (texts[i] == null) continue;
-
             //-- keep whatever the first line says, just swap the button part
-            labels[i] = texts[i].text.Split('\n')[0].Trim();
-            if (playerInput != null) actions[i] = playerInput.actions.FindAction("Player/Spell" + (i + 1));
+            if (slots[i].label != null) slots[i].labelStart = slots[i].label.text.Split('\n')[0].Trim();
+            if (playerInput != null) slots[i].action = playerInput.actions.FindAction("Player/Spell" + (i + 1));
         }
     }
 
     void Update()
     {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            SpellData spell = player != null ? player.GetSpell(i) : null;
+            ShowSpell(slots[i], spell);
+        }
+
         bool onPad = playerInput != null && playerInput.currentControlScheme == "Gamepad";
         Gamepad pad = Gamepad.current;
 
@@ -50,26 +62,33 @@ public class SpellSlotPrompts : MonoBehaviour
         lastWasPad = onPad;
         lastPad = pad;
 
-        for (int i = 0; i < slotCount; i++)
+        foreach (var slot in slots)
         {
-            if (texts[i] == null || actions[i] == null) continue;
-            string button = onPad ? ButtonName(actions[i], pad) : ButtonName(actions[i], Mouse.current, Keyboard.current);
-            if (button != null) texts[i].text = $"{labels[i]}\n({button})";
+            if (slot.action == null) continue;
+            InputControl control = onPad ? ButtonIcons.FindControl(slot.action, pad) : ButtonIcons.FindControl(slot.action, Mouse.current, Keyboard.current);
+            if (control == null) continue;
+            string button = ButtonIcons.Icon(control);
+            if (slot.label != null) slot.label.text = $"{slot.labelStart}\n({button})";
+            if (slot.badge != null) slot.badge.text = button;
         }
     }
 
-    //-- first binding that lands on one of these devices, short name if it has one (LMB, L2, LT...)
-    private static string ButtonName(InputAction action, params InputDevice[] devices)
+    private static void ShowSpell(Slot slot, SpellData spell)
     {
-        foreach (var binding in action.bindings)
+        bool hasIcon = spell != null && spell.icon != null && slot.icon != null;
+
+        if (slot.background != null) slot.background.enabled = !hasIcon;
+        if (slot.label != null) slot.label.gameObject.SetActive(!hasIcon);
+        if (slot.icon != null) slot.icon.gameObject.SetActive(hasIcon);
+        if (slot.cooldown != null) slot.cooldown.gameObject.SetActive(hasIcon);
+        if (slot.badge != null) slot.badge.gameObject.SetActive(hasIcon);
+        if (!hasIcon) return;
+
+        slot.icon.sprite = spell.icon;
+        if (slot.cooldown != null)
         {
-            foreach (var device in devices)
-            {
-                if (device == null) continue;
-                InputControl control = InputControlPath.TryFindControl(device, binding.effectivePath);
-                if (control != null) return string.IsNullOrEmpty(control.shortDisplayName) ? control.displayName : control.shortDisplayName;
-            }
+            slot.cooldown.sprite = spell.icon; //-- same sprite so the sweep is round
+            slot.cooldown.fillAmount = spell.CooldownPercent();
         }
-        return null;
     }
 }

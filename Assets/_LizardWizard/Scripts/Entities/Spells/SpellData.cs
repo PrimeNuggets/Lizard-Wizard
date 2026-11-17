@@ -9,6 +9,7 @@ public class SpellData : AttackData, ISpell
 //Holding an amount of 'power' that shrinks over time
     [SerializeField] private float cost;
     [SerializeField] private ISpell.Elements element;
+    [Tooltip("Shows up in the spell slot on the hud")] public Sprite icon;
     [NonSerialized] public float chargeTime;
     [LabelOverride("Charge Time"), Min(1f)] public float maxChargeTime = 1f;
     [Header("Movement")]
@@ -20,12 +21,12 @@ public class SpellData : AttackData, ISpell
     [LabelOverride("Decelerates?")] public bool decel;
     [NonSerialized] public GameObject root;
     [NonSerialized] public Entity rootData;
-    private bool onCooldown;
     private bool charging;
     private float cooldownRemaining;
 
     public bool IsCharging() => charging;
     public bool IsOnCooldown() => cooldownRemaining > 0f;
+    public float CooldownPercent() => cooldown > 0f ? cooldownRemaining / cooldown : 0f; //-- 1 right after casting, 0 when ready
 
     public ISpell.Elements GetElement()
     {
@@ -33,7 +34,7 @@ public class SpellData : AttackData, ISpell
     }
     public bool CanActivate()
     {
-        return !onCooldown && rootData.water.GetCurrent() > cost;
+        return !IsOnCooldown() && rootData.water.GetCurrent() > cost;
     }
     public void SetElement(ISpell.Elements elmnt)
     {
@@ -58,6 +59,7 @@ public class SpellData : AttackData, ISpell
     {
         if (!CanActivate() || !charging) return;
         charging = false;
+        cooldownRemaining = cooldown; //-- start cooldown
         float chargePercent = Mathf.Clamp01(chargeTime / maxChargeTime);
         var player = root.GetComponent<Player>();
 

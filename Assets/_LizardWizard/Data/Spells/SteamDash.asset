@@ -16,7 +16,7 @@ MonoBehaviour:
   attackName: Steam Dash
   type: 0
   anim: {fileID: 0}
-  cooldown: 0
+  cooldown: 1
   facingOffset: 0
   power: 0
   knockback: {x: 0, y: 0, z: 0}
@@ -29,6 +29,7 @@ MonoBehaviour:
   flags: []
   cost: 10
   element: 3
+  icon: {fileID: 21300000, guid: b339930819a8481fa0be1e3f0f42a51d, type: 3}
   maxChargeTime: 1
   moveSpell: 1
   velocity: {x: 0, y: 0, z: 200}

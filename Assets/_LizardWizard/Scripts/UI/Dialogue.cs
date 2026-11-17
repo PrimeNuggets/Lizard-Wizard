@@ -81,6 +81,7 @@ public class Dialogue : MonoBehaviour
     private Conversations currentConvo;
     public int currentLineIndex { get; private set; } = 0;
     private InputAction interactAction;
+    private PlayerInput inputs;
     [SerializeField] private GameObject player; //Since only one instance of this script will exist per scene, serializing this field is ok
     [SerializeField] private QuestRunner questRunner;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -90,14 +91,14 @@ public class Dialogue : MonoBehaviour
     [SerializeField, LabelOverride("Interaction Button Text")] private TMP_Text iButtonText;
     void Start()
     {
-        var inputs = player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
+        inputs = player.GetComponent<UnityEngine.InputSystem.PlayerInput>();
         interactAction = inputs.actions.FindAction("Player/Interact", true);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        iButtonText.text = interactAction.GetBindingDisplayString(0, InputBinding.DisplayStringOptions.DontIncludeInteractions);
+        iButtonText.text = ButtonIcons.For(interactAction, inputs); //-- shows the controller button on a pad
         if (interactAction.IsPressed()) {
             if (!waitForRelease && inDialogue) //Despite being in fixed update, this only runs while the object is enabled
             {

@@ -474,6 +474,8 @@ MonoBehaviour:
   entityTemplate: {fileID: 11400000, guid: 36451dce923b75248a22ad5fa1c88372, type: 2}
   canvas: {fileID: 3042505730200382261}
   buttonText: {fileID: 7069684809378879513}
+  padButtonSprite: {fileID: 21300000, guid: de2b0138a3d34e17b5b5181f42850a20, type: 3}
+  padButtonColor: {r: 0.17, g: 0.17, b: 0.17, a: 1}
   mesh: {fileID: 8578115562870676303}
   dialogue:
   - label: Test
@@ -633,7 +635,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}

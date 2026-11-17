@@ -286,6 +286,7 @@ public class Player : MonoBehaviour
             if (slot >= spells.Length) return;
             spells[slot].CastSpellReleased();
         }
+        public SpellData GetSpell(int slot) => spells != null && slot >= 0 && slot < spells.Length ? spells[slot] : null; //-- for the hud
         public void SetSpell(SpellData spell, int slot){
             spells[slot] = Instantiate(spell);
             spells[slot].root = gameObject;
