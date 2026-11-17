@@ -42,6 +42,7 @@ public class Projectiles : MonoBehaviour
         bool entityHit = collision.gameObject.GetComponent<EnemyAI>() != null;
         entityHit |= collision.gameObject.GetComponent<Player>() != null;
         entityHit |= collision.gameObject.GetComponent<NPC>() != null;
+        if (AudioManager.instance != null) AudioManager.instance.PlaySFX("WaterSplash"); //-- hit sound
         if ((data.type == AttackData.AttackType.OneHit && entityHit) || !entityHit) Destroy(gameObject);
     }
 }

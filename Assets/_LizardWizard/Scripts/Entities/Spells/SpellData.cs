@@ -102,6 +102,8 @@ public class SpellData : AttackData, ISpell
             projectile.lifeTime = cooldown;
 
             if (decel) projectile.decel = range;
+
+            if (AudioManager.instance != null) AudioManager.instance.PlaySFX("WaterShot"); //-- cast sound
         }
     }
     public void UpgradeSpell() {}
