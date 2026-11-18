@@ -21,7 +21,7 @@ public class NPC : MonoBehaviour
     //===========================================
     [SerializeField, LabelOverride("Interaction Canvas")] private GameObject canvas;
     [SerializeField, LabelOverride("Interaction Button Text")] private TMP_Text buttonText;
-    [SerializeField, Tooltip("Renderer used to position the prompt beside the NPC.")] private Renderer promptBoundsRenderer;
+    [SerializeField, Tooltip("Renderer used to position the prompt beside the NPC.")] protected Renderer promptBoundsRenderer;
     [SerializeField, LabelOverride("Controller Button Sprite"), Tooltip("round button used on controller")] private Sprite padButtonSprite;
     [SerializeField, LabelOverride("Controller Button Color")] private Color padButtonColor = new Color(0.17f, 0.17f, 0.17f);
     [SerializeField, LabelOverride("PlayStation Button Color"), Tooltip("white like the dualsense buttons")] private Color psButtonColor = new Color(0.95f, 0.95f, 0.95f);
@@ -148,6 +148,14 @@ public class NPC : MonoBehaviour
         bool newPressed = pressed && !waitForRelease;
         waitForRelease = pressed;
 
+        bool showAlternatePrompt = ShowAlternatePrompt(distance);
+        if (buttonBox != null) buttonBox.gameObject.SetActive(!showAlternatePrompt);
+        if (showAlternatePrompt)
+        {
+            canvas.SetActive(true);
+            return;
+        }
+
         if (distance <= iRange && aspect.aspectName == Aspect.aspect.Player)
         {
             UpdatePrompt(); //-- every frame so it swaps if you pick up the controller mid prompt
@@ -172,6 +180,16 @@ public class NPC : MonoBehaviour
         }
     }
 
+    protected virtual bool ShowAlternatePrompt(float distance) => false;
+
+    public virtual Conversations GetConversation()
+    {
+        //Sets the conversation to the first available convo
+        return dialogue.FirstOrDefault(option => option.ParseConditions())?.convo;
+    }
+
+    public virtual void OnDialogueFinished(Player speaker) { }
+
     /*public void ChangeDialogue(string line)
     {
         //Change here
@@ -192,8 +210,13 @@ public class NPC : MonoBehaviour
             player.entityData.water.GetCurrent() -
             water
         );
+        RecordRescue();
+    }
+
+    protected void RecordRescue(string scoreKey = null)
+    {
         //Update Saved Count
-        Scoring.AddValue($"npc.saved", 1);
-        Scoring.AddValue($"npc.{gameObject.name.ToLowerInvariant()}.saved", 1);
+        Scoring.AddValue("npc.saved", 1);
+        Scoring.AddValue(scoreKey ?? $"npc.{gameObject.name.ToLowerInvariant()}.saved", 1);
     }
 }

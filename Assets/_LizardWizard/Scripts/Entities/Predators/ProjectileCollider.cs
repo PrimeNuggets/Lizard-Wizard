@@ -132,6 +132,23 @@ public class ProjectileCollider : AttackCollider
         Aspect entity = other.GetComponentInParent<Aspect>();
         if (entity == null) return;
         var gameObj = entity.GameObject();
+        if (gameObj.TryGetComponent(out BeetleScript beetle))
+        {
+            var projectile = GetComponentInParent<Projectiles>();
+            if (this.entity != null && this.entity.aspectName == Aspect.aspect.Player
+                && projectile != null && projectile.data is SpellData spell && spell.GetElement() == ISpell.Elements.Water)
+            {
+                if (hitOver) return;
+
+                hitOver = true;
+                beetle.ReceiveWaterShot(spell.WaterCost);
+                if (AudioManager.instance != null) AudioManager.instance.PlaySFX("WaterSplash");
+                Destroy(projectile.gameObject);
+                return;
+            }
+
+            if (beetle.IsWaterHitbox(other)) return;
+        }
         //Debug.Log(gameObj.name + " is an entity");
 
         Entity otherData = null;
