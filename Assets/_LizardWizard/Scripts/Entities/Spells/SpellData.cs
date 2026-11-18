@@ -78,7 +78,7 @@ public class SpellData : AttackData, ISpell
             if (moveSpell)
             {
                 var velocity = this.velocity; //Set here to prevent data overwriting
-                if (rootData.GetStateType() == 'A') velocity *= 0.25f; //The lack of friction in the air requires a dampener
+                //if (rootData.GetStateType() == 'A') velocity *= 0.25f; //The lack of friction in the air requires a dampener
 
 
                 rootData.momentum = (
