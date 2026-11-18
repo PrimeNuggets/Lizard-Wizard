@@ -21,6 +21,7 @@ public class NPC : MonoBehaviour
     //===========================================
     [SerializeField, LabelOverride("Interaction Canvas")] private GameObject canvas;
     [SerializeField, LabelOverride("Interaction Button Text")] private TMP_Text buttonText;
+    [SerializeField, Tooltip("Renderer used to position the prompt beside the NPC.")] private Renderer promptBoundsRenderer;
     [SerializeField, LabelOverride("Controller Button Sprite"), Tooltip("round button used on controller")] private Sprite padButtonSprite;
     [SerializeField, LabelOverride("Controller Button Color")] private Color padButtonColor = new Color(0.17f, 0.17f, 0.17f);
     [SerializeField, LabelOverride("PlayStation Button Color"), Tooltip("white like the dualsense buttons")] private Color psButtonColor = new Color(0.95f, 0.95f, 0.95f);
@@ -115,6 +116,19 @@ public class NPC : MonoBehaviour
     void LateUpdate()
     {
         //entityData?.AfterTick(); //Aligns the entity to the ground. Since some npcs will be stuck in sand or similar situations, I'm not sure we should do this. - Xavier
+
+        if (canvas.activeSelf && promptBoundsRenderer != null && Camera.main is Camera viewCamera)
+        {
+            Bounds bounds = promptBoundsRenderer.bounds;
+            Vector3 viewRight = viewCamera.transform.right;
+            Vector3 absoluteViewRight = new Vector3(Mathf.Abs(viewRight.x), Mathf.Abs(viewRight.y), Mathf.Abs(viewRight.z));
+            float halfWidth = Vector3.Dot(bounds.extents, absoluteViewRight);
+            Vector3 promptPosition = bounds.center - viewRight * (halfWidth + 0.4f);
+            float bobOffset = Mathf.Sin(Time.time * Mathf.PI) * 0.1f; //-- one bounce every two seconds
+            promptPosition += viewCamera.transform.up * bobOffset;
+            canvas.transform.SetPositionAndRotation(promptPosition, viewCamera.transform.rotation);
+            return;
+        }
 
         Vector3 direction = player.transform.position - canvas.transform.position;
         direction.y = 0f;
