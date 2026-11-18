@@ -267,7 +267,7 @@ public class Entity : ScriptableObject
             modelTurnSpeed * deltaTime
         );
     }
-    public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null)
+    public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null, Vector3 extraVelocity = default)
     {
         //Setup Input
         Transform reference = moveRef == null ? entObj.transform : moveRef;
@@ -390,6 +390,14 @@ public class Entity : ScriptableObject
         {
             PlayJump(gravity);
         }
+        //-- extra push from outside (player trick boost). enemies/npcs just leave it at zero
+        //-- on the ground it follows the slope so we don't launch off dunes
+        if (ctrl && extraVelocity != Vector3.zero)
+        {
+            velocity += grounded
+                ? Vector3.ProjectOnPlane(extraVelocity, GroundNormal).normalized * extraVelocity.magnitude
+                : extraVelocity;
+        }
         //State before moving. Used to check landings.
         LastState = GetStateType();
         //MOVE
@@ -431,8 +439,7 @@ public class Entity : ScriptableObject
             }
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
-            //-- TODO: clean landing after a flip = small speed boost + add to combo
-            //-- TODO: sand puff particles on landing (bigger on crash)
+            //-- TODO: clean flip landing should add to combo too (boost is in Player.cs)
             if (prevStateType == StateTypes.Air && noiseChannel != null)
             {
                 //-- Harder landings make more noise
