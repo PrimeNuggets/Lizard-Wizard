@@ -10,7 +10,7 @@ public class SpellSlotButtonTest : MonoBehaviour
     [SerializeField] private Button SpellSlot3;
     [SerializeField] private Button SpellSlot4;
 
-    [SerializeField] private SteamDash steamDashSpell;
+    //[SerializeField] private SteamDash steamDashSpell;
 
     private ISpell[] equippedSpells = new ISpell[4];
 
@@ -34,9 +34,9 @@ public class SpellSlotButtonTest : MonoBehaviour
 
         if (keyboard != null)
         {
-            if (keyboard.gKey.wasPressedThisFrame && steamDashSpell != null) 
+            if (keyboard.gKey.wasPressedThisFrame) 
             {
-                EquipSpell(1, steamDashSpell);
+                //EquipSpell(1);
             }
 
             if (keyboard.qKey.wasPressedThisFrame)
