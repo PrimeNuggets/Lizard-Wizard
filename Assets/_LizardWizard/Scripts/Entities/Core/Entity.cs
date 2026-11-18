@@ -192,8 +192,7 @@ public class Entity : ScriptableObject
         animator.ResetTrigger("Jump");
     }
 
-    public Vector3 GetLookDir(Camera cam = null, Transform ret = null)
-    {
+    public Vector3 GetLookDir(Camera cam = null, Transform ret = null) {
         if (cam != null && ret != null) return (ret.position - cam.transform.position).normalized;
         return visualRoot.forward;
     }
@@ -345,62 +344,45 @@ public class Entity : ScriptableObject
             case 'S':
                 //downforce
                 velocity.y -= 1.0f;
+                //Friction
+                momentum *= 0.8f;
 
-                if (RemoveY(momentum).magnitude <= speed.GetCurrent() * 1.1f)
+                if (ctrl)
                 {
-                    momentum = Vector3.MoveTowards(momentum, direction.normalized * speed.GetCurrent(), 1.0f); //1 = accel. tweak maybe
+                    if (Vector3.Scale(momentum, new Vector3(1f, 0f, 1f)).magnitude < speed.GetCurrent())
+                    {
+                        //standing movement code here
+                        momentum.x += direction.x * 1.0f; //acceleration const
+                        momentum.z += direction.z * 1.0f; //acceleration const
+                    }
+                    //TODO: Add removal of storedMomentum that would be cancelled by movement
+
+                }
+                if ((storedMomentum + momentum).magnitude > storedMomentum.magnitude)
+                {
+                    storedMomentum *= 0.95f;
                 }
                 else
                 {
-                    float angle = Vector3.Angle(RemoveY(momentum).normalized, direction.normalized);
-                    momentum = Vector3.RotateTowards(momentum, direction, 0.05f, 0f);//0.1f is turn radius. tinker
-                    float drag = Mathf.InverseLerp(60f, 180f, angle);
-
-                    momentum = Vector3.ProjectOnPlane(momentum, GroundNormal).normalized * Mathf.Max(0f, (momentum.magnitude - drag) - 0.5f);
-
+                    storedMomentum += momentum;
                 }
-
-                /*    //Friction
-
-                    momentum *= 0.8f;
-
-                    if (ctrl)
-                    {
-                        if (Vector3.Scale(momentum, new Vector3(1f, 0f, 1f)).magnitude < speed.GetCurrent())
-                        {
-                            //standing movement code here
-                            momentum.x += direction.x * 1.0f; //acceleration const
-                            momentum.z += direction.z * 1.0f; //acceleration const
-                        }
-                        //TODO: Add removal of storedMomentum that would be cancelled by movement
-
-                    }
-                    if ((storedMomentum + momentum).magnitude > storedMomentum.magnitude)
-                    {
-                        storedMomentum *= 0.95f;
-                    }
-                    else
-                    {
-                        storedMomentum += momentum;
-                    }
-                    */
 
                 break;
             //SLIDING
             case 'C':
                 //downforce
-                velocity.y -= 2.0f;
+                velocity.y -= 1.0f;
                 //friction
                 storedMomentum *= 0.95f;
+                momentum *= 0.9f;
                 //without control slide will behave the same as stand
                 if (ctrl)
                 {
-                    momentum += UnityEngine.Vector3.ProjectOnPlane((velocity), GroundNormal);
+                    storedMomentum += UnityEngine.Vector3.ProjectOnPlane((momentum + velocity), GroundNormal);
 
                     //Slide strafe currently same as airstrafe. unhappy with current behavior. experiment. --vv
-                    velocity += direction * (1.0f - Vector3.Dot(direction.normalized, RemoveY(momentum).normalized));
+                    velocity += direction * (1.0f - Vector3.Dot(direction.normalized, (Vector3.Scale((storedMomentum), new Vector3(1f, 0f, 1f))).normalized));
                 }
-                momentum = momentum.normalized * MathF.Max(0f, momentum.magnitude - 0.1f);
 
                 break;
         }
@@ -758,10 +740,5 @@ public class Entity : ScriptableObject
             // Debug.Log(GetStateType());
         }
     }
-    public Vector3 RemoveY(Vector3 vector)
-    {
-        return new Vector3(vector.x, 0f, vector.z);
-    }
-
 
 }
