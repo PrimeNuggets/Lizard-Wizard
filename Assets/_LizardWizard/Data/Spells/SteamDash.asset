@@ -32,7 +32,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: b339930819a8481fa0be1e3f0f42a51d, type: 3}
   maxChargeTime: 1
   moveSpell: 1
-  velocity: {x: 0, y: 0, z: 100}
+  velocity: {x: 0, y: 0, z: 30}
   spellObj: {fileID: 0}
   objVelocity: {x: 0, y: 0, z: 0}
   decel: 0

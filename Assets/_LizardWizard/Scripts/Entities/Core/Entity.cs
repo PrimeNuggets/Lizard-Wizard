@@ -85,7 +85,9 @@ public class Entity : ScriptableObject
     [Header("Surface Alignment")]
     public LayerMask groundLayer = ~0;
     public float groundProbeDist = 0.3f;
+    [Min(0f)] public float groundSnapDistance; //-- 0 = off. keeps sliding downhill stuck to the ground
     [Min(0f)] public float modelTurnSpeed = 540f;
+    [Min(0f)] public float modelTurnSmoothing; //-- 0 = off. eases the model's tilt so it doesn't snap on bumpy ground
     [Min(0f)] public float groundContactDelay = 0.08f;
 
     //===================================================
@@ -261,6 +263,12 @@ public class Entity : ScriptableObject
         if (!VerifyVector(forward)) return;
 
         UnityEngine.Quaternion target = UnityEngine.Quaternion.LookRotation(forward, normal);
+        //-- framerate independent smoothing, then RotateTowards below still caps the turn speed
+        if (modelTurnSmoothing > 0f)
+        {
+            float blend = 1f - Mathf.Exp(-deltaTime / modelTurnSmoothing);
+            target = UnityEngine.Quaternion.Slerp(visualRoot.rotation, target, blend);
+        }
 
         visualRoot.rotation = UnityEngine.Quaternion.RotateTowards(
             visualRoot.rotation,
@@ -268,7 +276,7 @@ public class Entity : ScriptableObject
             modelTurnSpeed * deltaTime
         );
     }
-    public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null)
+    public void ApplyMove(UnityEngine.Vector2 move, bool jumped, Transform moveRef = null, Vector3 extraVelocity = default)
     {
         //Setup Input
         Transform reference = moveRef == null ? entObj.transform : moveRef;
@@ -408,10 +416,27 @@ public class Entity : ScriptableObject
         {
             PlayJump(gravity);
         }
+        //-- extra push from outside (player trick boost). enemies/npcs just leave it at zero
+        //-- on the ground it follows the slope so we don't launch off dunes
+        if (ctrl && extraVelocity != Vector3.zero)
+        {
+            velocity += grounded
+                ? Vector3.ProjectOnPlane(extraVelocity, GroundNormal).normalized * extraVelocity.magnitude
+                : extraVelocity;
+        }
         //State before moving. Used to check landings.
         LastState = GetStateType();
         //MOVE
-        CollisionFlags collisions = entChar.Move((momentum + storedMomentum + velocity) * dt);
+        Vector3 displacement = (momentum + storedMomentum + velocity) * dt;
+        //-- only snap when sliding/crouching on the ground and not moving up,
+        //-- so going over the top of a dune still launches you
+        bool canSnapToGround = groundSnapDistance > 0f && grounded && !jumped && ctrl && !hurtActive
+            && (LastState == 'S' || LastState == 'C') && displacement.y <= 0f;
+        CollisionFlags collisions = entChar.Move(displacement);
+        if (canSnapToGround && !entChar.isGrounded)
+        {
+            SnapToGround();
+        }
         //POSTMOVE BELOW
 
         //
@@ -449,8 +474,7 @@ public class Entity : ScriptableObject
             }
             //-- TODO: landing check if we were spinning. within ~35 of upright = normal landing, otherwise animator.SetTrigger("Crash")
             //-- TODO: on crash turn off ctrl for the Crash clip (~2.2s) and reset combo
-            //-- TODO: clean landing after a flip = small speed boost + add to combo
-            //-- TODO: sand puff particles on landing (bigger on crash)
+            //-- TODO: clean flip landing should add to combo too (boost is in Player.cs)
             if (prevStateType == StateTypes.Air && noiseChannel != null)
             {
                 //-- Harder landings make more noise
@@ -477,6 +501,20 @@ public class Entity : ScriptableObject
         }
 
         Scoring.AddValue($"{entObj.name.ToLowerInvariant()}.move", (int)(velocity.x + velocity.z));
+    }
+
+    //-- if there's walkable ground just below us, push down onto it instead of floating off the slope
+    private void SnapToGround()
+    {
+        Bounds bounds = entChar.bounds;
+        if (!UnityEngine.Physics.Raycast(bounds.center, Vector3.down, out RaycastHit hit,
+                bounds.extents.y + groundSnapDistance, groundLayer, QueryTriggerInteraction.Ignore)
+            || Vector3.Angle(hit.normal, Vector3.up) > entChar.slopeLimit)
+        {
+            return;
+        }
+
+        entChar.Move(Vector3.down * groundSnapDistance);
     }
 
     //Now that jumping logic is separate, this opens opportunities for uncontrolled/mid-air jumps as long as a gravity value is given

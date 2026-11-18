@@ -941,7 +941,7 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   captureStartupLogs: {}
   activeInputHandler: 1
-  windowsGamepadBackendHint: 0
+  windowsGamepadBackendHint: 1
   enableDirectStorage: 0
   cloudProjectId: cffbade3-452e-42d2-8f6b-af2bd9cf808c
   framebufferDepthMemorylessMode: 0
