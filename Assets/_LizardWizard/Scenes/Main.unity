@@ -975,7 +975,6 @@ MonoBehaviour:
   SpellSlot2: {fileID: 1722809102}
   SpellSlot3: {fileID: 1377814820}
   SpellSlot4: {fileID: 2109635955}
-  steamDashSpell: {fileID: 0}
 --- !u!1001 &475426760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2300,6 +2299,24 @@ MonoBehaviour:
     spawnChance: 5
     rollLowerBound: 0
     rollUpperBound: 0
+    minDist: 0
+    radius: 0
+    maxCount: 0
+  - item: {fileID: 2847047863770113928, guid: 2fd64436a55b00c4e92de1c8a5f60763, type: 3}
+    scale: 40
+    genType: 2
+    spawnChance: 5
+    rollLowerBound: 0.3
+    rollUpperBound: 150
+    minDist: 0
+    radius: 0
+    maxCount: 0
+  - item: {fileID: 4816323469939847408, guid: 0f2b8b451d4a7ca4f93aeb6c57c5f8c4, type: 3}
+    scale: 40
+    genType: 2
+    spawnChance: 5
+    rollLowerBound: 0.3
+    rollUpperBound: 150
     minDist: 0
     radius: 0
     maxCount: 0
