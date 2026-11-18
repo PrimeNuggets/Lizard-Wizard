@@ -945,8 +945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LizardAnimation
   animator: {fileID: 8389071859309181978}
-  swapIdleAndSlideAnimations: 0
-  landingDustMaterial: {fileID: 2100000, guid: e823cd5b5d27c0f4b8256e7c12ee3e6d, type: 2}
+  swapIdleAndSlideAnimations: 1
 --- !u!54 &4758410650257725370
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1019,7 +1018,7 @@ MonoBehaviour:
         startZone: 3
         strength: 4
   legionGo:
-    enabled: 1
+    enabled: 0
     strength: 1
   xbox:
     enabled: 0
@@ -1039,6 +1038,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66fc2d69d2d049abb799d94411027ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandheldSupport
+  capFrameRate: 1
+  handheldFps: 60
   simulateHandheld: 0
 --- !u!1 &2552766259529300424
 GameObject:

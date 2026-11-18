@@ -41,7 +41,6 @@ public class WaterLevelPercentScore : MonoBehaviour
     //private PlayerInput playerInput;
 
     private CharacterController playerController;
-    private Player player;
     private Collider playerCollider;
     public Collider OasisCollider;
     //Colliders don't need to be public since they grab the appropriate versions dynamically - Xavier
@@ -70,7 +69,6 @@ public class WaterLevelPercentScore : MonoBehaviour
         SetWater(100); //Force sets current water to 100
         playerCollider = GetComponentInChildren<Collider>(); //Colliders exist in the mesh's skeleton
         playerController = entityData.entChar; //entChar already obtains the character controller - Xavier
-        player = GetComponent<Player>();
         OasisCollider = GetComponent<Collider>(); //May want to handle this in the oasis rather than the player if oasis will be spawned
         HeartShieldIcon.gameObject.SetActive(false);
         HeartFrailIcon.gameObject.SetActive(false);
@@ -116,7 +114,7 @@ public class WaterLevelPercentScore : MonoBehaviour
 
     private void WaterMovementLoss()
     {
-        if (entityData.GetMoveType() == 'H' || (player != null && player.IsTrickBoostMovement)) return;
+        if (entityData.GetMoveType() == 'H') return; //Don't lose water on knockback
         //gets player velocity to detrimine how fast the player is going
         if (playerController == null)
         {

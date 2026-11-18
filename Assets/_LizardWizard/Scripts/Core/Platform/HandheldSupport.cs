@@ -9,6 +9,10 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class HandheldSupport : MonoBehaviour
 {
+    [Header("Frame Cap")]
+    [SerializeField, Tooltip("Cap fps on handhelds to save battery")] private bool capFrameRate = true;
+    [SerializeField, Range(30, 144)] private int handheldFps = 60;
+
     [Header("Testing")]
     [SerializeField, Tooltip("Pretend we're on a handheld in the editor")] private bool simulateHandheld = false;
 
@@ -21,8 +25,8 @@ public class HandheldSupport : MonoBehaviour
     //-- Legion Go is 2560x1600, Go S is 1920x1200, both 16:10
     //-- https://psref.lenovo.com/syspool/Sys/PDF/Legion/Legion_Go_8APU1/Legion_Go_8APU1_Spec.pdf
     //-- https://psref.lenovo.com/syspool/Sys/PDF/Legion/Legion_Go_S_8APU1/Legion_Go_S_8APU1_Spec.PDF
+    //-- Not sure what deviceModel says under proton yet, check the log on the actual device
     public static bool IsLegionGo =>
-        SystemInfo.deviceModel.StartsWith("83E1", StringComparison.OrdinalIgnoreCase) ||
         SystemInfo.deviceModel.IndexOf("Legion", StringComparison.OrdinalIgnoreCase) >= 0;
 
     public static bool IsHandheld { get; private set; }
@@ -31,5 +35,13 @@ public class HandheldSupport : MonoBehaviour
     {
         IsHandheld = IsSteamOS || IsLegionGo || (Application.isEditor && simulateHandheld);
         Debug.Log($"[HandheldSupport] model: {SystemInfo.deviceModel}, steamos: {IsSteamOS}, legion go: {IsLegionGo}, handheld: {IsHandheld}");
+
+        if (IsHandheld && capFrameRate)
+        {
+            //-- targetFrameRate gets ignored unless vsync is off
+            //-- https://docs.unity.com/en-us/engine/current/script-reference/unityengine/application/targetframerate
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = handheldFps;
+        }
     }
 }

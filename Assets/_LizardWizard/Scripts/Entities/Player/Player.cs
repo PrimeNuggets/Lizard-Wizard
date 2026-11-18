@@ -32,15 +32,8 @@ public class Player : MonoBehaviour
             private InputAction moveAction;
             private InputAction lookAction;
             private InputAction jumpAction;
-            private bool jumpRequested; //-- set in Update, used in FixedUpdate so presses don't get missed
             private InputAction crouchAction;
             private float pitch;
-            //-- trick boost: land a full flip = short speed burst that fades out
-            private const float TrickBoostDuration = 0.45f;
-            private const float TrickBoostSpeed = 17f;
-            private float trickBoostRemaining;
-            private Vector3 trickBoostDirection;
-            private bool trickBoostAppliedThisTick;
         #endregion
         //=========================================
         #region Spells
@@ -53,7 +46,6 @@ public class Player : MonoBehaviour
         #endregion
         //=========================================
         private LizardAnimation lizardAnimation;
-        private MenuUIScript menu;
         //=========================================
         #region Quests
             [Header("Quest Data")]
@@ -81,10 +73,6 @@ public class Player : MonoBehaviour
         [NonSerialized] public AttackData currentAttack;
         //=========================================
     #endregion
-
-    public bool IsTrickBoosting => trickBoostRemaining > 0f && entityData.ctrl && !entityData.IsHitPaused;
-    //-- also true on the last boost tick, so the water meter doesn't drain on that frame
-    public bool IsTrickBoostMovement => IsTrickBoosting || (trickBoostAppliedThisTick && entityData.ctrl && !entityData.IsHitPaused);
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -93,7 +81,6 @@ public class Player : MonoBehaviour
         #region Controls
             var input = GetComponent<UnityEngine.InputSystem.PlayerInput>();
             lizardAnimation = GetComponent<LizardAnimation>();
-            menu = FindAnyObjectByType<MenuUIScript>();
 
             moveAction = input.actions.FindAction("Player/Move", true);
             lookAction = input.actions.FindAction("Player/Look", true);
@@ -144,11 +131,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //-- one jump per press, holding doesn't re-jump on landing (holding in the air still flips)
-        if (Time.timeScale > 0f && jumpAction.WasPressedThisFrame())
-        {
-            jumpRequested = true;
-        }
         //=========================================================
         #region Camera
             if (Cursor.lockState != CursorLockMode.Locked) return;
@@ -208,15 +190,6 @@ public class Player : MonoBehaviour
         //=========================================================
         #region Entity Processing
             entityData?.BeginTick();
-            trickBoostAppliedThisTick = false;
-            bool jumpPressed = jumpRequested;
-            jumpRequested = false;
-            //-- getting hit or losing control cancels the boost and the flip
-            if (!entityData.ctrl || entityData.IsHitPaused)
-            {
-                trickBoostRemaining = 0f;
-                lizardAnimation?.ResetTrick();
-            }
             if (entityData.IsHitPaused)
             {
                 entityData.ApplyMove(Vector2.zero, false);
@@ -227,6 +200,7 @@ public class Player : MonoBehaviour
         //=========================================================
         #region Movement
             Vector2 move = moveAction.ReadValue<Vector2>();
+            bool jumpPressed = jumpAction.IsPressed(); //-- TODO: holding jump for a flip re-jumps right when you land, switch to WasPressedThisFrame() (watch FixedUpdate missing it)
             bool wasGrounded = entityData.entChar.isGrounded;
             bool jumped = entityData.jumped; //stores the jumped bool before it updates
             bool crouchPressed = crouchAction.IsPressed();
@@ -234,17 +208,7 @@ public class Player : MonoBehaviour
 
             Vector3 previousPosition = transform.position;
 
-            //-- jumping again ends the boost early
-            if (jumpPressed && wasGrounded) trickBoostRemaining = 0f;
-            //-- boost fades from full speed to 0 over the duration
-            Vector3 boostVelocity = Vector3.zero;
-            if (IsTrickBoosting)
-            {
-                trickBoostAppliedThisTick = true;
-                boostVelocity = trickBoostDirection * (TrickBoostSpeed * trickBoostRemaining / TrickBoostDuration);
-                trickBoostRemaining = Mathf.Max(0f, trickBoostRemaining - Time.fixedDeltaTime);
-            }
-            entityData.ApplyMove(move, jumpPressed && entityData.ctrl, cameraRef.transform, boostVelocity);
+            entityData.ApplyMove(move, jumpPressed, cameraRef.transform);
 
             Vector3 movement = transform.position - previousPosition;
             movement.y = 0f;
@@ -260,20 +224,6 @@ public class Player : MonoBehaviour
             }
 
             bool landed = !wasGrounded && entityData.entChar.isGrounded;
-
-            //-- clean flip landing = boost + sand puff + rumble + text
-            if (landed && entityData.ctrl && lizardAnimation != null && lizardAnimation.ConsumeCleanTrickLanding())
-            {
-                //-- boost the way we're moving, or where the camera faces if we landed standing still
-                Vector3 boostDirection = movement.sqrMagnitude > 0.0001f
-                    ? movement.normalized
-                    : Vector3.ProjectOnPlane(cameraRef.transform.forward, Vector3.up).normalized;
-                trickBoostDirection = boostDirection;
-                trickBoostRemaining = TrickBoostDuration;
-                lizardAnimation.PlayTrickLanding(boostDirection);
-                GetComponent<ControllerHaptics>()?.Play(0.7f, 0.45f, 0.19f);
-                menu?.ShowTrickBoost();
-            }
 
             if (landed && jumped)
             {
@@ -299,16 +249,10 @@ public class Player : MonoBehaviour
     {
         #region Entity Processing
             entityData?.AfterTick();
-            //-- keep the slide pose during the boost even if we bounce off a dune for a frame
-            if (IsTrickBoosting && entityData.animator != null) entityData.animator.SetBool("Grounded", true);
         #endregion
     }
     void OnDisable()
     {
-        jumpRequested = false;
-        trickBoostRemaining = 0f;
-        trickBoostAppliedThisTick = false;
-        lizardAnimation?.ResetTrick();
         #region Entity Processing
             entityData?.Disable();
         #endregion
