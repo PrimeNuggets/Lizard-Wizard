@@ -37,7 +37,6 @@ public class SpellData : AttackData, ISpell
     {
         return !IsOnCooldown() && rootData.water.GetCurrent() >= cost;
     }
-    public float WaterCost => cost;
 
     public void SetElement(ISpell.Elements elmnt)
     {

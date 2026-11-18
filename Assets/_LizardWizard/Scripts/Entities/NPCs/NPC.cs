@@ -119,6 +119,7 @@ public class NPC : MonoBehaviour
 
         if (canvas.activeSelf && promptBoundsRenderer != null && Camera.main is Camera viewCamera)
         {
+            //-- put the prompt to the left of the model based on how wide it looks from the camera
             Bounds bounds = promptBoundsRenderer.bounds;
             Vector3 viewRight = viewCamera.transform.right;
             Vector3 absoluteViewRight = new Vector3(Mathf.Abs(viewRight.x), Mathf.Abs(viewRight.y), Mathf.Abs(viewRight.z));

@@ -18,7 +18,7 @@ MonoBehaviour:
     requiredObjective: 0
     save: 0
     saveCost: 0
-  - line: I'm so parched... Shoot me with a couple of water spells!
+  - line: I'm so parched... Shoot me with some water spells!
     progressQuest: {fileID: 0}
     requiredObjective: 0
     save: 0

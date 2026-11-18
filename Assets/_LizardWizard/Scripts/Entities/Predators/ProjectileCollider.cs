@@ -132,6 +132,7 @@ public class ProjectileCollider : AttackCollider
         Aspect entity = other.GetComponentInParent<Aspect>();
         if (entity == null) return;
         var gameObj = entity.GameObject();
+        //-- water spit fills up the beetle instead of hurting it
         if (gameObj.TryGetComponent(out BeetleScript beetle))
         {
             var projectile = GetComponentInParent<Projectiles>();
@@ -141,7 +142,7 @@ public class ProjectileCollider : AttackCollider
                 if (hitOver) return;
 
                 hitOver = true;
-                beetle.ReceiveWaterShot(spell.WaterCost);
+                beetle.ReceiveWaterShot();
                 if (AudioManager.instance != null) AudioManager.instance.PlaySFX("WaterSplash");
                 Destroy(projectile.gameObject);
                 return;
