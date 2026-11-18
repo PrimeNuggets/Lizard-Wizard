@@ -454,7 +454,7 @@
                     "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Map",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -462,10 +462,10 @@
                 {
                     "name": "",
                     "id": "46f50840-8528-45c3-be06-196c7bf1114b",
-                    "path": "<Gamepad>/select",
+                    "path": "<Gamepad>/dpad/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "Map",
                     "isComposite": false,
                     "isPartOfComposite": false
