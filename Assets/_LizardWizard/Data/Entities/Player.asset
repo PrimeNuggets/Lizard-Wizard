@@ -25,5 +25,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundProbeDist: 0.3
+  groundSnapDistance: 0.3
   modelTurnSpeed: 540
+  modelTurnSmoothing: 0.05
   groundContactDelay: 0.08
