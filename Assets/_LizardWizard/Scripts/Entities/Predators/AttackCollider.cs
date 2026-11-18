@@ -150,6 +150,7 @@ public class AttackCollider : MonoBehaviour
         Aspect entity = other.GetComponentInParent<Aspect>();
         if (entity == null) return;
         var gameObj = entity.GameObject();
+        if (gameObj.TryGetComponent(out BeetleScript beetle) && beetle.IsWaterHitbox(other)) return; //-- big water hitbox shouldnt count for melee
         //Debug.Log(gameObj.name + " is an entity");
 
         Entity otherData = null;

@@ -21,6 +21,7 @@ public class NPC : MonoBehaviour
     //===========================================
     [SerializeField, LabelOverride("Interaction Canvas")] private GameObject canvas;
     [SerializeField, LabelOverride("Interaction Button Text")] private TMP_Text buttonText;
+    [SerializeField, Tooltip("Renderer used to position the prompt beside the NPC.")] protected Renderer promptBoundsRenderer;
     [SerializeField, LabelOverride("Controller Button Sprite"), Tooltip("round button used on controller")] private Sprite padButtonSprite;
     [SerializeField, LabelOverride("Controller Button Color")] private Color padButtonColor = new Color(0.17f, 0.17f, 0.17f);
     [SerializeField, LabelOverride("PlayStation Button Color"), Tooltip("white like the dualsense buttons")] private Color psButtonColor = new Color(0.95f, 0.95f, 0.95f);
@@ -116,6 +117,20 @@ public class NPC : MonoBehaviour
     {
         //entityData?.AfterTick(); //Aligns the entity to the ground. Since some npcs will be stuck in sand or similar situations, I'm not sure we should do this. - Xavier
 
+        if (canvas.activeSelf && promptBoundsRenderer != null && Camera.main is Camera viewCamera)
+        {
+            //-- put the prompt to the left of the model based on how wide it looks from the camera
+            Bounds bounds = promptBoundsRenderer.bounds;
+            Vector3 viewRight = viewCamera.transform.right;
+            Vector3 absoluteViewRight = new Vector3(Mathf.Abs(viewRight.x), Mathf.Abs(viewRight.y), Mathf.Abs(viewRight.z));
+            float halfWidth = Vector3.Dot(bounds.extents, absoluteViewRight);
+            Vector3 promptPosition = bounds.center - viewRight * (halfWidth + 0.4f);
+            float bobOffset = Mathf.Sin(Time.time * Mathf.PI) * 0.1f; //-- one bounce every two seconds
+            promptPosition += viewCamera.transform.up * bobOffset;
+            canvas.transform.SetPositionAndRotation(promptPosition, viewCamera.transform.rotation);
+            return;
+        }
+
         Vector3 direction = player.transform.position - canvas.transform.position;
         direction.y = 0f;
 
@@ -133,6 +148,14 @@ public class NPC : MonoBehaviour
         bool pressed = interactAction.IsPressed();
         bool newPressed = pressed && !waitForRelease;
         waitForRelease = pressed;
+
+        bool showAlternatePrompt = ShowAlternatePrompt(distance);
+        if (buttonBox != null) buttonBox.gameObject.SetActive(!showAlternatePrompt);
+        if (showAlternatePrompt)
+        {
+            canvas.SetActive(true);
+            return;
+        }
 
         if (distance <= iRange && aspect.aspectName == Aspect.aspect.Player)
         {
@@ -158,6 +181,16 @@ public class NPC : MonoBehaviour
         }
     }
 
+    protected virtual bool ShowAlternatePrompt(float distance) => false;
+
+    public virtual Conversations GetConversation()
+    {
+        //Sets the conversation to the first available convo
+        return dialogue.FirstOrDefault(option => option.ParseConditions())?.convo;
+    }
+
+    public virtual void OnDialogueFinished(Player speaker) { }
+
     /*public void ChangeDialogue(string line)
     {
         //Change here
@@ -178,8 +211,13 @@ public class NPC : MonoBehaviour
             player.entityData.water.GetCurrent() -
             water
         );
+        RecordRescue();
+    }
+
+    protected void RecordRescue(string scoreKey = null)
+    {
         //Update Saved Count
-        Scoring.AddValue($"npc.saved", 1);
-        Scoring.AddValue($"npc.{gameObject.name.ToLowerInvariant()}.saved", 1);
+        Scoring.AddValue("npc.saved", 1);
+        Scoring.AddValue(scoreKey ?? $"npc.{gameObject.name.ToLowerInvariant()}.saved", 1);
     }
 }

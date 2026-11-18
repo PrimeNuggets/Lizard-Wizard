@@ -135,16 +135,8 @@ public class Dialogue : MonoBehaviour
 
     public void UpdateCurrentDialogue(NPC npc)
     {
-        currentConvo = null;
         //if (npc.dialogue == null) return;
-
-        foreach (var condition in npc.dialogue)
-        {
-            if (condition.ParseConditions()) { //Sets the conversation to the first available convo
-                currentConvo = condition.convo;
-                break;
-            }
-        }
+        currentConvo = npc.GetConversation();
     }
 
     public void ContinueDialogue()
@@ -160,6 +152,7 @@ public class Dialogue : MonoBehaviour
             UpdateText();
         } else
         {
+            npc.OnDialogueFinished(player.GetComponent<Player>());
             EndDialogue();
         }
     }

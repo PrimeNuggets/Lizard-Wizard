@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The beetle is parched! Save it!
   objectiveChain:
   - task: Water
-    description: Bring the beetle 10ml of water
+    description: Hit the beetle 5 times with Water Spit
     type: 1
     reward:
     - key: 2

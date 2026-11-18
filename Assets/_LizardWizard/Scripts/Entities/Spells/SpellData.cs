@@ -35,8 +35,9 @@ public class SpellData : AttackData, ISpell
     }
     public bool CanActivate()
     {
-        return !IsOnCooldown() && rootData.water.GetCurrent() > cost;
+        return !IsOnCooldown() && rootData.water.GetCurrent() >= cost;
     }
+
     public void SetElement(ISpell.Elements elmnt)
     {
         element = elmnt;
@@ -58,7 +59,7 @@ public class SpellData : AttackData, ISpell
     }
     public void CastSpellReleased()
     {
-        if (!CanActivate() || !charging) return;
+        if (!charging) return; //-- water was already paid when charging started
         charging = false;
         cooldownRemaining = cooldown; //-- start cooldown
         float chargePercent = Mathf.Clamp01(chargeTime / maxChargeTime);

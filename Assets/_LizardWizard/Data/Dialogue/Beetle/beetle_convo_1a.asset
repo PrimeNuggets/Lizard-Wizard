@@ -18,8 +18,8 @@ MonoBehaviour:
     requiredObjective: 0
     save: 0
     saveCost: 0
-  - line: I'm so parched...
-    progressQuest: {fileID: 11400000, guid: 81553d285e83a2b43aaedbfc5e27594a, type: 2}
+  - line: I'm so parched... Shoot me with some water spells!
+    progressQuest: {fileID: 0}
     requiredObjective: 0
     save: 0
     saveCost: 0
