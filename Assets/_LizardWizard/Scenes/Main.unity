@@ -2259,31 +2259,31 @@ MonoBehaviour:
   props:
   - item: {fileID: 3544369245580720625, guid: 1e6b97e4f56e640479dfd92b4cce5fc9, type: 3}
     scale: 40
-    genType: 2
+    genType: 0
     spawnChance: 0
     rollLowerBound: 0.3
     rollUpperBound: 150
-    minDist: 0
-    radius: 0
-    maxCount: 0
+    minDist: 45
+    radius: 500
+    maxCount: 90
   - item: {fileID: 6402224144025649759, guid: ef4fc10aa098a5c47931cec00a614175, type: 3}
     scale: 100
-    genType: 1
+    genType: 0
     spawnChance: 10
     rollLowerBound: 0
     rollUpperBound: 0
-    minDist: 0
-    radius: 0
-    maxCount: 0
+    minDist: 20
+    radius: 500
+    maxCount: 25
   - item: {fileID: 2446414824738873181, guid: cccc7bf6269e30748899c0bd8d4d07d4, type: 3}
     scale: 100
-    genType: 1
+    genType: 0
     spawnChance: 5
     rollLowerBound: 0
     rollUpperBound: 0
-    minDist: 0
-    radius: 0
-    maxCount: 0
+    minDist: 30
+    radius: 500
+    maxCount: 12
   - item: {fileID: 8394376105098467455, guid: d94ac08070c723c4986c6745ce5a826c, type: 3}
     scale: 100
     genType: 1
@@ -2304,22 +2304,22 @@ MonoBehaviour:
     maxCount: 0
   - item: {fileID: 2847047863770113928, guid: 2fd64436a55b00c4e92de1c8a5f60763, type: 3}
     scale: 40
-    genType: 2
+    genType: 0
     spawnChance: 5
     rollLowerBound: 0.3
     rollUpperBound: 150
-    minDist: 0
-    radius: 0
-    maxCount: 0
+    minDist: 45
+    radius: 500
+    maxCount: 30
   - item: {fileID: 4816323469939847408, guid: 0f2b8b451d4a7ca4f93aeb6c57c5f8c4, type: 3}
     scale: 40
-    genType: 2
+    genType: 0
     spawnChance: 5
     rollLowerBound: 0.3
     rollUpperBound: 150
-    minDist: 0
-    radius: 0
-    maxCount: 0
+    minDist: 45
+    radius: 500
+    maxCount: 55
 --- !u!4 &925611749
 Transform:
   m_ObjectHideFlags: 0

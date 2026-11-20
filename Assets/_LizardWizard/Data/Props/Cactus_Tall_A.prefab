@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7015956161920369795}
   - component: {fileID: 3764269869013786536}
   - component: {fileID: 8170652272396283968}
+  - component: {fileID: 4451881121007478831}
+  - component: {fileID: 5412252637117528143}
   m_Layer: 6
   m_Name: Cactus_Tall_A
   m_TagString: Prop
@@ -82,6 +84,47 @@ CapsuleCollider:
   m_Height: 0.95
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!136 &4451881121007478831
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2847047863770113928}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.045
+  m_Height: 0.95
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &5412252637117528143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2847047863770113928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1146145f679e6d7321a13fd4bcce9d8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpikeHazard
+  hazard: {fileID: 11400000, guid: 9ead25b966652281094bd14c2c7cf7d6, type: 2}
+  pushBack: 8
+  pushUp: 4
+  stunFrames: 5
+  recoverFrames: 15
+  hitCooldown: 1
 --- !u!1001 &5592752553010077280
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -90,6 +90,7 @@ public class AttackCollider : MonoBehaviour
             otherData.health.GetCurrent() -
             remainingDamage
         );
+        if (damage > 0f) DamageBlink.Play(otherData.entObj); //-- lizard blinks red when it takes damage
 
         otherData.water.Set(
             otherData.water.GetCurrent() -
