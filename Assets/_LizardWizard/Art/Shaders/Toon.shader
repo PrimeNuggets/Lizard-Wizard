@@ -38,6 +38,7 @@ Shader "LizardWizard/Toon"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/LODCrossFade.hlsl"
 
         CBUFFER_START(UnityPerMaterial)
             float4 _BaseMap_ST;
@@ -87,6 +88,7 @@ Shader "LizardWizard/Toon"
             #pragma fragment Frag
 
             #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
             #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
@@ -133,6 +135,10 @@ Shader "LizardWizard/Toon"
 
             half4 Frag(Varyings input, FRONT_FACE_TYPE isFrontFace : FRONT_FACE_SEMANTIC) : SV_Target
             {
+                //-- dither between lod levels instead of popping
+                #ifdef LOD_FADE_CROSSFADE
+                LODFadeCrossFade(input.positionCS);
+                #endif
                 half4 baseColor = SampleBase(input.uv);
 
                 //-- flip for back faces when cull is off (capes etc)
@@ -169,6 +175,7 @@ Shader "LizardWizard/Toon"
             #pragma vertex OutlineVert
             #pragma fragment OutlineFrag
             #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
@@ -226,6 +233,9 @@ Shader "LizardWizard/Toon"
 
             half4 OutlineFrag(Varyings input) : SV_Target
             {
+                #ifdef LOD_FADE_CROSSFADE
+                LODFadeCrossFade(input.positionCS);
+                #endif
                 half4 baseColor = SampleBase(input.uv);
                 //-- darker version of the surface color looks softer than pure black
                 half3 color = lerp(_OutlineColor.rgb, baseColor.rgb * _OutlineColor.rgb * 2.5, _OutlineSurfaceTint);
@@ -249,6 +259,7 @@ Shader "LizardWizard/Toon"
             #pragma vertex ShadowVert
             #pragma fragment ShadowFrag
             #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile_instancing
             #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
@@ -292,6 +303,9 @@ Shader "LizardWizard/Toon"
 
             half4 ShadowFrag(Varyings input) : SV_Target
             {
+                #ifdef LOD_FADE_CROSSFADE
+                LODFadeCrossFade(input.positionCS);
+                #endif
                 SampleBase(input.uv);
                 return 0;
             }
@@ -311,6 +325,7 @@ Shader "LizardWizard/Toon"
             #pragma vertex DepthVert
             #pragma fragment DepthFrag
             #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile_instancing
 
             struct Attributes
@@ -337,6 +352,9 @@ Shader "LizardWizard/Toon"
 
             half4 DepthFrag(Varyings input) : SV_Target
             {
+                #ifdef LOD_FADE_CROSSFADE
+                LODFadeCrossFade(input.positionCS);
+                #endif
                 SampleBase(input.uv);
                 return input.positionCS.z;
             }
@@ -355,6 +373,7 @@ Shader "LizardWizard/Toon"
             #pragma vertex DepthNormalsVert
             #pragma fragment DepthNormalsFrag
             #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile_instancing
 
             struct Attributes
@@ -384,6 +403,9 @@ Shader "LizardWizard/Toon"
 
             half4 DepthNormalsFrag(Varyings input) : SV_Target
             {
+                #ifdef LOD_FADE_CROSSFADE
+                LODFadeCrossFade(input.positionCS);
+                #endif
                 SampleBase(input.uv);
                 return half4(normalize(input.normalWS), 0);
             }
