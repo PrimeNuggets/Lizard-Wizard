@@ -101,6 +101,7 @@ public abstract class EnemyAI : MonoBehaviour
         //===========================================
         [SerializeField] private Terrain terrain;
         [SerializeField] private Transform mesh;
+        [SerializeField] private GameObject minimapIcon;
 
         //===========================================
             //Non-Serialized
@@ -129,6 +130,8 @@ public abstract class EnemyAI : MonoBehaviour
         public Vector3 LastKnownPosition { get; private set; }
         public string LastSense { get; private set; }
         public float LastDetectionTime { get; private set; }
+        public bool IsAggro { get; private set; }
+        private bool aggroPending;
     #endregion
     #region Internals
         //-- SearchState uses these without changing the Inspector fields
@@ -279,6 +282,8 @@ public abstract class EnemyAI : MonoBehaviour
             //-- Wander stays around where it spawned
             homePosition = transform.position;
             avoidance = GetComponent<ObstacleAvoidance>();
+
+            minimapIcon.SetActive(false);
         #endregion
         //=========================================================
         #region State Data
@@ -296,9 +301,36 @@ public abstract class EnemyAI : MonoBehaviour
                 entityData.ApplyMove(Vector2.zero, false);
                 return;
             }
-            if (entityData.health.GetCurrent() <= 0f) Destroy(gameObject);
+            if (entityData.health.GetCurrent() <= 0f)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (entityData.IsHurt)
+            {
+                entityData.ApplyMove(Vector2.zero, false);
+                return;
+            }
         #endregion
         #region State Processing
+            if (aggroPending)
+            {
+                if (Target == null) ClearAggro();
+                else {
+                    if (!IsOnCooldown(AIStates.Chase))
+                    {
+                        ChangeState(AIStates.Chase);
+                        if (state == AIStates.Chase)
+                        {
+                            aggroPending = false;
+                            stateTime += Time.fixedDeltaTime;
+                            ProcessState();
+                            return;
+                        }
+                    }
+                }
+            }
             stateTime += Time.fixedDeltaTime;
 
             UpdateDecision();
@@ -370,6 +402,7 @@ public abstract class EnemyAI : MonoBehaviour
 
                 case AIStates.Chase:
                     ChaseActions();
+                    minimapIcon.SetActive(Target != null);
                     break;
 
                 case AIStates.Retreat:
@@ -378,6 +411,7 @@ public abstract class EnemyAI : MonoBehaviour
 
                 case AIStates.Attack:
                     AttackActions();
+                    minimapIcon.SetActive(Target != null);
                     break;
 
                 case AIStates.Search:
@@ -556,6 +590,25 @@ public abstract class EnemyAI : MonoBehaviour
 
             OnStateChange();
         }
+        public void RecieveAggro(Aspect attacker)
+        {
+            if (attacker == null || attacker.aspectName != Aspect.aspect.Player || entityData.health.GetCurrent() <= 0f) return;
+            IsAggro = true;
+            aggroPending = true;
+
+            Target = attacker;
+            targetController = attacker.GetComponentInParent<CharacterController>();
+            LastKnownPosition = attacker.transform.position;
+            LastDetectionTime = Time.time;
+            LastSense = "Damage";
+            RememberHeading();
+        }
+        public void ClearAggro()
+        {
+            IsAggro = false;
+            aggroPending = false;
+            minimapIcon.SetActive(false);
+        }
     #endregion
     #region Brain
         //---------------------------------------------------------
@@ -595,6 +648,19 @@ public abstract class EnemyAI : MonoBehaviour
             LastSense = sense;
             LastDetectionTime = Time.time;
             RememberHeading();
+            if (IsAggro)
+            {
+                if (sense == "Vision" &&
+                    !entityData.IsHurt &&
+                    !entityData.IsHitPaused &&
+                    !entityData.ctrl &&
+                    state != AIStates.Attack &&
+                    state != AIStates.Chase)
+                {
+                    aggroPending = true;
+                }
+                return;
+            }
 
             //-- Saw them again right after losing them, just keep chasing
             if (sense == "Vision" && state == AIStates.Search && prevState == AIStates.Chase)

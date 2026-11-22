@@ -32,6 +32,7 @@ public class EnemyAIEditor : Editor
         SerializedProperty followThroughDistance;
         SerializedProperty terrain;
         SerializedProperty mesh;
+        SerializedProperty minimapIcon;
 
         bool chaseStateGroup, wanderStateGroup, searchStateGroup, actionsGroup = false;
     #endregion
@@ -64,6 +65,7 @@ public class EnemyAIEditor : Editor
         followThroughDistance = serializedObject.FindProperty("followThroughDistance");
         terrain = serializedObject.FindProperty("terrain");
         mesh = serializedObject.FindProperty("mesh");
+        minimapIcon = serializedObject.FindProperty("minimapIcon");
     }
     public override void OnInspectorGUI()
     {
@@ -77,6 +79,7 @@ public class EnemyAIEditor : Editor
             EditorGUILayout.PropertyField(terrain);
             EditorGUILayout.PropertyField(mesh);
         }
+        EditorGUILayout.PropertyField(minimapIcon);
 
         EditorGUILayout.Space(5);
 

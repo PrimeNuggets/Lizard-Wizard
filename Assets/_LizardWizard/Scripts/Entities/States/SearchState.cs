@@ -113,6 +113,7 @@ public class SearchState : EnemyState
             {
                 //-- Checked everything, give up
                 done = true;
+                enemy.ClearAggro();
                 enemy.ClearWanderDestination();
                 return Vector2.zero;
             }

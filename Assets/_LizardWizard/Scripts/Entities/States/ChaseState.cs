@@ -18,6 +18,12 @@ public class ChaseState : EnemyState
 
     public override Vector2 Tick()
     {
+        if (enemy.Target == null)
+        {
+            enemy.ClearAggro();
+            enemy.ChangeState(EnemyAI.AIStates.Idle);
+            return Vector2.zero;
+        }
         enemy.SenseNearbyTarget();
 
         //-- Lost the player for too long, go look where they were

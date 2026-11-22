@@ -2058,6 +2058,7 @@ MonoBehaviour:
       maxTime: 15
   terrain: {fileID: 0}
   mesh: {fileID: 4799564899094114277}
+  minimapIcon: {fileID: 1703710400648198481}
 --- !u!54 &5944893694182298146
 Rigidbody:
   m_ObjectHideFlags: 0

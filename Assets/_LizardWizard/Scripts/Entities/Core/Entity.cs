@@ -136,6 +136,7 @@ public class Entity : ScriptableObject
     }
     [NonSerialized] public StatusEffects status;
 
+    public bool IsHurt => hurtActive;
     public bool IsHitPaused => hitPaused;
 
     public void Initialize(GameObject obj, Transform model = null)
