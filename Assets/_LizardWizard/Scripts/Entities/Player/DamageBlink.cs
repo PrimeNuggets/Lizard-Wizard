@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+//DECPRECATED
+//Use Palette Reciever & PaletteFX
 //-- lizard blinks red for a couple seconds after taking any damage
 [DisallowMultipleComponent]
 public class DamageBlink : MonoBehaviour

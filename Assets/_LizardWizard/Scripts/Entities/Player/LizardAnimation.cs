@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,7 @@ public sealed class LizardAnimation : MonoBehaviour
     private ParticleSystem landingDust;
     private Camera playerCamera;
     private float boostFieldOfViewOffset;
+    [NonSerialized] public float spinProgress;
 
     private void Awake()
     {
@@ -63,23 +65,23 @@ public sealed class LizardAnimation : MonoBehaviour
     }
 
     //-- Spin clip is 1 flip per loop, so normalizedTime >= 1 means a full flip
-    private void SampleSpinProgress()
+    public void SampleSpinProgress()
     {
+        spinProgress = 0f;
         AnimatorStateInfo state = GetAnimationState();
         if (!state.IsName("Base Layer.Spin"))
         {
             ignoreCurrentSpin = false;
         }
-        else if (!ignoreCurrentSpin && state.normalizedTime >= 1f)
-        {
-            completedFlip = true;
-        }
+        else if (ignoreCurrentSpin) return;
+        spinProgress = state.normalizedTime;
     }
 
     //-- Player calls this on landing. true = landed a full flip
     public bool ConsumeCleanTrickLanding()
     {
         SampleSpinProgress();
+        completedFlip = spinProgress >= 1f;
         bool clean = completedFlip;
         ResetTrick();
         return clean;

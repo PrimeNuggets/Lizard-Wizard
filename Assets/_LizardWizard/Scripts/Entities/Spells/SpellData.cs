@@ -91,6 +91,12 @@ public class SpellData : AttackData, ISpell
         #endregion
         if (spellObj != null)
         {
+            if (rootData.noiseChannel != null)
+            {
+                //Spell Volume is proportional to power. Subject to change
+                rootData.noiseChannel.Raise(root.transform.position, root.GetComponent<Aspect>(), power);
+            }
+            
             Quaternion rotation = Quaternion.LookRotation(forward);
 
             var projObj = Instantiate(spellObj, firePosition.position, rotation);

@@ -29,9 +29,13 @@ MonoBehaviour:
   - color: {r: 1, g: 1, b: 1, a: 0}
     frames: 5
     fadeOut: 0
+    blink: 0
+    blinksPerSecond: 6
   - color: {r: 1, g: 0, b: 0, a: 0}
     frames: 20
     fadeOut: 1
+    blink: 1
+    blinksPerSecond: 6
   flags:
   - jump
   - no_animtime

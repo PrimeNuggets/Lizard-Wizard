@@ -353,6 +353,7 @@ public class Entity : ScriptableObject
             case 'S':
                 //downforce
                 velocity.y -= 1.0f;
+                this.jumped = false;
 
                 if (RemoveY(momentum).magnitude <= speed.GetCurrent() * 1.1f)
                 {
@@ -398,6 +399,7 @@ public class Entity : ScriptableObject
             case 'C':
                 //downforce
                 velocity.y -= 2.0f;
+                this.jumped = false;
                 //friction
                 storedMomentum *= 0.95f;
                 //without control slide will behave the same as stand
@@ -460,8 +462,8 @@ public class Entity : ScriptableObject
             }
             if (LastState == 'A' || LastState == 'D')
             {//LANDING CODE
-                Debug.Log("LANDED");
-                Debug.Log(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized));
+                //Debug.Log("LANDED");
+                //Debug.Log(Vector3.Dot(GroundNormal.normalized, (storedMomentum + momentum + velocity).normalized));
 
                 momentum *= (
                     1.0f -
@@ -525,6 +527,7 @@ public class Entity : ScriptableObject
             storedMomentum.y = 0.0f;
         }
         //-- TODO: one flip takes 0.7s, so most height should come from launching off dune crests, not a taller jump. maybe less gravity while held
+        jumped = true;
         //Physics
         momentum.y = Mathf.Sqrt(
             2f *
