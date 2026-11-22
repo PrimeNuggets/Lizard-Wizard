@@ -750,6 +750,7 @@ GameObject:
   - component: {fileID: 4758410650257725370}
   - component: {fileID: 3693692350651771262}
   - component: {fileID: 7334572558071058003}
+  - component: {fileID: 5830823898031964736}
   m_Layer: 0
   m_Name: Lizard
   m_TagString: Untagged
@@ -858,6 +859,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
   renderers:
   - {fileID: 5186023736517444242}
+--- !u!114 &5830823898031964736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357876532559851445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e7e9626e9da15396649169995759d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageBlink
+  renderers:
+  - {fileID: 5186023736517444242}
+  blinkColor: {r: 0.9, g: 0.05, b: 0.05, a: 1}
+  blinkTime: 2
+  blinksPerSecond: 6
 --- !u!114 &2309034614299963382
 MonoBehaviour:
   m_ObjectHideFlags: 0
