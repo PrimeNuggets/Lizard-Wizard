@@ -259,6 +259,8 @@ public class Entity : ScriptableObject
         }
 
         Vector3 normal = GetGroundNormal();
+        //-- don't tilt up walls, only slopes we can walk on
+        if (entChar != null && Vector3.Angle(normal, Vector3.up) > entChar.slopeLimit) normal = Vector3.up;
         UnityEngine.Vector3 forward = UnityEngine.Vector3.ProjectOnPlane(facingDir, normal);
         if (!VerifyVector(forward)) return;
 

@@ -26,6 +26,17 @@ public class Player : MonoBehaviour
             [SerializeField, LabelOverride("Stick Sensitivity"), Tooltip("Degrees per second at full tilt")] float stickSensitivity = 180f; //-- controller look
             [SerializeField] private Transform cameraPitch;
             [SerializeField] private float maxLookAngle = 75f;
+            //-- camera collision so it doesn't end up inside rocks
+            [SerializeField, Tooltip("What the camera bumps into")] private LayerMask cameraBlockLayers = (1 << 0) | (1 << 3) | (1 << 6); //-- Default, Ground, Props
+            [SerializeField] private float cameraRadius = 0.08f;
+            private Vector3 cameraRestPos;
+            private float cameraDist = float.MaxValue;
+            private readonly RaycastHit[] cameraHits = new RaycastHit[8];
+            //-- capsule is too thin to stop the head, so the snout gets its own wall check
+            [SerializeField, Tooltip("What the snout can't go into")] private LayerMask snoutBlockLayers = (1 << 0) | (1 << 3) | (1 << 6); //-- Default, Ground, Props
+            [SerializeField] private float snoutRadius = 0.03f;
+            private Transform snout;
+            private readonly RaycastHit[] snoutHits = new RaycastHit[8];
         #endregion
         //=========================================
         #region Movement
@@ -135,6 +146,11 @@ public class Player : MonoBehaviour
         #endregion
         //=========================================================
         #region Camera
+            cameraRestPos = cameraPitch.localPosition;
+            foreach (Transform t in GetComponentsInChildren<Transform>(true))
+            {
+                if (t.name == "Snout") { snout = t; break; }
+            }
             pitch = cameraPitch.localEulerAngles.x;
             if (pitch > 180f)
                 pitch -= 360f;
@@ -302,6 +318,56 @@ public class Player : MonoBehaviour
             //-- keep the slide pose during the boost even if we bounce off a dune for a frame
             if (IsTrickBoosting && entityData.animator != null) entityData.animator.SetBool("Grounded", true);
         #endregion
+        KeepSnoutOutOfWalls();
+        KeepCameraOutOfWalls();
+    }
+    //-- idle leans the head forward into walls, push the lizard back if the snout would go in
+    void KeepSnoutOutOfWalls()
+    {
+        if (snout == null || entityData == null || entityData.entChar == null) return;
+        CharacterController cc = entityData.entChar;
+        Vector3 center = transform.TransformPoint(cc.center);
+        Vector3 toSnout = snout.position - center;
+        toSnout.y = 0f;
+        float reach = toSnout.magnitude;
+        if (reach <= cc.radius) return;
+        Vector3 dir = toSnout / reach;
+        Vector3 origin = new Vector3(center.x, snout.position.y, center.z);
+
+        float closest = reach;
+        int count = Physics.SphereCastNonAlloc(origin, snoutRadius, dir, snoutHits, reach, snoutBlockLayers, QueryTriggerInteraction.Ignore);
+        for (int i = 0; i < count; i++)
+        {
+            RaycastHit hit = snoutHits[i];
+            if (hit.distance <= 0f || hit.transform.IsChildOf(transform)) continue;
+            //-- walkable ground like dunes is fine, only walls count
+            if (Vector3.Angle(hit.normal, Vector3.up) <= cc.slopeLimit) continue;
+            closest = Mathf.Min(closest, hit.distance);
+        }
+        if (closest < reach) cc.Move(-dir * (reach - closest));
+    }
+    //-- stop the camera from going inside rocks
+    void KeepCameraOutOfWalls()
+    {
+        Transform rig = cameraRef.transform;
+        Vector3 pivot = rig.TransformPoint(0f, cameraRestPos.y, 0f);
+        Vector3 toCam = rig.TransformPoint(cameraRestPos) - pivot;
+        float full = toCam.magnitude;
+        if (full < 0.0001f) return;
+        Vector3 dir = toCam / full;
+
+        float dist = full;
+        int count = Physics.SphereCastNonAlloc(pivot, cameraRadius, dir, cameraHits, full, cameraBlockLayers, QueryTriggerInteraction.Ignore);
+        for (int i = 0; i < count; i++)
+        {
+            //-- ignore the lizard's own colliders
+            if (cameraHits[i].transform.IsChildOf(transform) || cameraHits[i].distance <= 0f) continue;
+            dist = Mathf.Min(dist, cameraHits[i].distance);
+        }
+
+        //-- snap in right away, ease back out so it doesn't jitter
+        cameraDist = dist < cameraDist ? dist : Mathf.Lerp(cameraDist, dist, 1f - Mathf.Exp(-Time.deltaTime * 8f));
+        cameraPitch.position = pivot + dir * cameraDist;
     }
     void OnDisable()
     {

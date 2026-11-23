@@ -1,0 +1,173 @@
+<mxfile host="app.diagrams.net" pages="2">
+  <diagram id="vvlNZ74U5It6m0COIQAP" name="Class Diagram">
+    <mxGraphModel dx="1462" dy="969" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="985" background="#ffffff" math="0" shadow="0" adaptiveColors="none">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="IoD9JZn7r6he544PiUl1-2" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="&lt;b style=&quot;font-size:25px&quot;&gt;Dragon Boss Rig, Collisions &amp;amp; Weak Spots&lt;/b&gt;&lt;br&gt;Georgi Tsvetanski &amp;middot; GAME 445" vertex="1">
+          <mxGeometry height="62" width="1060" x="36" y="19" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-3" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="&lt;b&gt;Attacking side&lt;/b&gt;" vertex="1">
+          <mxGeometry height="26" width="392" x="36" y="89" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-4" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="&lt;b&gt;Target entity&lt;/b&gt;" vertex="1">
+          <mxGeometry height="26" width="392" x="504" y="89" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-5" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="&lt;b&gt;Rig and hit regions&lt;/b&gt;" vertex="1">
+          <mxGeometry height="26" width="392" x="972" y="89" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-6" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#E7EDF3;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;existing&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;ProjectileCollider&lt;/b&gt;" vertex="1">
+          <mxGeometry height="98" width="392" x="36" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-7" parent="IoD9JZn7r6he544PiUl1-6" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="- OnTriggerEnter(other : Collider)&lt;br&gt;+ ApplyHit(otherData : Entity, enemy : GameObject)" vertex="1">
+          <mxGeometry height="52" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-8" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#E7EDF3;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;existing&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;EnemyAI&lt;/b&gt;" vertex="1">
+          <mxGeometry height="134" width="392" x="504" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-9" parent="IoD9JZn7r6he544PiUl1-8" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=13;" value="+ entityData : Entity&lt;br&gt;+ currentAttack : AttackData&lt;br&gt;+ ChangeState(state : AIStates)&lt;br&gt;# OnPlayerDetected() {abstract}" vertex="1">
+          <mxGeometry height="88" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-10" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#FFF1D5;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;proposed&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;DragonVisual&lt;/b&gt;" vertex="1">
+          <mxGeometry height="164" width="392" x="972" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-11" parent="IoD9JZn7r6he544PiUl1-10" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=13;" value="- animator : Animator&lt;br&gt;- fireFX : ParticleSystem&lt;br&gt;+ PlayAttack(name : string)&lt;br&gt;+ SetCharging(on : bool)&lt;br&gt;+ PlayFlinch()&lt;br&gt;+ PlayFireFX()" vertex="1">
+          <mxGeometry height="118" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-12" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#E7EDF3;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;existing&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;AttackCollider&lt;/b&gt;" vertex="1">
+          <mxGeometry height="98" width="392" x="36" y="291" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-13" parent="IoD9JZn7r6he544PiUl1-12" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="- OnTriggerEnter(other : Collider)&lt;br&gt;+ ApplyHit(otherData : Entity, enemy : GameObject)" vertex="1">
+          <mxGeometry height="52" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-14" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#FFF1D5;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;proposed&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;DragonBoss&lt;/b&gt;" vertex="1">
+          <mxGeometry height="98" width="392" x="504" y="291" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-15" parent="IoD9JZn7r6he544PiUl1-14" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="+ OnWeakSpotHit(spot : WeakSpot)&lt;br&gt;- InterruptAttack()" vertex="1">
+          <mxGeometry height="52" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-16" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#FFF1D5;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;proposed&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;WeakSpot&lt;/b&gt;" vertex="1">
+          <mxGeometry height="158" width="392" x="972" y="291" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-17" parent="IoD9JZn7r6he544PiUl1-16" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="- type : WeakSpotType&lt;br&gt;- exposed : bool&lt;br&gt;- damageMultiplier : float&lt;br&gt;+ SetExposed(on : bool)&lt;br&gt;+ TryGetMultiplier(out scale : float) : bool" vertex="1">
+          <mxGeometry height="112" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-18" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#E7EDF3;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;existing&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;AttackData&lt;/b&gt;" vertex="1">
+          <mxGeometry height="98" width="392" x="36" y="478" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-19" parent="IoD9JZn7r6he544PiUl1-18" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="+ power : float&lt;br&gt;+ type : AttackType" vertex="1">
+          <mxGeometry height="52" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-20" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#E7EDF3;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;existing&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;Entity&lt;/b&gt;" vertex="1">
+          <mxGeometry height="118" width="392" x="504" y="478" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-21" parent="IoD9JZn7r6he544PiUl1-20" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="+ health : Stat&lt;br&gt;+ water : Stat&lt;br&gt;+ invulnerable : bool" vertex="1">
+          <mxGeometry height="72" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-22" parent="1" style="html=1;fontColor=#171717;swimlane;horizontal=1;startSize=46;align=center;verticalAlign=middle;fillColor=#E6F1E5;swimlaneFillColor=#FFFFFF;strokeColor=#354859;strokeWidth=1.5;fontSize=17;" value="&lt;i style=&quot;font-size:12px;font-weight:normal&quot;&gt;&amp;laquo;enumeration&amp;raquo;&lt;/i&gt;&lt;br&gt;&lt;b&gt;WeakSpotType&lt;/b&gt;" vertex="1">
+          <mxGeometry height="98" width="392" x="972" y="478" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-23" parent="IoD9JZn7r6he544PiUl1-22" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;spacingTop=3;spacingLeft=9;overflow=hidden;fontFamily=Courier New;fontSize=14;" value="Mouth&lt;br&gt;FireWings" vertex="1">
+          <mxGeometry height="52" width="392" y="46" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-24" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-6" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;endArrow=block;endFill=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="IoD9JZn7r6he544PiUl1-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-25" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-14" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;endArrow=block;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="IoD9JZn7r6he544PiUl1-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-26" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-14" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;startArrow=diamondThin;startFill=1;endArrow=none;exitX=1;exitY=0.24;entryX=0;entryY=0.5;" target="IoD9JZn7r6he544PiUl1-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="934" y="315" />
+              <mxPoint x="934" y="189" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-27" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-14" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;startArrow=diamondThin;startFill=1;endArrow=none;exitX=1;exitY=0.76;entryX=0;entryY=0.51;" target="IoD9JZn7r6he544PiUl1-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-28" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-16" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;endArrow=open;endFill=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="IoD9JZn7r6he544PiUl1-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-29" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-12" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="IoD9JZn7r6he544PiUl1-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-30" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-12" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="IoD9JZn7r6he544PiUl1-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-31" edge="1" parent="1" source="IoD9JZn7r6he544PiUl1-12" style="html=1;edgeStyle=segmentEdgeStyle;rounded=0;strokeColor=#354859;strokeWidth=1.5;endSize=13;startSize=13;dashed=1;endArrow=open;endFill=0;exitX=0.82;exitY=1;entryX=0;entryY=0.48;" target="IoD9JZn7r6he544PiUl1-20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="356" y="441" />
+              <mxPoint x="465" y="441" />
+              <mxPoint x="465" y="535" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-32" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="&lt;b&gt;Proposed&lt;br&gt;hit callback&lt;/b&gt;" vertex="1">
+          <mxGeometry height="44" width="74" x="430" y="293" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-33" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="0..*" vertex="1">
+          <mxGeometry height="26" width="32" x="940" y="334" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-34" parent="1" style="html=1;fontColor=#171717;rounded=1;arcSize=8;whiteSpace=wrap;overflow=hidden;align=left;verticalAlign=top;spacing=12;fillColor=#F2F5F8;strokeColor=#9AA9B5;fontSize=14;" value="&lt;b style=&quot;font-size:16px&quot;&gt;Current hit flow&lt;/b&gt;&lt;br&gt;&lt;br&gt;The trigger resolves the target through its parent &lt;b&gt;Aspect&lt;/b&gt;. For enemies, stats come from &lt;b&gt;EnemyAI.entityData&lt;/b&gt;. The attacker uses its &lt;b&gt;currentAttack&lt;/b&gt; and consumes target water before health. A OneHit attack is spent at its first accepted contact." vertex="1">
+          <mxGeometry height="192" width="392" x="36" y="634" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-35" parent="1" style="html=1;fontColor=#171717;rounded=1;arcSize=8;whiteSpace=wrap;overflow=hidden;align=left;verticalAlign=top;spacing=12;fillColor=#FFF8E9;strokeColor=#9AA9B5;fontSize=14;" value="&lt;b style=&quot;font-size:16px&quot;&gt;Proposed hit resolution&lt;/b&gt;&lt;br&gt;&lt;br&gt;Both collider paths retain the exact struck collider. After contact selection, a proposed &lt;b&gt;ApplyHit(Entity, GameObject, Collider, AttackData)&lt;/b&gt; path reads any exposed weak-spot modifier and applies damage. An accepted damaging weak-spot hit calls the boss callback. See Hit and Recovery Flows." vertex="1">
+          <mxGeometry height="192" width="392" x="504" y="634" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-36" parent="1" style="html=1;fontColor=#171717;rounded=1;arcSize=8;whiteSpace=wrap;overflow=hidden;align=left;verticalAlign=top;spacing=12;fillColor=#FFF8E9;strokeColor=#9AA9B5;fontSize=14;" value="&lt;b style=&quot;font-size:16px&quot;&gt;Rig and exposure&lt;/b&gt;&lt;br&gt;&lt;br&gt;I will put&amp;nbsp;&lt;b&gt;WeakSpot&lt;/b&gt; markers on the colliders they describe, under the enemy &lt;b&gt;Aspect&lt;/b&gt;. The boss FSM should own exposure and recovery. An eligible head stomp routes through the player attack path. The mouth and wings have separate recovery transitions." vertex="1">
+          <mxGeometry height="192" width="392" x="972" y="634" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-37" parent="1" style="html=1;fontColor=#171717;rounded=1;arcSize=8;whiteSpace=wrap;overflow=hidden;align=left;verticalAlign=top;spacing=12;fillColor=#F3EFF9;strokeColor=#9AA9B5;fontSize=14;" value="&lt;b style=&quot;font-size:16px&quot;&gt;Stretch goal &amp;middot; BurningGround&lt;/b&gt;&lt;br&gt;&lt;br&gt;Terrain impact spawns an attacking hazard. Follow the existing SpikeHazard pattern for applying damage to a target&amp;rsquo;s Entity. Transition the surface to glass after about 30 seconds." vertex="1">
+          <mxGeometry height="100" width="860" x="36" y="848" as="geometry" />
+        </mxCell>
+        <mxCell id="IoD9JZn7r6he544PiUl1-38" parent="1" style="html=1;fontColor=#171717;text;align=left;verticalAlign=top;overflow=hidden;whiteSpace=wrap;spacing=4;fontSize=14;" value="Hollow triangle = inheritance&lt;br&gt;Filled diamond = composition&lt;br&gt;Dashed arrow = dependency" vertex="1">
+          <mxGeometry height="78" width="392" x="972" y="857" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="BXVvqlA6ud3JoOmI0YeM" name="Hit and Recovery Flows">
+    <mxGraphModel dx="1400" dy="955" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="955" background="#ffffff" adaptiveColors="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-2" value="&lt;b style=&quot;font-size:23px&quot;&gt;Proposed Hit and Recovery Flows&lt;/b&gt;&lt;br&gt;&lt;br&gt;Dragon Boss &amp;middot; GAME 445" style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;text;strokeColor=none;fillColor=none;spacing=3;" vertex="1" parent="1">
+          <mxGeometry x="45" y="26" width="1230" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-3" value="&lt;b style=&quot;font-size:23px&quot;&gt;Attack contact and damage&lt;/b&gt;" style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;text;strokeColor=none;fillColor=none;spacing=3;" vertex="1" parent="1">
+          <mxGeometry x="45" y="119" width="1250" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-4" value="&lt;b style=&quot;font-size:17px&quot;&gt;Collect contacts&lt;/b&gt;&lt;br&gt;&lt;br&gt;Both collider paths keep the exact struck &lt;b&gt;Collider&lt;/b&gt; and resolve its parent &lt;b&gt;Aspect&lt;/b&gt;. Collect eligible body and weak-spot contacts for one physics step by attack activation or projectile instance and target &lt;b&gt;Entity&lt;/b&gt;. Keep the existing self-hit and invulnerability checks." style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;rounded=1;arcSize=7;strokeColor=#98AABD;spacing=12;fillColor=#F1F5FA;" vertex="1" parent="1">
+          <mxGeometry x="45" y="163" width="404" height="202" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-5" value="&lt;b style=&quot;font-size:17px&quot;&gt;Choose one contact&lt;/b&gt;&lt;br&gt;&lt;br&gt;Before spending a OneHit attack, choose an exposed weak spot over a body contact for the same target. Evaluate exposure at resolution. A closed weak spot gives no bonus. For continuous attacks, coalesce same-step contacts and keep later eligible contacts." style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;rounded=1;arcSize=7;strokeColor=#98AABD;spacing=12;fillColor=#F1F5FA;" vertex="1" parent="1">
+          <mxGeometry x="498" y="163" width="404" height="202" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-6" value="&lt;b style=&quot;font-size:17px&quot;&gt;Resolve damage&lt;/b&gt;&lt;br&gt;&lt;br&gt;Pass the chosen collider into the proposed &lt;b&gt;ApplyHit(Entity, GameObject, Collider, AttackData)&lt;/b&gt; path. Read the multiplier through &lt;b&gt;WeakSpot.TryGetMultiplier&lt;/b&gt; and apply water, then health. Notify &lt;b&gt;DragonBoss&lt;/b&gt; once for an accepted positive weak-spot hit, even if water absorbed the full amount." style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;rounded=1;arcSize=7;strokeColor=#98AABD;spacing=12;fillColor=#F1F5FA;" vertex="1" parent="1">
+          <mxGeometry x="951" y="163" width="404" height="202" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-7" style="html=1;endArrow=block;endFill=1;strokeColor=#354859;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="GkoBIBB6rdrrRJFccz8Y-4" target="GkoBIBB6rdrrRJFccz8Y-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-8" style="html=1;endArrow=block;endFill=1;strokeColor=#354859;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="GkoBIBB6rdrrRJFccz8Y-5" target="GkoBIBB6rdrrRJFccz8Y-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-9" value="&lt;b style=&quot;font-size:23px&quot;&gt;Boss reactions&lt;/b&gt;" style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;text;strokeColor=none;fillColor=none;spacing=3;" vertex="1" parent="1">
+          <mxGeometry x="45" y="408" width="1250" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-10" value="&lt;b style=&quot;font-size:17px&quot;&gt;Head stomp during the charge&lt;/b&gt;&lt;br&gt;&lt;br&gt;A player-owned stomp check detects a descending contact on the head while the mouth is exposed. Submit that mouth collider and the configured stomp &lt;b&gt;AttackData&lt;/b&gt; through the hit path. Apply the mouth blast once with normal water absorption.&lt;br&gt;&lt;br&gt;On a valid mouth hit, the boss FSM cancels the pending breath, disables its attack hitboxes, closes the mouth and plays recoil. After recoil recovery, return to Idle in the stationary phase. Recoil adds no second damage application." style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;rounded=1;arcSize=7;strokeColor=#98AABD;spacing=12;fillColor=#FFF4DB;" vertex="1" parent="1">
+          <mxGeometry x="45" y="455" width="630" height="228" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-11" value="&lt;b style=&quot;font-size:17px&quot;&gt;Wing hit during flight&lt;/b&gt;&lt;br&gt;&lt;br&gt;Expose wing colliders only while the fire wings are active in the flight phase or optional final phase. A confirmed wing hit applies the same stat rules, cancels an active attack windup if one is in progress and plays a brief airborne flinch.&lt;br&gt;&lt;br&gt;The boss FSM owns this recovery and returns to flight in the current phase. Clear exposure as soon as the wings deactivate." style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;rounded=1;arcSize=7;strokeColor=#98AABD;spacing=12;fillColor=#FFF4DB;" vertex="1" parent="1">
+          <mxGeometry x="725" y="455" width="630" height="228" as="geometry" />
+        </mxCell>
+        <mxCell id="GkoBIBB6rdrrRJFccz8Y-12" value="&lt;b style=&quot;font-size:17px&quot;&gt;Projectile reuse for dragon fireballs&lt;/b&gt;&lt;br&gt;&lt;br&gt;Resolve the owner through &lt;b&gt;Aspect&lt;/b&gt; and its matching &lt;b&gt;Player&lt;/b&gt; or &lt;b&gt;EnemyAI&lt;/b&gt; before initializing &lt;b&gt;ProjectileCollider&lt;/b&gt;. Keep a launch-time &lt;b&gt;AttackData&lt;/b&gt; snapshot on each projectile for hit resolution, so a later owner attack change cannot alter a fireball in flight.&lt;br&gt;&lt;br&gt;Use the struck collider&amp;rsquo;s parent &lt;b&gt;Aspect&lt;/b&gt; to distinguish a rig hit from terrain. Resolve queued entity contacts before any collision-driven despawn can discard them. Terrain impact can spawn &lt;b&gt;BurningGround&lt;/b&gt; if that stretch goal is implemented." style="html=1;whiteSpace=wrap;overflow=hidden;verticalAlign=top;align=left;fontColor=#171717;fontSize=15;rounded=1;arcSize=7;strokeColor=#98AABD;spacing=12;fillColor=#F5F6F8;" vertex="1" parent="1">
+          <mxGeometry x="45" y="726" width="1310" height="177" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
