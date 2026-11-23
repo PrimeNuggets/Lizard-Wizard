@@ -135,6 +135,12 @@ MonoBehaviour:
   stunFrames: 5
   recoverFrames: 15
   hitCooldown: 1
+  palFXs:
+  - color: {r: 0.9, g: 0.05, b: 0.05, a: 0.5019608}
+    frames: 15
+    fadeOut: 0
+    blink: 1
+    blinksPerSecond: 6
 --- !u!1001 &336947680465354649
 PrefabInstance:
   m_ObjectHideFlags: 0

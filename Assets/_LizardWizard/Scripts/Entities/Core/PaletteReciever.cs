@@ -9,8 +9,11 @@ public class PaletteReciever : MonoBehaviour
 
     private readonly List<Material> materials = new();
     private readonly List<Color> originalColors = new();
+    private readonly List<Color> originalEmissionColors = new();
     private readonly List<Material[]> originalAssignments = new();
 
+    //-- the toon shader adds emission on top, so red emission tints the whole lizard
+    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
     private Coroutine sequence;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -34,13 +37,29 @@ public class PaletteReciever : MonoBehaviour
                 copies[i] = new Material(copies[i]);
                 materials.Add(copies[i]);
                 originalColors.Add(copies[i].color);
+                originalEmissionColors.Add(
+                    copies[i].HasProperty(EmissionColor) ?
+                        copies[i].GetColor(EmissionColor) :
+                        Color.black
+                );
             }
 
             render.sharedMaterials = copies;
         }
     }
 
-    public void Inflict(AttackData.PalFX[] palette)
+    private void ApplyEmission(Color color, float strength)
+    {
+        for (int i = 0; i < materials.Count; i++)
+        {
+            Material material = materials[i];
+            if (material == null || !material.HasProperty(EmissionColor)) continue;
+
+            material.SetColor(EmissionColor, Color.Lerp(originalEmissionColors[i], color, strength * (1f - color.a)));
+        }
+    }
+
+    public void Inflict(PaletteFX[] palette)
     {
         if (!isActiveAndEnabled || palette == null || palette.Length == 0) return;
 
@@ -54,7 +73,7 @@ public class PaletteReciever : MonoBehaviour
         sequence = StartCoroutine(PlayPalette(palette));
     }
 
-    private IEnumerator PlayPalette(AttackData.PalFX[] palette)
+    private IEnumerator PlayPalette(PaletteFX[] palette)
     {
         yield return null;
 
@@ -63,16 +82,24 @@ public class PaletteReciever : MonoBehaviour
             if (entry == null || entry.frames <= 0f) continue;
 
             float duration = entry.frames / 60f;
+
+            if (duration <= 0f) continue;
+            RestoreColors();
+
             float elapsed = 0f;
 
             ApplyColor(entry.color, 0f);
             while (elapsed < duration)
             {
-                yield return null;
-
-                elapsed += Time.deltaTime;
                 float fade = entry.fadeOut ? Mathf.Clamp01(elapsed / duration) : 0f;
-                ApplyColor(entry.color, fade);
+                if (entry.blink)
+                {
+                    bool flashOn = Mathf.Repeat(elapsed * entry.blinksPerSecond, 1f) < 0.5f;
+
+                    ApplyEmission(entry.color, flashOn ? 1f - fade : 0f);
+                } else ApplyColor(entry.color, fade);
+                yield return null;
+                elapsed += Time.deltaTime;
             }
         }
 
@@ -82,6 +109,7 @@ public class PaletteReciever : MonoBehaviour
 
     private void ApplyColor(Color color, float fade)
     {
+        float strength = (1f - fade) * (1f - color.a);
         for (int i = 0; i < materials.Count; i++)
         {
             if (materials[i] == null) continue;
@@ -89,16 +117,20 @@ public class PaletteReciever : MonoBehaviour
             Color tint = color;
             tint.a = originalColors[i].a;
 
-            materials[i].color = Color.Lerp(tint, originalColors[i], fade);
+            materials[i].color = Color.Lerp(tint, originalColors[i], strength);
         }
     }
     private void RestoreColors()
     {
         for (int i = 0; i < materials.Count; i++)
         {
-            if (materials[i] != null)
+            Material material = materials[i];
+            if (material == null) continue;
+            
+            material.color = originalColors[i];
+            if (material.HasProperty(EmissionColor))
             {
-                materials[i].color = originalColors[i];
+                material.SetColor(EmissionColor, originalEmissionColors[i]);
             }
         }
     }

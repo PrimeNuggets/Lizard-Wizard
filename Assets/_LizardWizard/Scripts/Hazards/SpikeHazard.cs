@@ -18,6 +18,16 @@ public class SpikeHazard : MonoBehaviour
 
     [Tooltip("Seconds before this cactus can hurt again")]
     [SerializeField] private float hitCooldown = 1f;
+    [SerializeField] private PaletteFX[] palFXs =
+    {
+        new PaletteFX
+        {
+            color = new Color(0.9f, 0.05f, 0.05f, 1f),
+            frames = 10f,
+            blink = true,
+            blinksPerSecond = 6f
+        }
+    };
 
     private float nextHitTime;
 
@@ -63,7 +73,10 @@ public class SpikeHazard : MonoBehaviour
         if (target.grounded && knockback.y > 0f) target.SetStateType('A', false);
         target.BeginHurt(stunFrames, knockback, recoverFrames);
 
-        DamageBlink.Play(lizard);
+        if (damage > 0f && lizard.TryGetComponent(out PaletteReciever reciever))
+        {
+            reciever.Inflict(palFXs);
+        }
         if (lizard.TryGetComponent(out WaterLevelPercentScore waterLevel)) waterLevel.DisplayGraphic(recoverFrames);
     }
 }

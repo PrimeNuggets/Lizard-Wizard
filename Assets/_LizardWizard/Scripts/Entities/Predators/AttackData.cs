@@ -10,13 +10,6 @@ public class AttackData : ScriptableObject
         OneHit,
         Continuous,
     }
-    [Serializable]
-    public class PalFX
-    {
-        public Color color;
-        [Tooltip("Applies the selected color for this many frames"), Min(0f)] public float frames;
-        public bool fadeOut;
-    }
     public string attackId;
     public string attackName;
     public AttackType type;
@@ -30,7 +23,7 @@ public class AttackData : ScriptableObject
     [Tooltip("The amount of time in frames the target is stunned for after the hit")] public int pauseTime = 10;
     [Tooltip("Frames after knockback is applied for the target to be able to recover control")] public int recoverTime = 12;
     [Tooltip("Negative value gives the target water.")] public float drainWater = 0f; //Exists in case draining water is the only desired effect or to deal modify damage while having water, applies after damage calculation
-    [LabelOverride("Inflict Palette")] public PalFX[] palFX;
+    [LabelOverride("Inflict Palette")] public PaletteFX[] palFX;
     //public GameObject[] projectiles;
     [Tooltip("Additional properties to add to the attack, such as bypassing guard or defining an element type")] public string[] flags;
     //public GameObject vfx;

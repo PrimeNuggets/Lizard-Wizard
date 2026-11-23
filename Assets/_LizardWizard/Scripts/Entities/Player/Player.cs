@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
             //-- trick boost: land a full flip = short speed burst that fades out
             private const float TrickBoostDuration = 0.45f;
             private const float TrickBoostSpeed = 17f;
+            private float trickBoostSpeed = TrickBoostSpeed;
             private float trickBoostRemaining;
             private Vector3 trickBoostDirection;
             private bool trickBoostAppliedThisTick;
@@ -241,9 +242,9 @@ public class Player : MonoBehaviour
             if (IsTrickBoosting)
             {
                 trickBoostAppliedThisTick = true;
-                boostVelocity = trickBoostDirection * (TrickBoostSpeed * trickBoostRemaining / TrickBoostDuration);
+                boostVelocity = trickBoostDirection * (trickBoostSpeed * trickBoostRemaining / TrickBoostDuration);
                 trickBoostRemaining = Mathf.Max(0f, trickBoostRemaining - Time.fixedDeltaTime);
-            }
+            } else trickBoostSpeed = TrickBoostSpeed;
             entityData.ApplyMove(move, jumpPressed && entityData.ctrl, cameraRef.transform, boostVelocity);
 
             Vector3 movement = transform.position - previousPosition;
@@ -261,19 +262,8 @@ public class Player : MonoBehaviour
 
             bool landed = !wasGrounded && entityData.entChar.isGrounded;
 
-            //-- clean flip landing = boost + sand puff + rumble + text
-            if (landed && entityData.ctrl && lizardAnimation != null && lizardAnimation.ConsumeCleanTrickLanding())
-            {
-                //-- boost the way we're moving, or where the camera faces if we landed standing still
-                Vector3 boostDirection = movement.sqrMagnitude > 0.0001f
-                    ? movement.normalized
-                    : Vector3.ProjectOnPlane(cameraRef.transform.forward, Vector3.up).normalized;
-                trickBoostDirection = boostDirection;
-                trickBoostRemaining = TrickBoostDuration;
-                lizardAnimation.PlayTrickLanding(boostDirection);
-                GetComponent<ControllerHaptics>()?.Play(0.7f, 0.45f, 0.19f);
-                menu?.ShowTrickBoost();
-            }
+            bool trickBoostCheck = true;
+            int trickLandingCheck = 0;
 
             if (landed && jumped)
             {
@@ -283,8 +273,44 @@ public class Player : MonoBehaviour
                     if (threshIndex != -1)
                     {
                         Debug.Log($"{landing.GameObject().name}: {checkThresholds[threshIndex].name} landing");
+                        switch (checkThresholds[threshIndex].name)
+                        {
+                            case "Perfect":
+                                trickLandingCheck += 2; //Max 4
+                                break;
+                            case "Good":
+                                trickLandingCheck += 1; //Max 2
+                                break;
+                            case "Ok":
+                                break;
+                            default:
+                                trickLandingCheck -= 1; //Min -2
+                                trickBoostCheck = false;
+                                break;
+                        }
                     }
                 }
+            }
+            trickBoostCheck &= trickLandingCheck > 0; //If no foot has a bad landing & landing score > 0
+
+            //-- half+ flip landing = boost + sand puff + rumble + text
+            lizardAnimation.SampleSpinProgress();
+            if (trickBoostCheck && lizardAnimation != null && lizardAnimation.spinProgress >= 0.5f)
+            {
+                //-- boost the way we're moving, or where the camera faces if we landed standing still
+                Vector3 boostDirection = movement.sqrMagnitude > 0.0001f
+                    ? movement.normalized
+                    : Vector3.ProjectOnPlane(cameraRef.transform.forward, Vector3.up).normalized;
+                trickBoostDirection = boostDirection;
+                trickBoostRemaining = TrickBoostDuration;
+
+                //Trick Speed Mod
+                trickBoostSpeed *= lizardAnimation.spinProgress;
+                trickBoostSpeed *= 1f + (float)trickLandingCheck / 10f; //2 Perfects == 1.4x Speed
+
+                lizardAnimation.PlayTrickLanding(boostDirection);
+                GetComponent<ControllerHaptics>()?.Play(0.7f, 0.45f, 0.19f);
+                menu?.ShowTrickBoost();
             }
             //NOTE: This implementation of a 'released' function hypothetically might miss sometimes.
             //Stress testing i havent gotten it to miss yet, but if it starts missing(esp in high framerate) try changing updateMode to FixedUpdate

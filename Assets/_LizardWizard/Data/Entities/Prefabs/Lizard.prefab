@@ -750,7 +750,6 @@ GameObject:
   - component: {fileID: 4758410650257725370}
   - component: {fileID: 3693692350651771262}
   - component: {fileID: 7334572558071058003}
-  - component: {fileID: 5830823898031964736}
   m_Layer: 0
   m_Name: Lizard
   m_TagString: Untagged
@@ -859,23 +858,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PaletteReciever
   renderers:
   - {fileID: 5186023736517444242}
---- !u!114 &5830823898031964736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2357876532559851445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0e7e9626e9da15396649169995759d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DamageBlink
-  renderers:
-  - {fileID: 5186023736517444242}
-  blinkColor: {r: 0.9, g: 0.05, b: 0.05, a: 1}
-  blinkTime: 2
-  blinksPerSecond: 6
 --- !u!114 &2309034614299963382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -894,7 +876,7 @@ MonoBehaviour:
   stickSensitivity: 180
   cameraPitch: {fileID: 2261183586174062863}
   maxLookAngle: 75
-  firePosition: {fileID: 1382476531751593656}
+  firePosition: {fileID: 7235272817771240344}
   spells:
   - {fileID: 11400000, guid: c69a926d0ac37844aba9f4c6f40025d9, type: 2}
   - {fileID: 11400000, guid: 0c4e938fba894fe4dbedc46f9c291568, type: 2}
@@ -912,14 +894,14 @@ MonoBehaviour:
     m_Bits: 8
   checkThresholds:
   - name: Perfect
-    min: -10
-    max: 10
+    min: -20
+    max: 20
   - name: Good
-    min: -25
-    max: 25
+    min: -35
+    max: 35
   - name: Ok
-    min: -50
-    max: 50
+    min: -60
+    max: 60
   - name: Bad
     min: -180
     max: 180
