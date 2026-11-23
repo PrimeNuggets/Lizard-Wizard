@@ -136,7 +136,7 @@ MonoBehaviour:
   recoverFrames: 15
   hitCooldown: 1
   palFXs:
-  - color: {r: 0.9, g: 0.05, b: 0.05, a: 1}
+  - color: {r: 0.9, g: 0.05, b: 0.05, a: 0.5019608}
     frames: 15
     fadeOut: 0
     blink: 1

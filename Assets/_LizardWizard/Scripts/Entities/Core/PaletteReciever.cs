@@ -55,7 +55,7 @@ public class PaletteReciever : MonoBehaviour
             Material material = materials[i];
             if (material == null || !material.HasProperty(EmissionColor)) continue;
 
-            material.SetColor(EmissionColor, Color.Lerp(originalEmissionColors[i], color, strength));
+            material.SetColor(EmissionColor, Color.Lerp(originalEmissionColors[i], color, strength * (1f - color.a)));
         }
     }
 
@@ -109,6 +109,7 @@ public class PaletteReciever : MonoBehaviour
 
     private void ApplyColor(Color color, float fade)
     {
+        float strength = (1f - fade) * (1f - color.a);
         for (int i = 0; i < materials.Count; i++)
         {
             if (materials[i] == null) continue;
@@ -116,7 +117,7 @@ public class PaletteReciever : MonoBehaviour
             Color tint = color;
             tint.a = originalColors[i].a;
 
-            materials[i].color = Color.Lerp(tint, originalColors[i], fade);
+            materials[i].color = Color.Lerp(tint, originalColors[i], strength);
         }
     }
     private void RestoreColors()
