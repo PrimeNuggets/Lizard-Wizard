@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(EnemyAI))]
 public class VisionSensor : MonoBehaviour
 {
-    public Transform player;
+    private Transform player;
 
     [FormerlySerializedAs("spiderAI")]
     public EnemyAI enemyAI;
@@ -31,6 +32,12 @@ public class VisionSensor : MonoBehaviour
 
     private float CurrentViewDistance => Chasing ? chaseViewDistance : viewDistance;
     private float CurrentViewAngle => Chasing ? chaseViewAngle : viewAngle;
+
+    void Awake()
+    {
+        if (enemyAI == null) enemyAI = GetComponent<EnemyAI>();
+        if (player == null) player = FindAnyObjectByType<Player>().transform; //Subject to change for multiplayer compat
+    }
 
     void Update()
     {
@@ -121,7 +128,7 @@ public class VisionSensor : MonoBehaviour
             Debug.Log("Vision: ray hit " + closestCollider.name +
                 ", aspect " + (aspect != null ? aspect.aspectName.ToString() : "none"));
 
-        if (aspect != null)
+        if (aspect != null && aspect.transform == player)
             enemyAI.PlayerDetected(aspect, player.position, "Vision");
     }
 
