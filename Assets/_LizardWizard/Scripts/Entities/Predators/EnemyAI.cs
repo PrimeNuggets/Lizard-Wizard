@@ -132,6 +132,7 @@ public abstract class EnemyAI : MonoBehaviour
         public float LastDetectionTime { get; private set; }
         public bool IsAggro { get; private set; }
         private bool aggroPending;
+        private readonly Dictionary<AttackData, float> attackReadyTimes = new();
     #endregion
     #region Internals
         //-- SearchState uses these without changing the Inspector fields
@@ -517,10 +518,18 @@ public abstract class EnemyAI : MonoBehaviour
         //---------------------------------------------------------
         protected void StartCooldown(AIStates _state)
         {
+            if (_state == AIStates.Attack) return;
             if (!actionCooldowns.TryGetValue(_state, out Cooldown cooldown))
                 return;
 
             cooldown.timer = Time.time + Mathf.Max(0f, cooldown.maxTime);
+        }
+        //---------------------------------------------------------
+        public void StartAttackCooldown(AttackData attack)
+        {
+            if (attack == null) return;
+
+            attackReadyTimes[attack] = Time.time + Mathf.Max(0f, attack.cooldown);
         }
         //---------------------------------------------------------
         public void ChangeState(AIStates _state)
@@ -590,25 +599,6 @@ public abstract class EnemyAI : MonoBehaviour
 
             OnStateChange();
         }
-        public void RecieveAggro(Aspect attacker)
-        {
-            if (attacker == null || attacker.aspectName != Aspect.aspect.Player || entityData.health.GetCurrent() <= 0f) return;
-            IsAggro = true;
-            aggroPending = true;
-
-            Target = attacker;
-            targetController = attacker.GetComponentInParent<CharacterController>();
-            LastKnownPosition = attacker.transform.position;
-            LastDetectionTime = Time.time;
-            LastSense = "Damage";
-            RememberHeading();
-        }
-        public void ClearAggro()
-        {
-            IsAggro = false;
-            aggroPending = false;
-            minimapIcon.SetActive(false);
-        }
     #endregion
     #region Brain
         //---------------------------------------------------------
@@ -653,7 +643,7 @@ public abstract class EnemyAI : MonoBehaviour
                 if (sense == "Vision" &&
                     !entityData.IsHurt &&
                     !entityData.IsHitPaused &&
-                    !entityData.ctrl &&
+                    entityData.ctrl &&
                     state != AIStates.Attack &&
                     state != AIStates.Chase)
                 {
@@ -691,14 +681,13 @@ public abstract class EnemyAI : MonoBehaviour
             currentAttack = null;
             currentAttackEntry = null;
             if (Target == null || attacks == null || attacks.Length <= 0) return false; //Omit if no attacks exist or no target exists
-            if (IsOnCooldown(AIStates.Attack)) return false;
 
             float distance = Vector3.Distance(transform.position, Target.transform.position);
             float totalWeight = 0f;
 
             foreach (var atk in attacks)
             {
-                if (atk == null || atk.attack == null || atk.weight <= 0f || atk.attack.range < distance) continue;
+                if (atk == null || atk.attack == null || atk.weight <= 0f || atk.attack.range < distance || IsAttackOnCooldown(atk.attack)) continue;
 
                 totalWeight += atk.weight;
             }
@@ -707,7 +696,7 @@ public abstract class EnemyAI : MonoBehaviour
             float accumulatedWeight = 0f;
             foreach (var atk in attacks)
             {
-                if (atk == null || atk.attack == null || atk.weight <= 0f || atk.attack.range < distance) continue;
+                if (atk == null || atk.attack == null || atk.weight <= 0f || atk.attack.range < distance || IsAttackOnCooldown(atk.attack)) continue;
 
                 accumulatedWeight += atk.weight;
 
@@ -747,8 +736,18 @@ public abstract class EnemyAI : MonoBehaviour
         //---------------------------------------------------------
         public bool IsOnCooldown(AIStates _state)
         {
+            if (_state == AIStates.Attack) return false;
             return actionCooldowns.TryGetValue(_state, out Cooldown time)
                 && Time.time < time.timer;
+        }
+        //---------------------------------------------------------
+        public bool IsAttackOnCooldown(AttackData attack)
+        {
+            return (
+                attack != null &&
+                attackReadyTimes.TryGetValue(attack, out float readyTime) &&
+                Time.time < readyTime
+            );
         }
         //---------------------------------------------------------
         protected virtual void CalculateScores() //Supports Overriding
@@ -810,6 +809,27 @@ public abstract class EnemyAI : MonoBehaviour
                 return true;
 
             return Vector3.Angle(transform.forward, direction) <= turnThreshold;
+        }
+        //---------------------------------------------------------
+        public void RecieveAggro(Aspect attacker)
+        {
+            if (attacker == null || attacker.aspectName != Aspect.aspect.Player || entityData.health.GetCurrent() <= 0f) return;
+            IsAggro = true;
+            aggroPending = true;
+
+            Target = attacker;
+            targetController = attacker.GetComponentInParent<CharacterController>();
+            LastKnownPosition = attacker.transform.position;
+            LastDetectionTime = Time.time;
+            LastSense = "Damage";
+            RememberHeading();
+        }
+        //---------------------------------------------------------
+        public void ClearAggro()
+        {
+            IsAggro = false;
+            aggroPending = false;
+            minimapIcon.SetActive(false);
         }
         //---------------------------------------------------------
         public bool CanChangeState(char moveType = 'I', bool grounded = true)

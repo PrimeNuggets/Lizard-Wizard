@@ -2289,7 +2289,7 @@ MonoBehaviour:
     minDist: 0
     radius: 0
     maxCount: 0
-  - item: {fileID: 6183464572879351044, guid: 6367f52eded199647bcd4f1fdaf8f80b, type: 3}
+  - item: {fileID: 2133001212}
     scale: 100
     genType: 1
     spawnChance: 5
@@ -6247,6 +6247,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109635953}
   m_CullTransparentMesh: 1
+--- !u!1 &2133001212 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8394376105098467455, guid: d94ac08070c723c4986c6745ce5a826c, type: 3}
+  m_PrefabInstance: {fileID: 1781760240}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2694692293406466300
 PrefabInstance:
   m_ObjectHideFlags: 0

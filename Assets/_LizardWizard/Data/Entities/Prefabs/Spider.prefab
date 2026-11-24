@@ -1926,7 +1926,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26b900fa5bdc192479232bb887a1ca7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpiderVision
-  player: {fileID: 0}
   enemyAI: {fileID: 7468268549545937355}
   visionOrigin: {fileID: 7425404383135081128}
   viewDistance: 10
@@ -2021,7 +2020,7 @@ MonoBehaviour:
       maxTime: 0
   - key: 3
     value:
-      maxTime: 10
+      maxTime: 1
   - key: 2
     value:
       maxTime: 0.5
@@ -2046,7 +2045,7 @@ MonoBehaviour:
       maxTime: 20
   - key: 3
     value:
-      maxTime: 40
+      maxTime: 5
   - key: 4
     value:
       maxTime: 1
@@ -2055,7 +2054,7 @@ MonoBehaviour:
       maxTime: 5
   - key: 6
     value:
-      maxTime: 15
+      maxTime: 0
   terrain: {fileID: 0}
   mesh: {fileID: 4799564899094114277}
   minimapIcon: {fileID: 1703710400648198481}

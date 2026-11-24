@@ -55,13 +55,6 @@ public class AttackState : EnemyState
         }
         timer.maxTime = enemy.currentAttack.anim.length;
         enemy.stateTimer = timer;
-        
-        if (!enemy.actionCooldowns.TryGetValue(EnemyAI.AIStates.Attack, out var cooldown))
-        {
-            cooldown = new EnemyAI.Cooldown();
-            enemy.actionCooldowns[EnemyAI.AIStates.Attack] = cooldown;
-        }
-        cooldown.maxTime = enemy.currentAttack.cooldown;
 
         enemy.prevAttack = enemy.currentAttack.attackId;
     }
@@ -95,6 +88,8 @@ public class AttackState : EnemyState
     }
     public override void Exit()
     {
+        enemy.StartAttackCooldown(enemy.currentAttack);
+        
         enemy.entityData.attackFacingLocked = false;
         enemy.entityData.animator.SetBool(enemy.currentAttackEntry.animatorBool, false);
     }
