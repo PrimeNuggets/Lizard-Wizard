@@ -55,13 +55,6 @@ public class AttackState : EnemyState
         }
         timer.maxTime = enemy.currentAttack.anim.length;
         enemy.stateTimer = timer;
-        
-        if (!enemy.actionCooldowns.TryGetValue(EnemyAI.AIStates.Attack, out var cooldown))
-        {
-            cooldown = new EnemyAI.Cooldown();
-            enemy.actionCooldowns[EnemyAI.AIStates.Attack] = cooldown;
-        }
-        cooldown.maxTime = enemy.currentAttack.cooldown;
 
         enemy.prevAttack = enemy.currentAttack.attackId;
     }
@@ -95,6 +88,8 @@ public class AttackState : EnemyState
     }
     public override void Exit()
     {
+        enemy.StartAttackCooldown(enemy.currentAttack);
+        
         enemy.entityData.attackFacingLocked = false;
         enemy.entityData.animator.SetBool(enemy.currentAttackEntry.animatorBool, false);
     }
@@ -117,14 +112,23 @@ public class AttackState : EnemyState
         // Ensure the arc clears the target's top by at least 0.25 units.
         float minimumRise = Mathf.Max(0f, heightDifference) + 0.25f;
 
-        float verticalSpeed = Mathf.Max(enemy.entityData.velocity.y, Mathf.Sqrt(2f * gravityStrength * minimumRise));
+        float verticalSpeed = Mathf.Max(enemy.entityData.momentum.y, Mathf.Sqrt(2f * gravityStrength * minimumRise));
 
-        enemy.entityData.velocity.y = verticalSpeed;
+        enemy.entityData.momentum.y = verticalSpeed;
 
         // Descending time at which the spider's feet reach target height.
         float discriminant = (verticalSpeed * verticalSpeed) - (2f * gravityStrength * heightDifference);
 
         float flightTime = (verticalSpeed + Mathf.Sqrt(Mathf.Max(0f, discriminant))) / gravityStrength;
+
+        if (targetController != null)
+        {
+            Vector3 targetVelocity = targetController.velocity;
+            targetVelocity.y = 0;
+
+            float predictionTime = Mathf.Min(flightTime, 0.6f);
+            landingPoint += targetVelocity * predictionTime;
+        }
 
         Vector3 horizontalDistance = landingPoint - attackerController.bounds.center;
 
@@ -132,8 +136,8 @@ public class AttackState : EnemyState
 
         Vector3 horizontalVelocity = horizontalDistance / Mathf.Max(flightTime, 0.001f);
 
-        enemy.entityData.momentum.x = horizontalVelocity.x;
-        enemy.entityData.momentum.z = horizontalVelocity.z;
+        enemy.entityData.momentum.x = horizontalVelocity.x - enemy.entityData.storedMomentum.x;
+        enemy.entityData.momentum.z = horizontalVelocity.z - enemy.entityData.storedMomentum.z;
     }
     private void BeginLunge()
     {

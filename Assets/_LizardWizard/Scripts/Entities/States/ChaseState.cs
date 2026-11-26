@@ -79,10 +79,13 @@ public class ChaseState : EnemyState
 
         currentSpeed = closeEnough ? 0f : Mathf.MoveTowards(currentSpeed, targetSpeed, accel);
 
-        if (!reacting && enemy.AttackChooser())
+        if (!reacting)
         {
-            enemy.ChangeState(EnemyAI.AIStates.Attack);
-            if (enemy.state == EnemyAI.AIStates.Attack) return Vector2.zero;
+            if (enemy.AttackChooser())
+            {
+                enemy.ChangeState(EnemyAI.AIStates.Attack);
+                if (enemy.state == EnemyAI.AIStates.Attack) return Vector2.zero;
+            }
         }
 
         return new Vector2(0f, currentSpeed);

@@ -16,7 +16,7 @@ MonoBehaviour:
   attackName: Swipe
   type: 0
   anim: {fileID: 7400000, guid: d4508ff0de6ceef41b03ff0ec719618f, type: 2}
-  cooldown: 2
+  cooldown: 1
   facingOffset: 25
   power: 10
   knockback: {x: 2, y: -1, z: 5}

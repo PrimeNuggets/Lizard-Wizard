@@ -16,7 +16,7 @@ MonoBehaviour:
   attackName: Spit
   type: 0
   anim: {fileID: 0}
-  cooldown: 1.5
+  cooldown: 0.75
   facingOffset: 0
   power: 2
   knockback: {x: 0, y: 0, z: 3}
@@ -29,9 +29,13 @@ MonoBehaviour:
   - color: {r: 1, g: 1, b: 1, a: 0}
     frames: 2
     fadeOut: 0
+    blink: 0
+    blinksPerSecond: 6
   - color: {r: 0, g: 0.82474124, b: 1, a: 0}
     frames: 10
     fadeOut: 1
+    blink: 0
+    blinksPerSecond: 6
   flags: []
   cost: 5
   element: 1

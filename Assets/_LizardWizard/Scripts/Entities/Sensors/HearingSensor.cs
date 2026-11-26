@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[RequireComponent(typeof(EnemyAI))]
 public class HearingSensor : MonoBehaviour
 {
     [Header("Debugging")]

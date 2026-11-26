@@ -16,7 +16,7 @@ MonoBehaviour:
   attackName: Pounce
   type: 0
   anim: {fileID: 7400000, guid: c8e245a67ee5df4418576ac434f286c7, type: 2}
-  cooldown: 10
+  cooldown: 4
   facingOffset: 0
   power: 20
   knockback: {x: 0, y: -5, z: 5}
